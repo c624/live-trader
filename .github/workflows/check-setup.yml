@@ -69,4 +69,31 @@ jobs:
                   print(f"TELEGRAM_BOT_TOKEN: {'WORKS, bot @' + name if ok else 'SET BUT FAILING'}")
               except Exception as e:
                   print(f"TELEGRAM_BOT_TOKEN: SET BUT ERRORING ({type(e).__name__})")
+
+          chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+          if chat:
+              try:
+                  r = httpx.post(
+                      f"https://api.telegram.org/bot{tg}/sendMessage",
+                      json={"chat_id": chat, "text": "live-trader setup check: Telegram wired up."},
+                      timeout=15,
+                  )
+                  print(f"TELEGRAM_CHAT_ID: {'WORKS, test message sent' if r.status_code == 200 else 'SET BUT FAILING'}")
+              except Exception as e:
+                  print(f"TELEGRAM_CHAT_ID: SET BUT ERRORING ({type(e).__name__})")
+          elif tg:
+              # Discover it: message the bot on Telegram first, then rerun this.
+              try:
+                  r = httpx.get(f"https://api.telegram.org/bot{tg}/getUpdates", timeout=15)
+                  ids = {str(((u.get("message") or {}).get("chat") or {}).get("id"))
+                         for u in (r.json().get("result") or [])}
+                  ids.discard("None")
+                  if ids:
+                      print(f"TELEGRAM_CHAT_ID: MISSING. Your chat id is: {', '.join(sorted(ids))} — save it as the TELEGRAM_CHAT_ID secret.")
+                  else:
+                      print("TELEGRAM_CHAT_ID: MISSING. Send your bot any Telegram message, then rerun this workflow to discover the id.")
+              except Exception as e:
+                  print(f"TELEGRAM_CHAT_ID: discovery errored ({type(e).__name__})")
+          else:
+              print("TELEGRAM_CHAT_ID: MISSING")
           PY
