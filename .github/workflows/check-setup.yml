@@ -1,0 +1,72 @@
+# Verifies the repo secrets work without ever printing them: Helius gets a
+# health call, the wallet key gets parsed (only the PUBLIC address is shown),
+# Telegram gets a getMe call. Safe to run any time.
+name: check-setup
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx solders
+
+      - name: Check secrets
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          TRADER_PRIVATE_KEY: ${{ secrets.TRADER_PRIVATE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os, httpx
+
+          helius = os.environ.get("HELIUS_API_KEY", "").strip()
+          if not helius:
+              print("HELIUS_API_KEY: MISSING")
+          else:
+              try:
+                  r = httpx.post(
+                      f"https://mainnet.helius-rpc.com/?api-key={helius}",
+                      json={"jsonrpc": "2.0", "id": 1, "method": "getHealth"},
+                      timeout=15,
+                  )
+                  ok = r.status_code == 200 and (r.json().get("result") == "ok")
+                  print(f"HELIUS_API_KEY: {'WORKS' if ok else f'SET BUT FAILING (http {r.status_code})'}")
+              except Exception as e:
+                  print(f"HELIUS_API_KEY: SET BUT ERRORING ({type(e).__name__})")
+
+          key = os.environ.get("TRADER_PRIVATE_KEY", "").strip()
+          if not key:
+              print("TRADER_PRIVATE_KEY: MISSING")
+          else:
+              try:
+                  from solders.keypair import Keypair
+                  kp = Keypair.from_base58_string(key)
+                  print(f"TRADER_PRIVATE_KEY: VALID, wallet address {kp.pubkey()}")
+              except Exception:
+                  print("TRADER_PRIVATE_KEY: SET BUT NOT A VALID KEY (re-export from Phantom)")
+
+          tg = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+          if not tg:
+              print("TELEGRAM_BOT_TOKEN: MISSING")
+          else:
+              try:
+                  r = httpx.get(f"https://api.telegram.org/bot{tg}/getMe", timeout=15)
+                  name = (r.json().get("result") or {}).get("username", "?")
+                  ok = r.status_code == 200
+                  print(f"TELEGRAM_BOT_TOKEN: {'WORKS, bot @' + name if ok else 'SET BUT FAILING'}")
+              except Exception as e:
+                  print(f"TELEGRAM_BOT_TOKEN: SET BUT ERRORING ({type(e).__name__})")
+          PY
