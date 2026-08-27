@@ -42,6 +42,11 @@ def entry_filter(row: dict, now: float, cfg: dict) -> str | None:
         return "clock_skew"
     if age_hours > entry["max_age_hours"]:
         return "too_old"
+    # The lab's edge was measured on pools up to an hour old at the 2h tick;
+    # a minutes-old pool is a different (rug-heavier) population. Too-young
+    # pools are NOT marked seen, so they re-qualify once they age in.
+    if age_hours < entry.get("min_age_hours", 0.0):
+        return "too_young"
     return None
 
 

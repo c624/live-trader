@@ -7,6 +7,7 @@
     "slippage_bps": 500,
     "max_price_impact_pct": 5.0,
     "entry": {
+        "min_age_hours": 0.25,
         "max_age_hours": 1.0,
         "min_reserve_usd": 5000,
         "max_new_per_loop": 2,
