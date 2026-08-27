@@ -1,0 +1,63 @@
+name: live-trader
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Force dry-run (no trades) regardless of config"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Two loops at once would double-buy and clobber each other's ledger.
+concurrency:
+  group: live-trader
+  cancel-in-progress: false
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 29
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx solders
+
+      - name: Fetch state branch
+        run: |
+          git fetch origin live-state:live-state 2>/dev/null || true
+          mkdir -p state
+          if git rev-parse --verify live-state >/dev/null 2>&1; then
+            git --work-tree=state checkout live-state -- . 2>/dev/null || true
+          fi
+
+      - name: Run trading loop
+        env:
+          STATE_DIR: ${{ github.workspace }}/state
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          TRADER_PRIVATE_KEY: ${{ secrets.TRADER_PRIVATE_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          LOOP_MINUTES: "25"
+        run: python -m live_trader.src.run_live
+
+      - name: Commit state back
+        if: always()
+        run: |
+          cd state
+          git init -q -b live-state
+          git config user.name "live-trader-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "live trader loop $(date -u +%FT%TZ)" || exit 0
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" live-state:live-state
