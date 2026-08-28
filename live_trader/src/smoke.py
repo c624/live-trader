@@ -41,7 +41,7 @@ def main() -> None:
     if not rpc.confirm(signature, 120):
         raise SystemExit("buy leg: not confirmed")
 
-    usdc_raw = rpc.token_balance_raw(pubkey, USDC_MINT)
+    usdc_raw = rpc.wait_token_balance(pubkey, USDC_MINT)
     print(f"USDC received: {usdc_raw / 1e6:.4f}")
     if usdc_raw <= 0:
         raise SystemExit("no USDC after confirmed buy")

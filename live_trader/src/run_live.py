@@ -139,7 +139,18 @@ class Trader:
         save_state(self.state)
 
         confirmed = self.rpc.confirm(signature)
-        token_raw = self.rpc.token_balance_raw(self.pubkey, mint)
+        token_raw = (
+            self.rpc.wait_token_balance(self.pubkey, mint)
+            if confirmed
+            else self.rpc.token_balance_raw(self.pubkey, mint)
+        )
+        if token_raw <= 0 and confirmed:
+            # Confirmed but tokens not visible yet: keep the position pending
+            # so the reconciler re-checks it on later loops instead of either
+            # abandoning real tokens or double-closing.
+            save_state(self.state)
+            send(f"{symbol} buy confirmed but tokens not visible yet; reconciling next loop.")
+            return
         if token_raw <= 0 and not confirmed:
             position["status"] = "closed"
             position["close_reason"] = "buy_failed"

@@ -77,7 +77,9 @@ class Rpc:
         return False
 
     def sol_balance_lamports(self, pubkey: str) -> int | None:
-        result = self._call("getBalance", [pubkey])
+        # "confirmed" commitment matches what confirm() waits for; the default
+        # ("finalized") lags ~15-30s and reads stale balances after a swap.
+        result = self._call("getBalance", [pubkey, {"commitment": "confirmed"}])
         try:
             return int(result["value"])
         except (TypeError, KeyError, ValueError):
@@ -87,7 +89,7 @@ class Rpc:
         """Sum of raw token units across the owner's accounts for this mint."""
         result = self._call(
             "getTokenAccountsByOwner",
-            [owner, {"mint": mint}, {"encoding": "jsonParsed"}],
+            [owner, {"mint": mint}, {"encoding": "jsonParsed", "commitment": "confirmed"}],
         )
         total = 0
         for account in (result or {}).get("value") or []:
@@ -97,3 +99,16 @@ class Rpc:
             except (KeyError, TypeError, ValueError):
                 continue
         return total
+
+    def wait_token_balance(self, owner: str, mint: str, timeout_seconds: float = 45.0) -> int:
+        """Poll until tokens show up after a confirmed swap; 0 on timeout.
+
+        Even at matching commitment, the node answering the balance query can
+        briefly trail the one that confirmed the transaction.
+        """
+        deadline = time.monotonic() + timeout_seconds
+        while True:
+            total = self.token_balance_raw(owner, mint)
+            if total > 0 or time.monotonic() >= deadline:
+                return total
+            time.sleep(3.0)
