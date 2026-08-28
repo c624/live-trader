@@ -46,13 +46,18 @@ def main() -> None:
     if usdc_raw <= 0:
         raise SystemExit("no USDC after confirmed buy")
 
-    quote2 = jup.quote(USDC_MINT, SOL_MINT, usdc_raw, SLIPPAGE_BPS)
-    if not quote2:
-        raise SystemExit("no quote USDC->SOL")
-    tx2 = jup.swap_transaction(quote2, pubkey)
-    signature2 = rpc.sign_and_send(tx2, keypair) if tx2 else None
+    signature2 = None
+    for attempt in range(3):
+        quote2 = jup.quote(USDC_MINT, SOL_MINT, usdc_raw, SLIPPAGE_BPS)
+        if not quote2:
+            raise SystemExit("no quote USDC->SOL")
+        tx2 = jup.swap_transaction(quote2, pubkey)
+        signature2 = rpc.sign_and_send(tx2, keypair) if tx2 else None
+        if signature2:
+            break
+        time.sleep(5)
     if not signature2:
-        raise SystemExit("sell leg: send failed")
+        raise SystemExit("sell leg: send failed after retries")
     print(f"sell leg sent: {signature2}")
     if not rpc.confirm(signature2, 120):
         raise SystemExit("sell leg: not confirmed")

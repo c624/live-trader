@@ -44,6 +44,7 @@ class Rpc:
             if response.is_success:
                 payload = response.json()
                 if "error" in payload:
+                    print(f"rpc error {method}: {payload['error']}")
                     return None
                 return payload.get("result")
             time.sleep(1.5 * (attempt + 1))
@@ -54,9 +55,17 @@ class Rpc:
         tx = VersionedTransaction.from_bytes(base64.b64decode(tx_b64))
         signed = VersionedTransaction(tx.message, [keypair])
         encoded = base64.b64encode(bytes(signed)).decode()
+        # Preflight must simulate against confirmed state: at the default
+        # (finalized) a sell submitted seconds after a confirmed buy fails
+        # "insufficient funds" because the buy is not finalized yet.
         return self._call(
             "sendTransaction",
-            [encoded, {"encoding": "base64", "skipPreflight": False, "maxRetries": 3}],
+            [encoded, {
+                "encoding": "base64",
+                "skipPreflight": False,
+                "preflightCommitment": "confirmed",
+                "maxRetries": 3,
+            }],
         )
 
     def confirm(self, signature: str, timeout_seconds: float = 90.0) -> bool:
