@@ -1,0 +1,63 @@
+# The research lab's forward paper trader, migrated here because the private
+# repo's cron silently stalled and public-repo minutes are unlimited. Fired
+# by the live-trader loop's heartbeat when paper-state grows stale, plus a
+# best-effort cron; state lives on this repo's paper-state branch.
+name: paper-trader
+
+on:
+  schedule:
+    - cron: "41 1,3,5,7,9,11,13,15,17,19,21,23 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# Ticks share one state branch; two at once would clobber each other.
+concurrency:
+  group: paper-trader
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Fetch state branch
+        run: |
+          git fetch origin paper-state:paper-state 2>/dev/null || true
+          mkdir -p state
+          if git rev-parse --verify paper-state >/dev/null 2>&1; then
+            git --work-tree=state checkout paper-state -- . 2>/dev/null || true
+          fi
+
+      - name: Guard against unseeded state
+        run: |
+          # Refuse to tick before the ledger is migrated in: a fresh-state
+          # tick here would fork the lab's history.
+          test -f state/ledger.csv || { echo "paper-state not seeded yet"; exit 1; }
+
+      - name: Run paper trader tick
+        working-directory: paper_trader
+        env:
+          STATE_DIR: ${{ github.workspace }}/state
+        run: python -m src.run
+
+      - name: Commit state back
+        if: always()
+        run: |
+          cd state
+          git init -q -b paper-state
+          git config user.name "paper-trader-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "paper trader tick $(date -u +%FT%TZ)" || exit 0
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" paper-state:paper-state

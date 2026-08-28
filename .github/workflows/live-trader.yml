@@ -75,3 +75,22 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/live-trader.yml/dispatches" \
             -d '{"ref":"main"}'
+
+      # The cron scheduler proved unreliable for both repos, so this loop
+      # doubles as the research lab's heartbeat: when paper-state has not
+      # ticked in ~2 hours, fire the paper trader. Skips silently while the
+      # paper-state branch does not exist yet.
+      - name: Heartbeat the paper trader
+        if: success()
+        run: |
+          last=$(curl -sS -H "Authorization: Bearer ${{ github.token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/branches/paper-state" \
+            | python3 -c "import sys,json,datetime;d=json.load(sys.stdin);print(int(datetime.datetime.fromisoformat(d['commit']['commit']['committer']['date'].replace('Z','+00:00')).timestamp()))" 2>/dev/null || echo 0)
+          age=$(( $(date +%s) - last ))
+          echo "paper-state age: ${age}s"
+          if [ "$last" != "0" ] && [ "$age" -gt 6600 ]; then
+            curl -sS -X POST -H "Authorization: Bearer ${{ github.token }}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/actions/workflows/paper-trader.yml/dispatches" \
+              -d '{"ref":"main"}'
+          fi
