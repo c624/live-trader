@@ -56,6 +56,15 @@ jobs:
                   from solders.keypair import Keypair
                   kp = Keypair.from_base58_string(key)
                   print(f"TRADER_PRIVATE_KEY: VALID, wallet address {kp.pubkey()}")
+                  if helius:
+                      r = httpx.post(
+                          f"https://mainnet.helius-rpc.com/?api-key={helius}",
+                          json={"jsonrpc": "2.0", "id": 1, "method": "getBalance",
+                                "params": [str(kp.pubkey())]},
+                          timeout=15,
+                      )
+                      lamports = ((r.json().get("result") or {}).get("value")) or 0
+                      print(f"WALLET BALANCE: {lamports / 1e9:.4f} SOL")
               except Exception:
                   print("TRADER_PRIVATE_KEY: SET BUT NOT A VALID KEY (re-export from Phantom)")
 
