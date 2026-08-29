@@ -1,0 +1,55 @@
+# Diagnostic: what does the live bot's pool detection actually see from a
+# runner? Prints raw HTTP status, row counts, and per-row filter verdicts.
+name: diag
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Probe detection path
+        run: |
+          python - <<'PY'
+          import time, httpx
+          from live_trader.src.gecko import Gecko, API_ROOT, NETWORK
+          from live_trader.src.decisions import entry_filter
+          from live_trader.src.config import load_config
+
+          r = httpx.get(
+              f"{API_ROOT}/networks/{NETWORK}/new_pools",
+              params={"page": 1},
+              headers={"Accept": "application/json;version=20230302"},
+              timeout=30.0,
+          )
+          print("raw status:", r.status_code)
+          body = r.text[:300].replace("\n", " ")
+          print("raw body head:", body)
+
+          g = Gecko()
+          rows = g.new_pools(pages=2)
+          print("client rows:", len(rows))
+          cfg = load_config()
+          now = time.time()
+          verdicts = {}
+          for row in rows:
+              reason = entry_filter(row, now, cfg) or "QUALIFIES"
+              verdicts[reason] = verdicts.get(reason, 0) + 1
+          print("filter verdicts:", verdicts)
+          for row in rows[:3]:
+              print("sample:", row["symbol"], row["pool_created_at"], row["reserve_usd"])
+          PY
