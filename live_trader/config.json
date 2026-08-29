@@ -1,5 +1,5 @@
 {
-    "trading_enabled": false,
+    "trading_enabled": true,
     "ticket_usd": 15,
     "max_open_positions": 5,
     "max_daily_spend_usd": 100,
