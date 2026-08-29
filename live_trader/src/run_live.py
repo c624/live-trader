@@ -73,8 +73,11 @@ class Trader:
 
     # ------------------------------------------------------------- buying
     def detect_and_buy(self, ts: float) -> None:
-        rows = self.gecko.new_pools(pages=2)
+        rows = self.gecko.candidate_pools()
         buys, skipped = pick_entries(rows, self.state, ts, self.cfg)
+        # One line per detection so a silent market is distinguishable from
+        # a blind detector in the run logs.
+        print(f"detect: {len(rows)} rows, {len(buys)} buys, {len(skipped)} skipped")
         for row, reason in skipped:
             if reason in LOGGED_SKIPS:
                 log_signal(_signal_row(row, "skip", reason, ts))

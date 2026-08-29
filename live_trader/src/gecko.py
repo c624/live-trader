@@ -45,10 +45,19 @@ class Gecko:
             time.sleep(2 * (attempt + 1))
         return None
 
-    def new_pools(self, pages: int = 2) -> list[dict]:
+    def candidate_pools(self) -> list[dict]:
+        """Discovery identical to the paper lab's: trending plus new pools.
+
+        The first pages of new_pools hold only pools seconds-to-minutes old
+        during busy hours; the 15-60 minute window the lab measured lives in
+        trending_pools and the deeper new_pools pages.
+        """
+        return self.pools("trending_pools", 3) + self.pools("new_pools", 5)
+
+    def pools(self, kind: str, pages: int) -> list[dict]:
         rows: list[dict] = []
         for page in range(1, pages + 1):
-            payload = self._get(f"/networks/{NETWORK}/new_pools", {"page": page})
+            payload = self._get(f"/networks/{NETWORK}/{kind}", {"page": page})
             if not payload:
                 break
             for pool in payload.get("data") or []:

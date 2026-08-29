@@ -41,7 +41,7 @@ jobs:
           print("raw body head:", body)
 
           g = Gecko()
-          rows = g.new_pools(pages=2)
+          rows = g.candidate_pools()
           print("client rows:", len(rows))
           cfg = load_config()
           now = time.time()
