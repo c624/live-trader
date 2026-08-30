@@ -134,6 +134,13 @@ class HeliusSwaps:
                     token_delta += sign * amount
 
         if not mint or token_delta == 0 or sol_delta == 0:
+            # Helius classifies only some routers. For the rest the raw
+            # transfers say the same thing: what left the wallet and what
+            # arrived. Without this fallback almost every swap is discarded.
+            mint, token_delta, sol_delta, saw_stable = _from_transfers(tx, wallet)
+            touched_stable = touched_stable or saw_stable
+
+        if not mint or token_delta == 0 or sol_delta == 0:
             if touched_stable:
                 self.skipped_stable += 1
             else:
@@ -167,3 +174,53 @@ def _amount(leg: dict) -> float:
         return float(leg.get("tokenAmount") or 0)
     except (TypeError, ValueError):
         return 0.0
+
+
+def _from_transfers(tx: dict, wallet: str):
+    """Net position change for the wallet, read from raw transfers.
+
+    Returns (mint, token_delta, sol_delta, saw_stable). The traded token is
+    the non-quote mint the wallet moved the most of, so routing hops through
+    other tokens cannot be mistaken for the trade itself.
+    """
+    token_deltas: dict[str, float] = {}
+    sol_delta = 0.0
+    saw_stable = False
+
+    for transfer in tx.get("tokenTransfers") or []:
+        mint = transfer.get("mint")
+        if not mint:
+            continue
+        try:
+            amount = float(transfer.get("tokenAmount") or 0)
+        except (TypeError, ValueError):
+            continue
+        if not amount:
+            continue
+        if transfer.get("toUserAccount") == wallet:
+            sign = 1.0
+        elif transfer.get("fromUserAccount") == wallet:
+            sign = -1.0
+        else:
+            continue
+        if mint == WSOL:
+            sol_delta += sign * amount
+        elif mint in STABLES:
+            saw_stable = True
+        else:
+            token_deltas[mint] = token_deltas.get(mint, 0.0) + sign * amount
+
+    for native in tx.get("nativeTransfers") or []:
+        try:
+            amount = int(native.get("amount") or 0) / LAMPORTS_PER_SOL
+        except (TypeError, ValueError):
+            continue
+        if native.get("toUserAccount") == wallet:
+            sol_delta += amount
+        elif native.get("fromUserAccount") == wallet:
+            sol_delta -= amount
+
+    if not token_deltas:
+        return None, 0.0, sol_delta, saw_stable
+    mint = max(token_deltas, key=lambda m: abs(token_deltas[m]))
+    return mint, token_deltas[mint], sol_delta, saw_stable

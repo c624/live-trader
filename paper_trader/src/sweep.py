@@ -107,6 +107,21 @@ def bootstrap_ci(values: list[float], rounds: int = BOOTSTRAP_ROUNDS):
     return means[int(0.05 * rounds)], means[int(0.95 * rounds)]
 
 
+def trimmed_mean(values: list[float], frac: float = 0.05) -> float:
+    """Mean with the extreme tails dropped.
+
+    The first live run of this sweep ranked policies by plain mean and put a
+    single position worth tens of millions of percent at the top of every
+    cell that held it. A number like that is a broken price series, not a
+    trade anybody could make, and ranking on it measures nothing.
+    """
+    if len(values) < 10:
+        return statistics.fmean(values) if values else 0.0
+    ordered = sorted(values)
+    cut = max(1, int(len(ordered) * frac))
+    return statistics.fmean(ordered[cut:-cut])
+
+
 def robustness(values: list[float]) -> tuple[float, float]:
     """Median, and the mean with the single best trade removed.
 
@@ -133,7 +148,7 @@ def breakdown(results: list[list], indices: list[int], j: int) -> str:
     return ", ".join(parts)
 
 
-def report(grid: list[Policy], results: list[list]) -> None:
+def report(grid: list[Policy], results: list[list], positions: list[dict]) -> None:
     n = len(results)
     half = n // 2
     discovery = list(range(half))
@@ -149,25 +164,29 @@ def report(grid: list[Policy], results: list[list]) -> None:
     print(f"  exits: {breakdown(results, list(range(n)), baseline)}")
 
     ranked = sorted(
-        range(len(grid)), key=lambda j: -edge_of(results, discovery, j)
+        range(len(grid)),
+        key=lambda j: -trimmed_mean(
+            [results[i][j].net_return_pct for i in discovery]
+        ),
     )
     print(
         f"\n=== SPLIT SAMPLE ===\ndiscovery n={len(discovery)} (older), "
         f"holdout n={len(holdout)} (newer, never seen by the ranking)"
     )
     print(f"{len(grid)} policies ranked on the discovery half. Top 12:")
+    print("(disc and hold are 5% trimmed means; mean is the raw average)")
     print(
-        f"  {'policy':28s} {'disc':>9} {'holdout':>9} {'median':>8}"
-        f" {'ex-best':>9}  90% CI"
+        f"  {'policy':22s} {'disc':>9} {'hold':>9} {'mean':>11}"
+        f" {'median':>8} {'ex-best':>10}"
     )
     for j in ranked[:12]:
         values = [results[i][j].net_return_pct for i in holdout]
-        lo, hi = bootstrap_ci(values)
         median, ex_best = robustness(values)
         print(
-            f"  {grid[j].label:28s} {edge_of(results, discovery, j):+9.2f}"
-            f" {statistics.fmean(values):+9.2f} {median:+8.2f} {ex_best:+9.2f}"
-            f"  [{lo:+.1f} .. {hi:+.1f}]"
+            f"  {grid[j].label:22s}"
+            f" {trimmed_mean([results[i][j].net_return_pct for i in discovery]):+9.2f}"
+            f" {trimmed_mean(values):+9.2f} {statistics.fmean(values):+11.2f}"
+            f" {median:+8.2f} {ex_best:+10.2f}"
         )
 
     best = ranked[0]
@@ -179,7 +198,7 @@ def report(grid: list[Policy], results: list[list]) -> None:
     print(f"holdout edge {statistics.fmean(values):+.2f}% per trade, 90% CI {lo:+.1f} .. {hi:+.1f}")
     print(f"holdout median {median:+.2f}%, edge without the single best trade {ex_best:+.2f}%")
     print(f"  exits: {breakdown(results, holdout, best)}")
-    if lo > 0 and ex_best > 0:
+    if lo > 0 and ex_best > 0 and trimmed_mean(values) > 0:
         print("VERDICT: positive on unseen data, interval clear of zero, "
               "and it survives losing its best trade.")
     elif lo > 0:
@@ -188,17 +207,35 @@ def report(grid: list[Policy], results: list[list]) -> None:
     else:
         print("VERDICT: NOT tradeable. The interval includes zero or is negative.")
 
+    print("\n=== LARGEST SINGLE-POSITION RETURNS (sanity check) ===")
+    print("a real memecoin can 10x; a five-figure percentage is a broken price series")
+    ride = next(
+        j for j, p in enumerate(grid)
+        if p.take_profit_pct is None and p.stop_loss_pct is None
+        and p.trail_pct is None and p.hold_hours == 24
+    )
+    extremes = sorted(
+        range(len(results)), key=lambda i: -results[i][ride].net_return_pct
+    )[:8]
+    for i in extremes:
+        position = positions[i] if i < len(positions) else {}
+        print(
+            f"  {str(position.get('symbol', '?'))[:18]:20s}"
+            f" {results[i][ride].net_return_pct:+15.1f}%"
+            f"  entry_price={position.get('entry_price_api')}"
+        )
+
     # A policy that only wins in one half is a coin flip; show the honest pair.
     both = [
         j for j in ranked[:40]
-        if edge_of(results, discovery, j) > 0
-        and statistics.fmean(results[i][j].net_return_pct for i in holdout) > 0
+        if trimmed_mean([results[i][j].net_return_pct for i in discovery]) > 0
+        and trimmed_mean([results[i][j].net_return_pct for i in holdout]) > 0
     ]
     print(f"\npolicies positive in BOTH halves: {len(both)} of {len(grid)}")
     for j in both[:10]:
         print(
-            f"  {grid[j].label:28s} disc {edge_of(results, discovery, j):+7.2f}"
-            f"  hold {statistics.fmean(results[i][j].net_return_pct for i in holdout):+7.2f}"
+            f"  {grid[j].label:22s} disc {trimmed_mean([results[i][j].net_return_pct for i in discovery]):+8.2f}"
+            f"  hold {trimmed_mean([results[i][j].net_return_pct for i in holdout]):+8.2f}"
         )
 
 
@@ -207,11 +244,11 @@ async def main() -> None:
     group = sys.argv[2] if len(sys.argv) > 2 else "all"
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
     grid = build_grid()
-    _positions, results = await score_all(state_dir, group, limit, grid)
+    positions, results = await score_all(state_dir, group, limit, grid)
     if not results:
         print("no positions")
         return
-    report(grid, results)
+    report(grid, results, positions)
 
 
 if __name__ == "__main__":
