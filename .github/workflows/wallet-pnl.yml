@@ -1,0 +1,35 @@
+# Grades wallets on their own realized profit and tests whether that profit
+# persists from one period to the next. Read-only: no trades, no state.
+name: wallet-pnl
+
+on:
+  workflow_dispatch:
+    inputs:
+      lookback_days:
+        description: "Days of swap history per wallet"
+        type: string
+        default: "60"
+
+permissions:
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Grade wallets
+        working-directory: wallet_pnl
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: |
+          python -m src.grade wallets.txt "${{ inputs.lookback_days }}"
