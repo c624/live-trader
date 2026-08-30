@@ -82,6 +82,15 @@ async def main() -> None:
         f"\nskipped: {client.skipped_stable} stablecoin-quoted, "
         f"{client.skipped_unparsed} unparsed"
     )
+    print(f"parsed by path: {client.by_path}")
+    print(f"first transaction shape: {client.shape_sample}")
+    sizes = sorted(abs(s.sol_amount) for _l, _a, _r, sw in rows for s in sw)
+    if sizes:
+        print(
+            f"swap size SOL: min {sizes[0]:.4f} "
+            f"p25 {sizes[len(sizes)//4]:.4f} median {sizes[len(sizes)//2]:.4f} "
+            f"p75 {sizes[3*len(sizes)//4]:.4f} max {sizes[-1]:.4f}"
+        )
 
     print("\n=== DID THEY MAKE MONEY? ===")
     print(

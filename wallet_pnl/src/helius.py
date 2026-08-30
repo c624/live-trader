@@ -43,6 +43,10 @@ class HeliusSwaps:
         self._last = 0.0
         self.skipped_stable = 0
         self.skipped_unparsed = 0
+        # Which path produced each swap. Three parsers have now disagreed
+        # with reality in a row; a counter is cheaper than another guess.
+        self.by_path = {"balances": 0, "event": 0, "transfers": 0}
+        self.shape_sample: dict | None = None
 
     async def close(self) -> None:
         await self._client.aclose()
@@ -118,7 +122,26 @@ class HeliusSwaps:
         # (0.002 SOL) instead of trade size for 24 of 27 wallets.
         mint, token_delta, sol_delta, saw_stable = _from_account_data(tx, wallet)
         touched_stable = touched_stable or saw_stable
+        if self.shape_sample is None:
+            self.shape_sample = {
+                "top_level_keys": sorted(tx.keys()),
+                "account_data_entries": len(tx.get("accountData") or []),
+                "wallet_entry_present": any(
+                    e.get("account") == wallet for e in tx.get("accountData") or []
+                ),
+                "wallet_native_change": next(
+                    (e.get("nativeBalanceChange") for e in tx.get("accountData") or []
+                     if e.get("account") == wallet), None
+                ),
+                "token_balance_change_owners": sorted({
+                    str(c.get("userAccount"))[:6]
+                    for e in tx.get("accountData") or []
+                    for c in (e.get("tokenBalanceChanges") or [])
+                })[:5],
+                "wallet_prefix": wallet[:6],
+            }
         if mint and token_delta and sol_delta and (token_delta > 0) != (sol_delta > 0):
+            self.by_path["balances"] += 1
             return Swap(
                 ts=int(ts),
                 signature=signature,
@@ -172,6 +195,7 @@ class HeliusSwaps:
             self.skipped_unparsed += 1
             return None
 
+        self.by_path["event" if swap else "transfers"] += 1
         return Swap(
             ts=int(ts),
             signature=signature,
