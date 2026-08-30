@@ -1,0 +1,44 @@
+# Asks whether a rug is visible before the buy: entry-time features against
+# corrected-engine outcomes, searched on the older half of the sample and
+# scored on the newer half. Read-only, places no trades.
+name: rugstudy
+
+on:
+  workflow_dispatch:
+    inputs:
+      group:
+        description: "Group to study, or 'all'"
+        type: string
+        default: "all"
+      limit:
+        description: "Max positions to study"
+        type: string
+        default: "400"
+
+permissions:
+  contents: read
+
+jobs:
+  rugstudy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Fetch lab state
+        run: |
+          git fetch origin paper-state:paper-state
+          mkdir -p state
+          git --work-tree=state checkout paper-state -- .
+
+      - name: Study
+        working-directory: paper_trader
+        run: |
+          python -m src.rugstudy ../state "${{ inputs.group }}" "${{ inputs.limit }}"

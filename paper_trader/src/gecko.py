@@ -93,6 +93,39 @@ class Gecko:
         return sorted(rows, key=lambda r: r[0])
 
 
+    async def candles_with_volume(self, pool: str, before_timestamp: int) -> list[tuple]:
+        """Same bars as candles() but keeping the volume column.
+
+        Volume before entry is the only evidence of whether anyone other
+        than the deployer was trading the pool, so the study needs it.
+        """
+        payload = await self._get(
+            f"/networks/{NETWORK}/pools/{pool}/ohlcv/minute",
+            {
+                "before_timestamp": before_timestamp,
+                "limit": 1000,
+                "currency": "usd",
+                "aggregate": 5,
+            },
+        )
+        if not payload:
+            return []
+        raw = ((payload.get("data") or {}).get("attributes") or {}).get("ohlcv_list") or []
+        rows = [
+            (
+                int(r[0]),
+                float(r[1]),
+                float(r[2]),
+                float(r[3]),
+                float(r[4]),
+                float(r[5]) if len(r) > 5 and r[5] is not None else 0.0,
+            )
+            for r in raw
+            if len(r) >= 5
+        ]
+        return sorted(rows, key=lambda r: r[0])
+
+
 def _f(value):
     try:
         return float(value) if value not in (None, "") else None
