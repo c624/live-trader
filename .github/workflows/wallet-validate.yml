@@ -1,0 +1,36 @@
+# Runs the swap parser against a wallet whose trades are already known, so
+# its output can be checked against a ledger we wrote ourselves.
+name: wallet-validate
+
+on:
+  workflow_dispatch:
+    inputs:
+      wallet:
+        description: "Wallet address to parse"
+        type: string
+        default: "DtFUr5giXgjMEFKD89xZfg4dw6gJ8bEGc2acQ4XunpEX"
+      days:
+        description: "Days of history"
+        type: string
+        default: "7"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install httpx
+      - name: Validate
+        working-directory: wallet_pnl
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: |
+          python -m src.validate "${{ inputs.wallet }}" "${{ inputs.days }}"
