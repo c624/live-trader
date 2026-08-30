@@ -1,0 +1,44 @@
+# Scores every take-profit / stop / trailing-stop / hold combination over the
+# lab's positions on the honest engine, ranking on the older half and
+# reporting the winner on the newer half. Read-only: places no trades.
+name: sweep
+
+on:
+  workflow_dispatch:
+    inputs:
+      group:
+        description: "Group to sweep, or 'all'"
+        type: string
+        default: "all"
+      limit:
+        description: "Max positions"
+        type: string
+        default: "400"
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Fetch lab state
+        run: |
+          git fetch origin paper-state:paper-state
+          mkdir -p state
+          git --work-tree=state checkout paper-state -- .
+
+      - name: Sweep
+        working-directory: paper_trader
+        run: |
+          python -m src.sweep ../state "${{ inputs.group }}" "${{ inputs.limit }}"

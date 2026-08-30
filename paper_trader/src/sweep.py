@@ -1,0 +1,218 @@
+"""Sweep exit policies over the lab's positions on honest terms.
+
+The entry-filter study found no screen that turns this population positive,
+and showed why: even where rugs are nearly absent the strategy loses,
+because winners are capped at +100% while losers fill at -60% or worse. So
+the question moves to the exit. This scores every position under a grid of
+take-profit / stop / trailing-stop / hold combinations from a single pass
+over the candle data.
+
+The grid is large, which means the best cell is partly luck. The same
+defence as the entry study applies: policies are ranked on the older half of
+the sample and the winner is reported on the newer half, with a bootstrap
+interval and the number of cells tried.
+
+Usage: python -m src.sweep [state_dir] [group|all] [limit]
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import random
+import statistics
+import sys
+from pathlib import Path
+
+from .engine import Candles
+from .gecko import Gecko
+from .policy_engine import Policy, simulate_policy
+
+FEES = 3.2
+MAX_HOLD_HOURS = 24
+MATURITY_SECONDS = (MAX_HOLD_HOURS + 2) * 3600
+BOOTSTRAP_ROUNDS = 2000
+
+TAKE_PROFITS: list[float | None] = [50, 100, 200, 400, None]
+STOPS: list[float | None] = [30, 50, 80, None]
+TRAILS: list[float | None] = [None, 30, 50]
+HOLDS = [2, 6, 12, 24]
+
+
+def build_grid() -> list[Policy]:
+    """Every combination, minus the ones that are the same rule twice."""
+    grid = []
+    for hold in HOLDS:
+        for tp in TAKE_PROFITS:
+            for sl in STOPS:
+                for trail in TRAILS:
+                    # With no stop of any kind and no target, hold time is the
+                    # only rule; that cell is worth exactly one entry.
+                    grid.append(
+                        Policy(
+                            take_profit_pct=tp,
+                            stop_loss_pct=sl,
+                            trail_pct=trail,
+                            hold_hours=hold,
+                            round_trip_fee_pct=FEES,
+                        )
+                    )
+    return grid
+
+
+def load_positions(state_dir: Path, group: str) -> list[dict]:
+    state = json.loads((state_dir / "paper_state.json").read_text())
+    out = []
+    for bucket in ("riding", "open"):
+        for p in state.get(bucket, []):
+            if group == "all" or group in (p.get("groups") or []) or p.get("group") == group:
+                out.append(p)
+    out.sort(key=lambda p: p["entry_ts"])
+    return out
+
+
+async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy]):
+    """Returns (positions, results) where results[i][j] is position i under policy j."""
+    positions = load_positions(state_dir, group)[:limit]
+    print(f"sweeping {len(grid)} policies over {len(positions)} {group} positions\n", flush=True)
+
+    gecko = Gecko()
+    results: list[list] = []
+    kept: list[dict] = []
+    try:
+        for i, position in enumerate(positions, 1):
+            entry_ts = position["entry_ts"]
+            rows = await gecko.candles(position["pool"], entry_ts + MATURITY_SECONDS)
+            candles = Candles(rows=rows)
+            results.append([simulate_policy(candles, entry_ts, p) for p in grid])
+            kept.append(position)
+            if i % 25 == 0:
+                print(f"  ...{i}/{len(positions)}", flush=True)
+    finally:
+        await gecko.close()
+    return kept, results
+
+
+def edge_of(results: list[list], indices: list[int], j: int) -> float:
+    return statistics.fmean(results[i][j].net_return_pct for i in indices)
+
+
+def bootstrap_ci(values: list[float], rounds: int = BOOTSTRAP_ROUNDS):
+    if len(values) < 5:
+        return (float("nan"), float("nan"))
+    rng = random.Random(20260830)
+    means = sorted(
+        statistics.fmean(rng.choices(values, k=len(values))) for _ in range(rounds)
+    )
+    return means[int(0.05 * rounds)], means[int(0.95 * rounds)]
+
+
+def robustness(values: list[float]) -> tuple[float, float]:
+    """Median, and the mean with the single best trade removed.
+
+    A policy with no take-profit can post a fine average off one lottery
+    ticket. If dropping the best trade kills the edge, it is not a strategy,
+    it is that one trade.
+    """
+    if len(values) < 3:
+        return (float("nan"), float("nan"))
+    without_best = sorted(values)[:-1]
+    return statistics.median(values), statistics.fmean(without_best)
+
+
+def breakdown(results: list[list], indices: list[int], j: int) -> str:
+    counts: dict[str, int] = {}
+    for i in indices:
+        reason = results[i][j].exit_reason
+        counts[reason] = counts.get(reason, 0) + 1
+    total = len(indices)
+    parts = [
+        f"{reason} {100 * n / total:.0f}%"
+        for reason, n in sorted(counts.items(), key=lambda kv: -kv[1])
+    ]
+    return ", ".join(parts)
+
+
+def report(grid: list[Policy], results: list[list]) -> None:
+    n = len(results)
+    half = n // 2
+    discovery = list(range(half))
+    holdout = list(range(half, n))
+
+    baseline = next(
+        j for j, p in enumerate(grid)
+        if p.take_profit_pct == 100 and p.stop_loss_pct == 50
+        and p.trail_pct is None and p.hold_hours == 24
+    )
+    print("\n=== THE POLICY WE TRADED LIVE ===")
+    print(f"{grid[baseline].label}: whole sample edge {edge_of(results, list(range(n)), baseline):+.2f}%")
+    print(f"  exits: {breakdown(results, list(range(n)), baseline)}")
+
+    ranked = sorted(
+        range(len(grid)), key=lambda j: -edge_of(results, discovery, j)
+    )
+    print(
+        f"\n=== SPLIT SAMPLE ===\ndiscovery n={len(discovery)} (older), "
+        f"holdout n={len(holdout)} (newer, never seen by the ranking)"
+    )
+    print(f"{len(grid)} policies ranked on the discovery half. Top 12:")
+    print(
+        f"  {'policy':28s} {'disc':>9} {'holdout':>9} {'median':>8}"
+        f" {'ex-best':>9}  90% CI"
+    )
+    for j in ranked[:12]:
+        values = [results[i][j].net_return_pct for i in holdout]
+        lo, hi = bootstrap_ci(values)
+        median, ex_best = robustness(values)
+        print(
+            f"  {grid[j].label:28s} {edge_of(results, discovery, j):+9.2f}"
+            f" {statistics.fmean(values):+9.2f} {median:+8.2f} {ex_best:+9.2f}"
+            f"  [{lo:+.1f} .. {hi:+.1f}]"
+        )
+
+    best = ranked[0]
+    values = [results[i][best].net_return_pct for i in holdout]
+    lo, hi = bootstrap_ci(values)
+    print("\n=== VERDICT ===")
+    print(f"best discovery policy: {grid[best].label}")
+    median, ex_best = robustness(values)
+    print(f"holdout edge {statistics.fmean(values):+.2f}% per trade, 90% CI {lo:+.1f} .. {hi:+.1f}")
+    print(f"holdout median {median:+.2f}%, edge without the single best trade {ex_best:+.2f}%")
+    print(f"  exits: {breakdown(results, holdout, best)}")
+    if lo > 0 and ex_best > 0:
+        print("VERDICT: positive on unseen data, interval clear of zero, "
+              "and it survives losing its best trade.")
+    elif lo > 0:
+        print("VERDICT: FRAGILE. Positive overall but the edge dies without "
+              "its single best trade; that is one lottery ticket, not an edge.")
+    else:
+        print("VERDICT: NOT tradeable. The interval includes zero or is negative.")
+
+    # A policy that only wins in one half is a coin flip; show the honest pair.
+    both = [
+        j for j in ranked[:40]
+        if edge_of(results, discovery, j) > 0
+        and statistics.fmean(results[i][j].net_return_pct for i in holdout) > 0
+    ]
+    print(f"\npolicies positive in BOTH halves: {len(both)} of {len(grid)}")
+    for j in both[:10]:
+        print(
+            f"  {grid[j].label:28s} disc {edge_of(results, discovery, j):+7.2f}"
+            f"  hold {statistics.fmean(results[i][j].net_return_pct for i in holdout):+7.2f}"
+        )
+
+
+async def main() -> None:
+    state_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "state")
+    group = sys.argv[2] if len(sys.argv) > 2 else "all"
+    limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
+    grid = build_grid()
+    _positions, results = await score_all(state_dir, group, limit, grid)
+    if not results:
+        print("no positions")
+        return
+    report(grid, results)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
