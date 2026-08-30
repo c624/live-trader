@@ -111,6 +111,25 @@ class HeliusSwaps:
         mint = None
         touched_stable = False
 
+        # Balance changes are the ground truth: they are what the wallet's
+        # accounts actually gained and lost. The parsed swap event and the
+        # raw transfers both miss SOL that moves through a temporary wrapped
+        # -SOL account, which left the first live run measuring account rent
+        # (0.002 SOL) instead of trade size for 24 of 27 wallets.
+        mint, token_delta, sol_delta, saw_stable = _from_account_data(tx, wallet)
+        touched_stable = touched_stable or saw_stable
+        if mint and token_delta and sol_delta and (token_delta > 0) != (sol_delta > 0):
+            return Swap(
+                ts=int(ts),
+                signature=signature,
+                mint=mint,
+                token_amount=token_delta,
+                sol_amount=sol_delta,
+            )
+
+        sol_delta = 0.0
+        token_delta = 0.0
+        mint = None
         swap = (tx.get("events") or {}).get("swap") or {}
         native_in = (swap.get("nativeInput") or {}).get("amount")
         native_out = (swap.get("nativeOutput") or {}).get("amount")
@@ -219,6 +238,43 @@ def _from_transfers(tx: dict, wallet: str):
             sol_delta += amount
         elif native.get("fromUserAccount") == wallet:
             sol_delta -= amount
+
+    if not token_deltas:
+        return None, 0.0, sol_delta, saw_stable
+    mint = max(token_deltas, key=lambda m: abs(token_deltas[m]))
+    return mint, token_deltas[mint], sol_delta, saw_stable
+
+
+def _from_account_data(tx: dict, wallet: str):
+    """Net SOL and token change for the wallet, from account balance deltas.
+
+    A wallet's own native balance change plus its wrapped-SOL balance change
+    is the true economic SOL delta: wrapping moves value between the two and
+    nets to zero, so counting both is correct rather than double counting.
+    """
+    sol_delta = 0.0
+    token_deltas: dict[str, float] = {}
+    saw_stable = False
+
+    for entry in tx.get("accountData") or []:
+        if entry.get("account") == wallet:
+            try:
+                sol_delta += int(entry.get("nativeBalanceChange") or 0) / LAMPORTS_PER_SOL
+            except (TypeError, ValueError):
+                pass
+        for change in entry.get("tokenBalanceChanges") or []:
+            if change.get("userAccount") != wallet:
+                continue
+            mint = change.get("mint")
+            amount = _amount(change)
+            if not mint or not amount:
+                continue
+            if mint == WSOL:
+                sol_delta += amount
+            elif mint in STABLES:
+                saw_stable = True
+            else:
+                token_deltas[mint] = token_deltas.get(mint, 0.0) + amount
 
     if not token_deltas:
         return None, 0.0, sol_delta, saw_stable
