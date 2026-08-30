@@ -1,0 +1,44 @@
+# Re-scores the lab's positions with the corrected engine (realistic stop
+# fills, rugs counted as -100% instead of dropped) and prints both numbers
+# side by side. Read-only: touches no state, places no trades.
+name: rescore
+
+on:
+  workflow_dispatch:
+    inputs:
+      group:
+        description: "Which group to re-score"
+        type: string
+        default: "brand_new"
+      limit:
+        description: "Max positions to re-score"
+        type: string
+        default: "200"
+
+permissions:
+  contents: read
+
+jobs:
+  rescore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Fetch lab state
+        run: |
+          git fetch origin paper-state:paper-state
+          mkdir -p state
+          git --work-tree=state checkout paper-state -- .
+
+      - name: Re-score
+        working-directory: paper_trader
+        run: |
+          python -m src.rescore ../state "${{ inputs.group }}" "${{ inputs.limit }}"
