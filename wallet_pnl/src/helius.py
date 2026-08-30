@@ -46,6 +46,7 @@ class HeliusSwaps:
         # Which path produced each swap. Three parsers have now disagreed
         # with reality in a row; a counter is cheaper than another guess.
         self.by_path = {"balances": 0, "event": 0, "transfers": 0}
+        self.skipped_funded_elsewhere = 0
         self.shape_sample: dict | None = None
 
     async def close(self) -> None:
@@ -120,7 +121,7 @@ class HeliusSwaps:
         # raw transfers both miss SOL that moves through a temporary wrapped
         # -SOL account, which left the first live run measuring account rent
         # (0.002 SOL) instead of trade size for 24 of 27 wallets.
-        mint, token_delta, sol_delta, saw_stable = _from_account_data(tx, wallet)
+        mint, token_delta, sol_delta, saw_stable, wallet_entry = _from_account_data(tx, wallet)
         touched_stable = touched_stable or saw_stable
         if self.shape_sample is None:
             self.shape_sample = {
@@ -149,6 +150,13 @@ class HeliusSwaps:
                 token_amount=token_delta,
                 sol_amount=sol_delta,
             )
+        if mint and token_delta and not sol_delta and wallet_entry:
+            # Tokens moved but this wallet's SOL did not: the trade was funded
+            # from some other account. The FomoScan wallets look like this,
+            # and letting the transfer fallback guess here is what produced
+            # rent-sized "trades". Refusing is the only honest reading.
+            self.skipped_funded_elsewhere += 1
+            return None
 
         sol_delta = 0.0
         token_delta = 0.0
@@ -279,9 +287,11 @@ def _from_account_data(tx: dict, wallet: str):
     sol_delta = 0.0
     token_deltas: dict[str, float] = {}
     saw_stable = False
+    wallet_entry = False
 
     for entry in tx.get("accountData") or []:
         if entry.get("account") == wallet:
+            wallet_entry = True
             try:
                 sol_delta += int(entry.get("nativeBalanceChange") or 0) / LAMPORTS_PER_SOL
             except (TypeError, ValueError):
@@ -301,6 +311,6 @@ def _from_account_data(tx: dict, wallet: str):
                 token_deltas[mint] = token_deltas.get(mint, 0.0) + amount
 
     if not token_deltas:
-        return None, 0.0, sol_delta, saw_stable
+        return None, 0.0, sol_delta, saw_stable, wallet_entry
     mint = max(token_deltas, key=lambda m: abs(token_deltas[m]))
-    return mint, token_deltas[mint], sol_delta, saw_stable
+    return mint, token_deltas[mint], sol_delta, saw_stable, wallet_entry

@@ -1,0 +1,43 @@
+# Finds candidate wallets from the chain itself: walks each 2x-winner pool the
+# lab watched back to its birth and nominates wallets that were early on
+# multiple distinct winners. Nomination is not a grade; candidates go through
+# wallet-pnl next. Read-only: no trades, no state.
+name: discover-wallets
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_pools:
+        description: "Max pools to screen"
+        type: string
+        default: "400"
+      max_candidates:
+        description: "Max candidates to print"
+        type: string
+        default: "40"
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install httpx
+      - name: Fetch lab state
+        run: |
+          git fetch origin paper-state:paper-state
+          mkdir -p state
+          git --work-tree=state checkout paper-state -- .
+      - name: Discover
+        working-directory: wallet_pnl
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: |
+          python -m src.discover ../state "${{ inputs.max_pools }}" "${{ inputs.max_candidates }}"
