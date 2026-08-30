@@ -192,8 +192,14 @@ class Trader:
                 position["no_route_checks"] = 0
                 position["peak_usd"] = max(position.get("peak_usd", 0.0), value_usd)
                 position["last_value_usd"] = round(value_usd, 4)
+                position["value_stale"] = False
+                position["valued_at"] = int(ts)
             else:
+                # A failed quote means no sell route. The previous value is
+                # now fiction, not a price: mark it stale so no reader
+                # mistakes a frozen number for a live one.
                 position["no_route_checks"] = position.get("no_route_checks", 0) + 1
+                position["value_stale"] = True
             reason = exit_reason(position, value_usd, ts, self.cfg)
             if reason == "dead":
                 position["status"] = "closed"

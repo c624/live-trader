@@ -99,7 +99,11 @@ def exit_reason(position: dict, value_usd: float | None, now: float, cfg: dict) 
     ex = cfg["exit"]
     age_hours = (now - position["opened_ts"]) / 3600
     if value_usd is None:
-        # No route twice in a row after the hold window: write it off.
+        # Sustained absence of any sell route is a rug, not a blip. Waiting
+        # the full hold window to admit it only delays the write-off and
+        # holds a slot hostage; ~40 failed checks is an hour of silence.
+        if position.get("no_route_checks", 0) >= 40:
+            return "dead"
         if age_hours > ex["hold_hours"] and position.get("no_route_checks", 0) >= 2:
             return "dead"
         return None
