@@ -1,0 +1,5 @@
+# The two wallets that stayed clearly profitable once uncosted sells were
+# excluded: +71.4% and +65.5% over more than a thousand closed trades each.
+# Run with a deep page budget so the persistence split has two real halves.
+GK8UnUd6xPtdYCVfLvxDcGPtd7UA6grYVvZfoJJUJdH7 GK8UnU
+3kd57PvazZbXLuCHzmDCHBEHG2tdUDQmfN6B7KYzDSVd 3kd57P
