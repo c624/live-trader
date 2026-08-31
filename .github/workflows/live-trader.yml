@@ -31,7 +31,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install httpx solders
+        run: pip install httpx solders websockets
 
       - name: Fetch state branch
         run: |

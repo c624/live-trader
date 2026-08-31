@@ -29,6 +29,25 @@ def entry_filter(row: dict, now: float, cfg: dict) -> str | None:
     is exactly the one the lab measured, no silent widening.
     """
     entry = cfg["entry"]
+
+    # Rows from the launch subscription carry the mint and the moment of its
+    # first trade, and nothing else: the chain announces a launch before any
+    # indexer has priced it. Liquidity is judged instead by the price impact
+    # of a real quote at buy time, which measures what reserve_usd was only
+    # ever a proxy for - whether this pool can absorb our order.
+    first_trade = row.get("first_trade_ts")
+    if first_trade:
+        if not row.get("token"):
+            return "missing_data"
+        age_hours = (now - float(first_trade)) / 3600
+        if age_hours < 0:
+            return "clock_skew"
+        if age_hours > entry["max_age_hours"]:
+            return "too_old"
+        if age_hours < entry.get("min_age_hours", 0.0):
+            return "too_young"
+        return None
+
     reserve = row.get("reserve_usd")
     if reserve is None or row.get("price_usd") is None or not row.get("pool"):
         return "missing_data"

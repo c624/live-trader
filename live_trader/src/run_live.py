@@ -53,6 +53,7 @@ class Trader:
         self.jup = Jupiter()
         self.rpc = Rpc()
         self.gecko = Gecko()
+        self.feed = None          # launch subscription, started in run()
         self.sol_price: float | None = None
         self.wallet_low = False
 
@@ -73,11 +74,23 @@ class Trader:
 
     # ------------------------------------------------------------- buying
     def detect_and_buy(self, ts: float) -> None:
-        rows = self.gecko.candidate_pools()
+        # The subscription is the discovery path when it is running:
+        # GeckoTerminal lists a pool 160 seconds after its first trade and
+        # the edge is gone by 60, so polling it is a slow way to lose. The
+        # poller stays as the fallback for a dead socket.
+        if self.feed is not None:
+            rows = self.feed.drain()
+            source = "feed"
+        else:
+            rows = self.gecko.candidate_pools()
+            source = "gecko"
         buys, skipped = pick_entries(rows, self.state, ts, self.cfg)
         # One line per detection so a silent market is distinguishable from
         # a blind detector in the run logs.
-        print(f"detect: {len(rows)} rows, {len(buys)} buys, {len(skipped)} skipped")
+        ages = [ts - float(r["first_trade_ts"]) for r in rows if r.get("first_trade_ts")]
+        age_note = f", ages {min(ages):.0f}-{max(ages):.0f}s" if ages else ""
+        print(f"detect[{source}]: {len(rows)} rows, {len(buys)} buys, "
+              f"{len(skipped)} skipped{age_note}")
         for row, reason in skipped:
             if reason in LOGGED_SKIPS:
                 log_signal(_signal_row(row, "skip", reason, ts))
@@ -132,6 +145,11 @@ class Trader:
             "sol_lamports": lamports,
             "cost_usd": round(lamports / LAMPORTS * self.sol_price, 4),
             "entry_gecko_price_usd": row.get("price_usd"),
+            "first_trade_ts": row.get("first_trade_ts"),
+            "entry_lag_s": (
+                round(ts - float(row["first_trade_ts"]), 1)
+                if row.get("first_trade_ts") else None
+            ),
             "token_raw": 0,
             "peak_usd": 0.0,
             "signature": signature,
@@ -251,6 +269,7 @@ class Trader:
     def run(self) -> None:
         loop_minutes = float(os.environ.get("LOOP_MINUTES", self.cfg["loop_minutes"]))
         deadline = time.monotonic() + loop_minutes * 60
+        self._start_feed()
         check_seconds = self.cfg["check_seconds"]
         mode = "LIVE" if self.live else "dry-run"
         print(f"live-trader starting: {mode}, {loop_minutes:.0f} min loop, "
@@ -278,7 +297,31 @@ class Trader:
             if remaining > 0:
                 time.sleep(remaining)
         save_state(self.state)
+        if self.feed is not None:
+            print(f"feed: {self.feed.messages} messages, {self.feed.launches} launches, "
+                  f"{self.feed.errors} errors")
+            self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
+
+    def _start_feed(self) -> None:
+        """Start the launch subscription, or carry on without it.
+
+        A missing socket must not stop the loop: open positions still need
+        their exits run, and the poller can still find something, however
+        late. Discovery degrading is survivable, exits going unmanaged is not.
+        """
+        key = os.environ.get("HELIUS_API_KEY")
+        if not key or os.environ.get("DISABLE_FEED"):
+            print("launch feed: disabled, falling back to polling")
+            return
+        try:
+            from .wsfeed import LaunchFeed
+            feed = LaunchFeed(key)
+            feed.start()
+            self.feed = feed
+            print("launch feed: subscribed")
+        except Exception as exc:
+            print(f"launch feed unavailable ({exc!r}); falling back to polling")
 
 
 def main() -> None:
