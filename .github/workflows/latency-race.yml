@@ -14,7 +14,7 @@ on:
         type: string
         default: "10"
       probe:
-        description: "'yes' to dump launch shapes, 'rpc' to dump raw RPC responses"
+        description: "'mints' to time launch detection, 'rpc' for raw RPC, 'yes' for shapes"
         type: string
         default: "no"
 
@@ -37,7 +37,9 @@ jobs:
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
         run: |
-          if [ "${{ inputs.probe }}" = "rpc" ]; then
+          if [ "${{ inputs.probe }}" = "mints" ]; then
+            python -m src.mintwatch "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
+          elif [ "${{ inputs.probe }}" = "rpc" ]; then
             python -m src.rpccheck
           elif [ "${{ inputs.probe }}" = "yes" ]; then
             python -m src.probe 400
