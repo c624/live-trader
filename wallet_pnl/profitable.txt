@@ -1,0 +1,10 @@
+# The seven wallets the first grading pass called profitable, to be re-measured
+# with uncosted sells excluded and a page budget deep enough that the window is
+# a real period rather than wherever the pages ran out.
+5C62wGTqcqkbpTx26xXkrq1EPfDk8p1eRaTscZPep21j 5C62wG
+GK8UnUd6xPtdYCVfLvxDcGPtd7UA6grYVvZfoJJUJdH7 GK8UnU
+3kd57PvazZbXLuCHzmDCHBEHG2tdUDQmfN6B7KYzDSVd 3kd57P
+2aRFiPuP8Ht56NNFe2LaKN8vujAbtVwz5uGqzf3nJhcg 2aRFiP
+EwujkMx5WPLT2ndQ851ewXATYAqVJ8YYtwP9WeaaLfM9 EwujkM
+DSp8i9g4Apie5n85hGFdDfe7d7NRrbJfz4pBmoCwqQHA DSp8i9
+99zufzLYsr8BuDkbRWpEURbEoUjHw3rrunVEQm9bMQMW 99zufz

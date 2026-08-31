@@ -9,6 +9,14 @@ on:
         description: "Days of swap history per wallet"
         type: string
         default: "60"
+      wallets:
+        description: "Wallet list file"
+        type: string
+        default: "wallets.txt"
+      page_cap:
+        description: "Transaction pages per wallet (100 tx each)"
+        type: string
+        default: "60"
 
 permissions:
   contents: read
@@ -31,5 +39,6 @@ jobs:
         working-directory: wallet_pnl
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          WALLET_PAGE_CAP: ${{ inputs.page_cap }}
         run: |
-          python -m src.grade wallets.txt "${{ inputs.lookback_days }}"
+          python -m src.grade "${{ inputs.wallets }}" "${{ inputs.lookback_days }}"

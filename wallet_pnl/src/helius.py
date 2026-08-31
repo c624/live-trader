@@ -28,7 +28,11 @@ STABLES = {
     "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
 }
 LAMPORTS_PER_SOL = 1_000_000_000
-PAGE_CAP = 60
+# 6,000 transactions sounds generous until a wallet trades 500 times a day:
+# the first grading run covered 1.9 days for the busiest candidates and 25 for
+# the quietest, and reported returns tracked the window length rather than any
+# skill. Deep runs raise this so the sample is a period, not a page budget.
+PAGE_CAP = int(os.environ.get("WALLET_PAGE_CAP", "60"))
 
 
 class HeliusSwaps:
