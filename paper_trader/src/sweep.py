@@ -38,14 +38,26 @@ STOPS: list[float | None] = [30, 50, 80, None]
 TRAILS: list[float | None] = [None, 30, 50]
 HOLDS = [2, 6, 12, 24]
 
+# The wallets that actually make money hold for 301 seconds and take small
+# gains, so the short grid needs targets and stops sized for minutes rather
+# than for a 24-hour lottery ticket.
+SHORT_TAKE_PROFITS: list[float | None] = [10, 20, 30, 50, 100, None]
+SHORT_STOPS: list[float | None] = [10, 20, 30, 50, None]
+SHORT_TRAILS: list[float | None] = [None, 10, 20]
+SHORT_HOLDS = [2 / 60, 5 / 60, 10 / 60, 15 / 60, 30 / 60, 1.0]
 
-def build_grid() -> list[Policy]:
+
+def build_grid(short: bool = False) -> list[Policy]:
     """Every combination, minus the ones that are the same rule twice."""
+    holds = SHORT_HOLDS if short else HOLDS
+    take_profits = SHORT_TAKE_PROFITS if short else TAKE_PROFITS
+    stops = SHORT_STOPS if short else STOPS
+    trails = SHORT_TRAILS if short else TRAILS
     grid = []
-    for hold in HOLDS:
-        for tp in TAKE_PROFITS:
-            for sl in STOPS:
-                for trail in TRAILS:
+    for hold in holds:
+        for tp in take_profits:
+            for sl in stops:
+                for trail in trails:
                     # With no stop of any kind and no target, hold time is the
                     # only rule; that cell is worth exactly one entry.
                     grid.append(
@@ -71,7 +83,8 @@ def load_positions(state_dir: Path, group: str) -> list[dict]:
     return out
 
 
-async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy]):
+async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy],
+                    short: bool = False):
     """Returns (positions, results) where results[i][j] is position i under policy j."""
     positions = load_positions(state_dir, group)[:limit]
     print(f"sweeping {len(grid)} policies over {len(positions)} {group} positions\n", flush=True)
@@ -82,7 +95,12 @@ async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy])
     try:
         for i, position in enumerate(positions, 1):
             entry_ts = position["entry_ts"]
-            rows = await gecko.candles(position["pool"], entry_ts + MATURITY_SECONDS)
+            # A five-minute hold cannot be scored on five-minute bars.
+            rows = (
+                await gecko.candles_fine(position["pool"], entry_ts + 16 * 3600)
+                if short
+                else await gecko.candles(position["pool"], entry_ts + MATURITY_SECONDS)
+            )
             candles = Candles(rows=rows)
             results.append([simulate_policy(candles, entry_ts, p) for p in grid])
             kept.append(position)
@@ -155,9 +173,10 @@ def report(grid: list[Policy], results: list[list], positions: list[dict]) -> No
     holdout = list(range(half, n))
 
     baseline = next(
-        j for j, p in enumerate(grid)
-        if p.take_profit_pct == 100 and p.stop_loss_pct == 50
-        and p.trail_pct is None and p.hold_hours == 24
+        (j for j, p in enumerate(grid)
+         if p.take_profit_pct == 100 and p.stop_loss_pct == 50
+         and p.trail_pct is None and p.hold_hours == 24),
+        0,
     )
     print("\n=== THE POLICY WE TRADED LIVE ===")
     print(f"{grid[baseline].label}: whole sample edge {edge_of(results, list(range(n)), baseline):+.2f}%")
@@ -210,9 +229,10 @@ def report(grid: list[Policy], results: list[list], positions: list[dict]) -> No
     print("\n=== LARGEST SINGLE-POSITION RETURNS (sanity check) ===")
     print("a real memecoin can 10x; a five-figure percentage is a broken price series")
     ride = next(
-        j for j, p in enumerate(grid)
-        if p.take_profit_pct is None and p.stop_loss_pct is None
-        and p.trail_pct is None and p.hold_hours == 24
+        (j for j, p in enumerate(grid)
+         if p.take_profit_pct is None and p.stop_loss_pct is None
+         and p.trail_pct is None),
+        0,
     )
     extremes = sorted(
         range(len(results)), key=lambda i: -results[i][ride].net_return_pct
@@ -243,8 +263,11 @@ async def main() -> None:
     state_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "state")
     group = sys.argv[2] if len(sys.argv) > 2 else "all"
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
-    grid = build_grid()
-    positions, results = await score_all(state_dir, group, limit, grid)
+    short = len(sys.argv) > 4 and sys.argv[4].lower() in ("short", "true", "1")
+    grid = build_grid(short=short)
+    if short:
+        print("SHORT-HOLD MODE: one-minute bars, holds of 2 to 60 minutes")
+    positions, results = await score_all(state_dir, group, limit, grid, short=short)
     if not results:
         print("no positions")
         return

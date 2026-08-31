@@ -47,14 +47,22 @@ def simulate_policy(candles, entry_ts: int, policy: Policy) -> Outcome:
     if not entry_price:
         return Outcome("no_entry_price", 0.0, False)
 
-    window_end = entry_ts + int(policy.hold_hours * 3600)
+    hold_seconds = int(policy.hold_hours * 3600)
+    # A two-hour silence rule says nothing about a five-minute trade. What
+    # matters is whether the pool was trading near the moment we wanted out,
+    # so the threshold is a quarter of the hold - never less than two minutes,
+    # never more than the two hours the long holds already used. Tying it to
+    # the full hold would let a thirty-minute trade tolerate twenty-nine
+    # minutes of silence and still call the exit a real fill.
+    silence = min(SILENCE_IS_DEATH_SECONDS, max(120, hold_seconds // 4))
+    window_end = entry_ts + hold_seconds
     rows = [r for r in candles.rows if entry_ts <= r[0] <= window_end]
     if not rows:
         return Outcome("rug_no_data", -100.0, False)
 
     last_stamp = entry_ts
     for row in rows:
-        if row[0] - last_stamp > SILENCE_IS_DEATH_SECONDS:
+        if row[0] - last_stamp > silence:
             return Outcome("rug_went_quiet", -100.0, False)
         last_stamp = row[0]
 
@@ -95,7 +103,7 @@ def simulate_policy(candles, entry_ts: int, policy: Policy) -> Outcome:
 
     # Selling at timeout means selling into whatever is still trading. If the
     # pool went silent before the window closed, there is nothing to sell to.
-    if window_end - rows[-1][0] > SILENCE_IS_DEATH_SECONDS:
+    if window_end - rows[-1][0] > silence:
         return Outcome("rug_went_quiet", -100.0, False)
 
     last = candles.price_at(window_end) or rows[-1][4]

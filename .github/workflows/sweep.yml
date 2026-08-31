@@ -14,6 +14,10 @@ on:
         description: "Max positions"
         type: string
         default: "400"
+      mode:
+        description: "long (2-24h holds, 5m bars) or short (2-60m holds, 1m bars)"
+        type: string
+        default: "long"
 
 permissions:
   contents: read
@@ -41,4 +45,4 @@ jobs:
       - name: Sweep
         working-directory: paper_trader
         run: |
-          python -m src.sweep ../state "${{ inputs.group }}" "${{ inputs.limit }}"
+          python -m src.sweep ../state "${{ inputs.group }}" "${{ inputs.limit }}" "${{ inputs.mode }}"

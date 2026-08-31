@@ -69,6 +69,16 @@ class TokenResult:
         return self.sol_received - sold * self.cost_per_token
 
     @property
+    def has_cost_basis(self) -> bool:
+        """False when the window caught sells of a position bought before it.
+
+        Those proceeds look like pure profit because the purchase is outside
+        the sample, which silently inflates any short window. They are not
+        profit, they are a missing cost.
+        """
+        return self.tokens_bought > 0
+
+    @property
     def fully_exited(self) -> bool:
         return self.tokens_bought > 0 and self.tokens_held <= self.tokens_bought * 0.01
 
@@ -82,16 +92,31 @@ class WalletReport:
     last_ts: int = 0
 
     @property
+    def scored(self) -> list[TokenResult]:
+        """Positions whose purchase is inside the window, so P&L is real."""
+        return [t for t in self.tokens.values() if t.has_cost_basis]
+
+    @property
+    def orphan_sells(self) -> int:
+        """Positions sold here but bought before the window began."""
+        return sum(1 for t in self.tokens.values() if not t.has_cost_basis)
+
+    @property
+    def orphan_sol(self) -> float:
+        """Proceeds excluded because their cost is outside the window."""
+        return sum(t.sol_received for t in self.tokens.values() if not t.has_cost_basis)
+
+    @property
     def sol_deployed(self) -> float:
-        return sum(t.sol_spent for t in self.tokens.values())
+        return sum(t.sol_spent for t in self.scored)
 
     @property
     def realized_sol(self) -> float:
-        return sum(t.realized_sol for t in self.tokens.values())
+        return sum(t.realized_sol for t in self.scored)
 
     @property
     def open_cost_sol(self) -> float:
-        return sum(t.open_cost_sol for t in self.tokens.values())
+        return sum(t.open_cost_sol for t in self.scored)
 
     @property
     def realized_pct(self) -> float:
@@ -107,7 +132,7 @@ class WalletReport:
 
     @property
     def closed(self) -> list[TokenResult]:
-        return [t for t in self.tokens.values() if t.fully_exited]
+        return [t for t in self.scored if t.fully_exited]
 
     @property
     def win_rate_pct(self) -> float:
@@ -147,9 +172,7 @@ class WalletReport:
 
     @property
     def median_buy_sol(self) -> float:
-        sizes = sorted(
-            t.sol_spent / t.buys for t in self.tokens.values() if t.buys
-        )
+        sizes = sorted(t.sol_spent / t.buys for t in self.scored if t.buys)
         if not sizes:
             return 0.0
         mid = len(sizes) // 2

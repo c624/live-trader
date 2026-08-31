@@ -93,6 +93,33 @@ class Gecko:
         return sorted(rows, key=lambda r: r[0])
 
 
+    async def candles_fine(self, pool: str, before_timestamp: int) -> list[tuple]:
+        """One-minute bars. 1000 of them covers about 16 hours.
+
+        The 5-minute bars used elsewhere cannot resolve a 5-minute hold: the
+        whole trade would live inside a single bar, and its high and low would
+        decide the outcome by assumption rather than by evidence.
+        """
+        payload = await self._get(
+            f"/networks/{NETWORK}/pools/{pool}/ohlcv/minute",
+            {
+                "before_timestamp": before_timestamp,
+                "limit": 1000,
+                "currency": "usd",
+                "aggregate": 1,
+            },
+        )
+        if not payload:
+            return []
+        raw = ((payload.get("data") or {}).get("attributes") or {}).get("ohlcv_list") or []
+        rows = [
+            (int(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4]))
+            for r in raw
+            if len(r) >= 5
+        ]
+        return sorted(rows, key=lambda r: r[0])
+
+
     async def candles_with_volume(self, pool: str, before_timestamp: int) -> list[tuple]:
         """Same bars as candles() but keeping the volume column.
 
