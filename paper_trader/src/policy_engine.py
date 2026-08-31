@@ -56,11 +56,19 @@ def simulate_policy(candles, entry_ts: int, policy: Policy) -> Outcome:
     # minutes of silence and still call the exit a real fill.
     silence = min(SILENCE_IS_DEATH_SECONDS, max(120, hold_seconds // 4))
     window_end = entry_ts + hold_seconds
-    rows = [r for r in candles.rows if entry_ts <= r[0] <= window_end]
+    # The entry price is the CLOSE of the bar covering entry_ts, so the buy
+    # happens at the end of that bar. Scanning that same bar would credit its
+    # high and low to a position taken after they printed - a spike inside the
+    # first minute would book a take-profit nobody could have taken. Only bars
+    # that open after the fill are tradeable.
+    entry_bar_ts = max(
+        (r[0] for r in candles.rows if r[0] <= entry_ts), default=entry_ts
+    )
+    rows = [r for r in candles.rows if entry_bar_ts < r[0] <= window_end]
     if not rows:
         return Outcome("rug_no_data", -100.0, False)
 
-    last_stamp = entry_ts
+    last_stamp = entry_bar_ts
     for row in rows:
         if row[0] - last_stamp > silence:
             return Outcome("rug_went_quiet", -100.0, False)
