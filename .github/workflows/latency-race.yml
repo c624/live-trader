@@ -1,0 +1,36 @@
+# Races GeckoTerminal's listing against the chain itself for the same pools,
+# both timed from the pool's own creation timestamp. Read-only: no trades.
+name: latency-race
+
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "How long to race"
+        type: string
+        default: "20"
+      poll_seconds:
+        description: "Seconds between polls"
+        type: string
+        default: "10"
+
+permissions:
+  contents: read
+
+jobs:
+  race:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install httpx
+      - name: Race
+        working-directory: latency
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: |
+          python -m src.race "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
