@@ -287,6 +287,27 @@ async def main() -> None:
     # birth+90 means entry ninety seconds after the pool opened.
     delay_seconds = int(mode.split("+", 1)[1]) if "+" in mode else 0
     grid = build_grid(short=short)
+
+    # Two runs have now completed successfully while measuring something other
+    # than what was asked, and both were only caught by reading the grid size
+    # in the output afterwards. The configuration is stated up front and
+    # checked against the mode, so a mismatch stops the run in seconds instead
+    # of producing a plausible answer to a different question two hours later.
+    holds = sorted({p.hold_hours for p in grid})
+    print(
+        f"CONFIG mode={mode!r} policies={len(grid)} "
+        f"bars={'1-minute' if short else '5-minute'} "
+        f"holds={holds[0] * 60:.0f}min..{holds[-1] * 60:.0f}min "
+        f"entry={'pool birth' if at_birth else 'lab detection'}+{delay_seconds}s",
+        flush=True,
+    )
+    if at_birth and (not short or len(grid) != 540):
+        raise SystemExit(
+            f"mode {mode!r} asked for a birth run but produced the "
+            f"{len(grid)}-policy {'short' if short else 'long'} grid"
+        )
+    if mode == "long" and short:
+        raise SystemExit("mode 'long' must not select the short grid")
     if short:
         print("SHORT-HOLD MODE: one-minute bars, holds of 2 to 60 minutes")
     if at_birth:
