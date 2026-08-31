@@ -69,17 +69,25 @@ def entry_filter(row: dict, now: float, cfg: dict) -> str | None:
     return None
 
 
-def realized_pnl_usd(state: dict) -> float:
+def realized_pnl_usd(state: dict, since_ts: float | None = None) -> float:
     """Money actually banked or lost on closed positions.
 
     Buys that never landed cost nothing but fees and are not losses; a
     written-off rug returns nothing and is a total loss of its cost.
+
+    since_ts scopes the answer to positions opened after a moment, which is
+    what a pilot's loss cap needs: the account already carries losses from a
+    different strategy, and charging those against a new experiment's budget
+    would spend the cap before its first trade. That is not hypothetical - it
+    is what stopped the first wired run from buying anything.
     """
     total = 0.0
     for position in state.get("positions", []):
         if position.get("status") != "closed":
             continue
         if position.get("close_reason") == "buy_failed":
+            continue
+        if since_ts is not None and position.get("opened_ts", 0) < since_ts:
             continue
         total += (position.get("exit_usd") or 0.0) - position.get("cost_usd", 0.0)
     return total
@@ -101,7 +109,9 @@ def pick_entries(rows: list[dict], state: dict, now: float, cfg: dict) -> tuple[
     # fixed in advance. Once the cap is spent there is nothing further to learn
     # from losing more, so buying stops and open positions run to their exits.
     loss_cap = cfg.get("max_loss_usd")
-    capped = loss_cap is not None and realized_pnl_usd(state) <= -abs(loss_cap)
+    capped = loss_cap is not None and realized_pnl_usd(
+        state, cfg.get("pilot_start_ts")
+    ) <= -abs(loss_cap)
 
     held = {p["mint"] for p in state["positions"] if p.get("status") != "closed"}
     open_count = len(held)

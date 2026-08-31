@@ -23,6 +23,9 @@ LAMPORTS = 1_000_000_000
 LOGGED_SKIPS = {
     "loop_cap", "position_cap", "daily_spend_cap", "already_held",
     "no_route", "impact_too_high", "wallet_low",
+    # A cap that silently stops all buying has to say so. The pilot's loss
+    # cap blocked an entire run while the logs showed only "0 buys".
+    "loss_cap", "too_old", "too_young", "missing_data", "clock_skew",
 }
 
 
