@@ -50,6 +50,22 @@ def entry_filter(row: dict, now: float, cfg: dict) -> str | None:
     return None
 
 
+def realized_pnl_usd(state: dict) -> float:
+    """Money actually banked or lost on closed positions.
+
+    Buys that never landed cost nothing but fees and are not losses; a
+    written-off rug returns nothing and is a total loss of its cost.
+    """
+    total = 0.0
+    for position in state.get("positions", []):
+        if position.get("status") != "closed":
+            continue
+        if position.get("close_reason") == "buy_failed":
+            continue
+        total += (position.get("exit_usd") or 0.0) - position.get("cost_usd", 0.0)
+    return total
+
+
 def pick_entries(rows: list[dict], state: dict, now: float, cfg: dict) -> tuple[list[dict], list[tuple[dict, str]]]:
     """Returns (buys, skipped) where skipped is [(row, reason)].
 
@@ -61,6 +77,12 @@ def pick_entries(rows: list[dict], state: dict, now: float, cfg: dict) -> tuple[
     for mint, ts in list(seen.items()):
         if now - ts > ttl:
             del seen[mint]
+
+    # A pilot exists to buy information, and the price of that information is
+    # fixed in advance. Once the cap is spent there is nothing further to learn
+    # from losing more, so buying stops and open positions run to their exits.
+    loss_cap = cfg.get("max_loss_usd")
+    capped = loss_cap is not None and realized_pnl_usd(state) <= -abs(loss_cap)
 
     held = {p["mint"] for p in state["positions"] if p.get("status") != "closed"}
     open_count = len(held)
@@ -75,6 +97,8 @@ def pick_entries(rows: list[dict], state: dict, now: float, cfg: dict) -> tuple[
             reason = "already_seen"
         if reason is None and mint in held:
             reason = "already_held"
+        if reason is None and capped:
+            reason = "loss_cap"
         if reason is None:
             seen[mint] = now
             if len(buys) >= entry["max_new_per_loop"]:
@@ -98,13 +122,19 @@ def exit_reason(position: dict, value_usd: float | None, now: float, cfg: dict) 
     """
     ex = cfg["exit"]
     age_hours = (now - position["opened_ts"]) / 3600
+    hold_hours = ex["hold_hours"]
     if value_usd is None:
         # Sustained absence of any sell route is a rug, not a blip. Waiting
         # the full hold window to admit it only delays the write-off and
-        # holds a slot hostage; ~40 failed checks is an hour of silence.
-        if position.get("no_route_checks", 0) >= 40:
+        # holds a slot hostage. The threshold scales with the hold: an hour of
+        # silence is right for a day-long position and absurd for a two-minute
+        # one, which would be written off long after the pool had died.
+        checks = position.get("no_route_checks", 0)
+        seconds_per_check = max(1, cfg.get("check_seconds", 75))
+        silence_checks = max(3, int(hold_hours * 3600 / seconds_per_check))
+        if checks >= silence_checks:
             return "dead"
-        if age_hours > ex["hold_hours"] and position.get("no_route_checks", 0) >= 2:
+        if age_hours > hold_hours and checks >= 2:
             return "dead"
         return None
     cost = position["cost_usd"]
@@ -113,8 +143,12 @@ def exit_reason(position: dict, value_usd: float | None, now: float, cfg: dict) 
     pnl_pct = (value_usd / cost - 1.0) * 100.0
     if pnl_pct >= ex["tp_pct"]:
         return "tp"
-    if pnl_pct <= -ex["sl_pct"]:
+    # A null stop means the position rides to its timer. The measured edge sits
+    # in a two-minute hold with no stop at all: stops fill at the candle low on
+    # these pools, which is what turned a modelled -50% into a real -92%.
+    stop = ex.get("sl_pct")
+    if stop is not None and pnl_pct <= -stop:
         return "sl"
-    if age_hours >= ex["hold_hours"]:
+    if age_hours >= hold_hours:
         return "time"
     return None
