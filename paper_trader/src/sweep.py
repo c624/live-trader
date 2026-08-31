@@ -279,8 +279,11 @@ async def main() -> None:
     group = sys.argv[2] if len(sys.argv) > 2 else "all"
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
     mode = sys.argv[4].lower() if len(sys.argv) > 4 else "long"
-    short = mode in ("short", "birth", "true", "1")
+    # "birth+90" has to select the short grid and one-minute bars just as
+    # "birth" does; matching the bare word only sent the delayed runs to the
+    # 24-hour grid on five-minute bars, which answers a different question.
     at_birth = mode.startswith("birth")
+    short = at_birth or mode in ("short", "true", "1")
     # birth+90 means entry ninety seconds after the pool opened.
     delay_seconds = int(mode.split("+", 1)[1]) if "+" in mode else 0
     grid = build_grid(short=short)
