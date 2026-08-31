@@ -13,6 +13,10 @@ on:
         description: "Seconds between polls"
         type: string
         default: "10"
+      probe:
+        description: "Set to 'yes' to dump launch transaction shapes instead of racing"
+        type: string
+        default: "no"
 
 permissions:
   contents: read
@@ -33,4 +37,8 @@ jobs:
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
         run: |
-          python -m src.race "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
+          if [ "${{ inputs.probe }}" = "yes" ]; then
+            python -m src.probe 3
+          else
+            python -m src.race "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
+          fi
