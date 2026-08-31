@@ -43,18 +43,39 @@ def load_wallets(path: Path) -> list[tuple[str, str]]:
     return out
 
 
-def verdict(report) -> str:
+MIN_DEPLOYED_SOL = 0.5   # below this, a percentage is a rounding artifact
+COPYABLE_BUYS_PER_DAY = 40
+COPYABLE_HOLD_MINUTES = 30
+
+
+def money_verdict(report) -> str:
+    """Did the wallet make money? Nothing about whether we could follow it.
+
+    Keeping this separate from copyability matters: the first run of this
+    grader answered SPRAY_BOT before it answered the money question, so
+    wallets with hundreds of closed trades and triple-digit returns were
+    counted as "not profitable" when they were nothing of the kind.
+    """
+    if report.sol_deployed < MIN_DEPLOYED_SOL:
+        return "UNMEASURABLE"
     if len(report.closed) < MIN_CLOSED_POSITIONS:
         return "TOO_FEW_TRADES"
-    if report.buys_per_day > SPRAY_BUYS_PER_DAY:
-        return "SPRAY_BOT"
-    if report.median_buy_sol < DUST_SOL:
-        return "DUST"
     if report.harsh_pct > 0:
         return "PROFITABLE"
     if report.realized_pct > 0:
         return "PROFITABLE_IF_BAGS_IGNORED"
     return "LOSING"
+
+
+def copyable(report) -> str:
+    """Could a 25-minute loop follow this wallet at all?"""
+    if report.buys_per_day > COPYABLE_BUYS_PER_DAY:
+        return "no:rate"
+    if report.median_hold_minutes and report.median_hold_minutes < COPYABLE_HOLD_MINUTES:
+        return "no:hold"
+    if report.median_buy_sol < DUST_SOL:
+        return "no:dust"
+    return "maybe"
 
 
 async def main() -> None:
@@ -94,18 +115,29 @@ async def main() -> None:
 
     print("\n=== DID THEY MAKE MONEY? ===")
     print(
-        f"{'wallet':14s} {'closed':>7} {'buys/day':>9} {'med buy':>9} "
-        f"{'win%':>6} {'realized%':>10} {'harsh%':>9}  verdict"
+        f"{'wallet':14s} {'closed':>7} {'days':>6} {'buys/day':>9} {'med buy':>8} "
+        f"{'hold_m':>8} {'win%':>6} {'harsh%':>9}  {'money':<12} copyable"
     )
     for label, _addr, r, _s in sorted(rows, key=lambda x: -x[2].harsh_pct):
         print(
-            f"{label:14s} {len(r.closed):7d} {r.buys_per_day:9.1f} "
-            f"{r.median_buy_sol:9.3f} {r.win_rate_pct:6.1f} "
-            f"{r.realized_pct:+10.1f} {r.harsh_pct:+9.1f}  {verdict(r)}"
+            f"{label:14s} {len(r.closed):7d} {r.observed_days:6.1f} "
+            f"{r.buys_per_day:9.1f} {r.median_buy_sol:8.3f} "
+            f"{r.median_hold_minutes:8.1f} {r.win_rate_pct:6.1f} "
+            f"{r.harsh_pct:+9.1f}  {money_verdict(r):<12} {copyable(r)}"
         )
 
-    tradeable = [row for row in rows if verdict(row[2]) == "PROFITABLE"]
-    print(f"\nwallets profitable on their own money: {len(tradeable)} of {len(rows)}")
+    made_money = [row for row in rows if money_verdict(row[2]) == "PROFITABLE"]
+    followable = [row for row in made_money if copyable(row[2]) == "maybe"]
+    print(f"\nwallets profitable on their own money: {len(made_money)} of {len(rows)}")
+    print(f"  of those, followable on a 25-minute loop: {len(followable)}")
+    for label, addr, r, _s in made_money:
+        print(f"  PROFITABLE {label} {addr} harsh={r.harsh_pct:+.1f}% "
+              f"closed={len(r.closed)} copyable={copyable(r)}")
+    truncated = [r for _l, _a, r, _s in rows if r.observed_days < 0.6 * lookback]
+    if truncated:
+        print(f"\nNOTE: {len(truncated)} wallets' history was truncated by the page "
+              f"budget and covers far less than the {lookback} days requested; "
+              "the persistence split below cannot be trusted for those.")
 
     print("\n=== DOES IT PERSIST? ===")
     boundary = int(time.time()) - (lookback // 2) * 86400

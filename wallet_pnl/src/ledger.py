@@ -117,6 +117,27 @@ class WalletReport:
         return 100 * sum(1 for t in closed if t.realized_sol > 0) / len(closed)
 
     @property
+    def median_hold_minutes(self) -> float:
+        """How long closed positions were held. Decides copyability.
+
+        A wallet that is in and out inside one minute is racing, and a
+        follower on a 25-minute loop is buying whatever it already sold.
+        """
+        holds = sorted(
+            (t.last_ts - t.first_ts) / 60 for t in self.closed if t.last_ts > t.first_ts
+        )
+        if not holds:
+            return 0.0
+        mid = len(holds) // 2
+        return holds[mid] if len(holds) % 2 else (holds[mid - 1] + holds[mid]) / 2
+
+    @property
+    def observed_days(self) -> float:
+        """Span the swap history actually covers, which may be far less than
+        the lookback asked for once a busy wallet exhausts the page budget."""
+        return (self.last_ts - self.first_ts) / 86400 if self.last_ts else 0.0
+
+    @property
     def days_active(self) -> float:
         return max((self.last_ts - self.first_ts) / 86400, 1 / 24)
 
