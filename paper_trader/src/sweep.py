@@ -84,7 +84,7 @@ def load_positions(state_dir: Path, group: str) -> list[dict]:
 
 
 async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy],
-                    short: bool = False):
+                    short: bool = False, at_birth: bool = False):
     """Returns (positions, results) where results[i][j] is position i under policy j."""
     positions = load_positions(state_dir, group)[:limit]
     print(f"sweeping {len(grid)} policies over {len(positions)} {group} positions\n", flush=True)
@@ -102,6 +102,15 @@ async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy],
                 else await gecko.candles(position["pool"], entry_ts + MATURITY_SECONDS)
             )
             candles = Candles(rows=rows)
+            if at_birth:
+                # Every sweep so far entered where the lab detected the pool,
+                # which is minutes to an hour after it opened. The wallets
+                # that make money enter at second zero, so this measures the
+                # same pools bought at their first printed bar: the best case
+                # perfect speed could ever deliver.
+                if not rows:
+                    continue
+                entry_ts = rows[0][0]
             results.append([simulate_policy(candles, entry_ts, p) for p in grid])
             kept.append(position)
             if i % 25 == 0:
@@ -263,11 +272,18 @@ async def main() -> None:
     state_dir = Path(sys.argv[1] if len(sys.argv) > 1 else "state")
     group = sys.argv[2] if len(sys.argv) > 2 else "all"
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
-    short = len(sys.argv) > 4 and sys.argv[4].lower() in ("short", "true", "1")
+    mode = sys.argv[4].lower() if len(sys.argv) > 4 else "long"
+    short = mode in ("short", "birth", "true", "1")
+    at_birth = mode == "birth"
     grid = build_grid(short=short)
     if short:
         print("SHORT-HOLD MODE: one-minute bars, holds of 2 to 60 minutes")
-    positions, results = await score_all(state_dir, group, limit, grid, short=short)
+    if at_birth:
+        print("ENTRY AT POOL BIRTH: entering on the first printed bar, not at "
+              "the lab's detection time. This is the ceiling perfect speed buys.")
+    positions, results = await score_all(
+        state_dir, group, limit, grid, short=short, at_birth=at_birth
+    )
     if not results:
         print("no positions")
         return

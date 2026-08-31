@@ -15,7 +15,7 @@ on:
         type: string
         default: "400"
       mode:
-        description: "long (2-24h holds, 5m bars) or short (2-60m holds, 1m bars)"
+        description: "long | short | birth (short holds, entry at the pool's first bar)"
         type: string
         default: "long"
 
