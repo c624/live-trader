@@ -84,7 +84,8 @@ def load_positions(state_dir: Path, group: str) -> list[dict]:
 
 
 async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy],
-                    short: bool = False, at_birth: bool = False):
+                    short: bool = False, at_birth: bool = False,
+                    delay_seconds: int = 0):
     """Returns (positions, results) where results[i][j] is position i under policy j."""
     positions = load_positions(state_dir, group)[:limit]
     print(f"sweeping {len(grid)} policies over {len(positions)} {group} positions\n", flush=True)
@@ -110,7 +111,12 @@ async def score_all(state_dir: Path, group: str, limit: int, grid: list[Policy],
                 # perfect speed could ever deliver.
                 if not rows:
                     continue
-                entry_ts = rows[0][0]
+                # Birth plus a delay is what a real buyer gets: the pool opens,
+                # we notice, we quote, we sign, we land. Measured on this bot's
+                # own trades that path takes 97 seconds at the median and 40 at
+                # its best, so the delay curve says whether the edge is still
+                # there when we actually arrive.
+                entry_ts = rows[0][0] + delay_seconds
             results.append([simulate_policy(candles, entry_ts, p) for p in grid])
             kept.append(position)
             if i % 25 == 0:
@@ -274,15 +280,21 @@ async def main() -> None:
     limit = int(sys.argv[3]) if len(sys.argv) > 3 else 400
     mode = sys.argv[4].lower() if len(sys.argv) > 4 else "long"
     short = mode in ("short", "birth", "true", "1")
-    at_birth = mode == "birth"
+    at_birth = mode.startswith("birth")
+    # birth+90 means entry ninety seconds after the pool opened.
+    delay_seconds = int(mode.split("+", 1)[1]) if "+" in mode else 0
     grid = build_grid(short=short)
     if short:
         print("SHORT-HOLD MODE: one-minute bars, holds of 2 to 60 minutes")
     if at_birth:
-        print("ENTRY AT POOL BIRTH: entering on the first printed bar, not at "
-              "the lab's detection time. This is the ceiling perfect speed buys.")
+        print(
+            f"ENTRY AT POOL BIRTH + {delay_seconds}s: entering that long after "
+            "the first printed bar. Zero is the ceiling perfect speed buys; "
+            "this bot's own median entry lands at 97 seconds."
+        )
     positions, results = await score_all(
-        state_dir, group, limit, grid, short=short, at_birth=at_birth
+        state_dir, group, limit, grid, short=short, at_birth=at_birth,
+        delay_seconds=delay_seconds,
     )
     if not results:
         print("no positions")

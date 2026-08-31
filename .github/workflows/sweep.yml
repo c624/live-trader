@@ -15,7 +15,7 @@ on:
         type: string
         default: "400"
       mode:
-        description: "long | short | birth (short holds, entry at the pool's first bar)"
+        description: "long | short | birth | birth+N (entry N seconds after the pool opened)"
         type: string
         default: "long"
 
