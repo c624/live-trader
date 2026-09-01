@@ -58,6 +58,8 @@ def main() -> None:
     except Exception as exc:
         print(f"signing not measured ({exc!r})")
         can_sign = False
+    sign_error = ""
+
 
     with httpx.Client(timeout=30.0) as client:
         for i in range(samples):
@@ -94,20 +96,28 @@ def main() -> None:
                 continue
 
             if can_sign:
+                # Sign the message bytes directly. Handing the keypair to
+                # VersionedTransaction instead raises "keypair-pubkey mismatch",
+                # because the fee payer is the real wallet and this signer is a
+                # throwaway -- an earlier version swallowed that and silently
+                # reported no samples. The ed25519 signature is the real cost
+                # either way; the wallet does not make it any slower.
                 t2 = time.time()
                 try:
                     raw = VersionedTransaction.from_bytes(base64.b64decode(encoded))
-                    VersionedTransaction(raw.message, [signer])
+                    signer.sign_message(bytes(raw.message))
                     sign_times.append(time.time() - t2)
-                except Exception:
-                    pass
+                except Exception as exc:
+                    sign_error = f"{type(exc).__name__}: {exc}"
+
             whole.append(time.time() - started)
             print(f"  sample {i+1}: {whole[-1]*1000:.0f}ms total", flush=True)
 
     print("\n=== HOW LONG THE TRADING PATH TAKES ===")
     print(f"quote      {percentiles(quote_times)}")
     print(f"build swap {percentiles(build_times)}")
-    print(f"sign       {percentiles(sign_times)}")
+    print(f"sign       {percentiles(sign_times)}"
+          + (f"  [failed: {sign_error}]" if sign_error and not sign_times else ""))
     print(f"QUOTE+BUILD+SIGN {percentiles(whole)}")
     if whole:
         median = sorted(whole)[len(whole) // 2]
