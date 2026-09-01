@@ -32,7 +32,7 @@
         {
             "name": "dexctl",
             "min_age_s": 120,
-            "max_age_s": 7200,
+            "max_age_s": 86400,
             "hold_hours": 0.1667,
             "where": {
                 "m5_buys": 0
@@ -42,7 +42,7 @@
         {
             "name": "boost",
             "min_age_s": 0,
-            "max_age_s": 7200,
+            "max_age_s": 86400,
             "hold_hours": 0.1667,
             "where": {
                 "boosts": 1
@@ -52,7 +52,7 @@
         {
             "name": "boost1h",
             "min_age_s": 0,
-            "max_age_s": 7200,
+            "max_age_s": 86400,
             "hold_hours": 1.0,
             "where": {
                 "boosts": 1

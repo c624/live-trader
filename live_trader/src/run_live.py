@@ -33,7 +33,7 @@ LAMPORTS = 1_000_000_000
 # creation time rather than by when the row arrived: at 2100 a freshly
 # boosted one-hour-old token was evicted the moment it was merged. The
 # buffer stays small regardless, since each token is held once.
-BUFFER_SECONDS = 7500
+BUFFER_SECONDS = 90000
 # How often to refresh attention and momentum stats. They describe tokens
 # already trading, so seconds of staleness matter less than for a launch.
 ATTENTION_EVERY_S = 60
