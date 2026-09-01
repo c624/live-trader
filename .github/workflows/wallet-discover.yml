@@ -10,6 +10,10 @@ on:
         description: "Transactions to inspect per winning token"
         type: string
         default: "60"
+      grade_wallets:
+        description: "How many of the shortlist to grade"
+        type: string
+        default: "12"
 
 permissions:
   contents: read
@@ -31,6 +35,12 @@ jobs:
         run: |
           python -m wallet_pnl.src.discover_rpc wallet_pnl/winners.json \
             wallets.json "${{ inputs.per_token }}"
+      - name: Grade the shortlist
+        if: always()
+        run: |
+          python -m wallet_pnl.src.grade_rpc wallets.json \
+            "${{ inputs.grade_wallets }}"
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:

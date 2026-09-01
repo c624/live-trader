@@ -88,3 +88,36 @@ def buys_in(tx: dict) -> list[dict]:
             "signature": (tx.get("transaction") or {}).get("signatures", [None])[0],
         })
     return out
+
+
+def swaps_for(tx: dict, wallet: str) -> list[dict]:
+    """Both directions of a wallet's trading against SOL in one transaction.
+
+    A buy is tokens in with SOL out; a sale is tokens out with SOL in. Signs
+    follow the ledger's convention: token_amount positive when acquired,
+    sol_amount negative when spent. Legs where only one side moves are left
+    out, which is what keeps airdrops, transfers and routing accounts from
+    being priced as trades.
+    """
+    meta = tx.get("meta") or {}
+    if meta.get("err"):
+        return []
+    keys = account_keys(tx)
+    sol_change = _owner_sol_deltas(meta, keys).get(wallet, 0) / LAMPORTS
+    if sol_change == 0:
+        return []
+
+    out = []
+    for (owner, mint), change in _owner_token_deltas(meta).items():
+        if owner != wallet or change == 0:
+            continue
+        if (change > 0 and sol_change >= 0) or (change < 0 and sol_change <= 0):
+            continue
+        out.append({
+            "ts": tx.get("blockTime"),
+            "signature": (tx.get("transaction") or {}).get("signatures", [None])[0],
+            "mint": mint,
+            "token_amount": change,
+            "sol_amount": sol_change,
+        })
+    return out
