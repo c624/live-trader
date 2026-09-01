@@ -70,6 +70,11 @@ class Trader:
         self.feed = None          # launch subscription, started in run()
         self.sol_price: float | None = None
         self.wallet_low = False
+        self.buffer: list[dict] = []
+        # Arms run side by side on the same launches, so entry timing and
+        # exit rules are compared on identical data rather than across
+        # different nights and different markets. Paper only.
+        self.arms = self.cfg.get("arms") or [] if not self.live else []
 
     @property
     def live(self) -> bool:
@@ -102,6 +107,17 @@ class Trader:
         else:
             rows = self.gecko.candidate_pools()
             source = "gecko(feed down)" if self.feed is not None else "gecko"
+        # Launches are buffered rather than consumed. An arm that waits for a
+        # pool to survive thirty seconds would otherwise never see one: the
+        # feed hands each launch over once, at an age of a few seconds, and a
+        # row skipped as too_young was simply dropped.
+        self.buffer.extend(rows)
+        cutoff = ts - BUFFER_SECONDS
+        self.buffer = [r for r in self.buffer
+                       if float(r.get("first_trade_ts") or ts) >= cutoff]
+        if self.arms:
+            self.run_arms(ts, source)
+            return
         buys, skipped = pick_entries(rows, self.state, ts, self.cfg)
         # One line per detection so a silent market is distinguishable from
         # a blind detector in the run logs.
@@ -230,7 +246,53 @@ class Trader:
              f"(TP +{self.cfg['exit']['tp_pct']}% / SL -{self.cfg['exit']['sl_pct']}% "
              f"/ {self.cfg['exit']['hold_hours']}h hold)")
 
-    def paper_buy(self, row: dict, ts: float) -> None:
+    def arm_config(self, arm: dict) -> dict:
+        """This arm's rules, over the shared config."""
+        cfg = dict(self.cfg)
+        entry = dict(cfg["entry"])
+        entry["min_age_hours"] = arm.get("min_age_s", 0) / 3600
+        entry["max_age_hours"] = arm.get("max_age_s", 300) / 3600
+        entry["max_new_per_loop"] = arm.get("max_new_per_loop", 2)
+        cfg["entry"] = entry
+        cfg["exit"] = {
+            "tp_pct": arm.get("tp_pct", self.cfg["exit"]["tp_pct"]),
+            "sl_pct": arm.get("sl_pct", self.cfg["exit"]["sl_pct"]),
+            "hold_hours": arm.get("hold_hours", self.cfg["exit"]["hold_hours"]),
+        }
+        cfg["max_open_positions"] = arm.get("max_open_positions", 5)
+        return cfg
+
+    def arm_state(self, name: str) -> dict:
+        """A private ledger view per arm.
+
+        Each arm keeps its own seen-set and spend, or the first arm to accept
+        a launch would mark it seen and the others would never evaluate it --
+        which would silently make this a race rather than a comparison.
+        """
+        arms = self.state.setdefault("arms", {})
+        book = arms.setdefault(name, {"seen": {}, "daily_spend": {}})
+        return {
+            "positions": [p for p in self.state["positions"]
+                          if p.get("arm") == name],
+            "seen": book["seen"],
+            "daily_spend": book["daily_spend"],
+        }
+
+    def run_arms(self, ts: float, source: str) -> None:
+        for arm in self.arms:
+            name = arm["name"]
+            cfg = self.arm_config(arm)
+            buys, skipped = pick_entries(
+                self.buffer, self.arm_state(name), ts, cfg)
+            tally = Counter(reason for _r, reason in skipped)
+            why = " ".join(f"{r}={n}" for r, n in tally.most_common(4))
+            print(f"  arm[{name}]: {len(buys)} buys, {len(skipped)} skipped"
+                  + (f" [{why}]" if why else ""), flush=True)
+            for row in buys:
+                self.paper_buy(row, ts, arm=arm, cfg=cfg)
+
+    def paper_buy(self, row: dict, ts: float, arm: dict | None = None,
+                  cfg: dict | None = None) -> None:
         """Take the position on paper, priced by real quotes.
 
         Dry run used to log "would_buy" and stop, which records an intention
@@ -244,27 +306,34 @@ class Trader:
         Same feed, same filters, same quotes as the live path. The only thing
         missing is the send, which is the one part that costs money.
         """
+        cfg = cfg or self.cfg
+        name = arm["name"] if arm else ""
         mint, symbol = row["token"], row.get("symbol", "?")
         if not self.sol_price:
             log_signal(_signal_row(row, "skip", "no_sol_price", ts))
             return
-        lamports = int(self.cfg["ticket_usd"] / self.sol_price * LAMPORTS)
-        quote = self.jup.quote(SOL_MINT, mint, lamports, self.cfg["slippage_bps"])
+        lamports = int(cfg["ticket_usd"] / self.sol_price * LAMPORTS)
+        quote = self.jup.quote(SOL_MINT, mint, lamports, cfg["slippage_bps"])
         if not quote:
             log_signal(_signal_row(row, "skip", "no_route", ts))
             return
         impact = price_impact_pct(quote)
-        if impact is not None and impact > self.cfg["max_price_impact_pct"]:
+        if impact is not None and impact > cfg["max_price_impact_pct"]:
             log_signal(_signal_row(row, "skip", "impact_too_high", ts))
             return
         tokens = int(quote["outAmount"])
         # The same exit check the live path makes, so the paper record is not
         # flattered by entries the real bot would have refused.
-        if not self.jup.quote(mint, SOL_MINT, tokens, self.cfg["slippage_bps"]):
+        if not self.jup.quote(mint, SOL_MINT, tokens, cfg["slippage_bps"]):
             log_signal(_signal_row(row, "skip", "no_exit_route", ts))
             return
 
         self.state["positions"].append({
+            # The exit rules travel with the position. Reading them from the
+            # live config at exit time would judge every arm by one rule and
+            # make the comparison meaningless.
+            "arm": name,
+            "exit": dict(cfg["exit"]),
             "mint": mint,
             "symbol": symbol,
             "pool": row.get("pool", ""),
@@ -272,16 +341,16 @@ class Trader:
             "paper": True,
             "opened_ts": ts,
             "token_raw": tokens,
-            "cost_usd": self.cfg["ticket_usd"],
-            "peak_usd": self.cfg["ticket_usd"],
+            "cost_usd": cfg["ticket_usd"],
+            "peak_usd": cfg["ticket_usd"],
             "entry_lag_s": round(ts - float(row["first_trade_ts"]), 1)
             if row.get("first_trade_ts") else "",
         })
-        log_signal(_signal_row(row, "paper_buy", "", ts))
+        log_signal(_signal_row(row, "paper_buy", name, ts))
         log_trade({"ts": int(ts), "action": "paper_buy", "mint": mint,
-                   "symbol": symbol, "pool": row.get("pool", ""),
+                   "symbol": symbol, "pool": row.get("pool", ""), "arm": name,
                    "sol_lamports": lamports, "token_raw": tokens,
-                   "usd_value": self.cfg["ticket_usd"],
+                   "usd_value": cfg["ticket_usd"],
                    "gecko_price_usd": row.get("price_usd") or "",
                    "note": "paper"})
         save_state(self.state)
@@ -294,10 +363,11 @@ class Trader:
         position["close_reason"] = reason
         position["proceeds_usd"] = round(proceeds, 4)
         position["pnl_usd"] = round(proceeds - position["cost_usd"], 4)
-        print(f"paper exit: {position['symbol']} {reason} "
+        print(f"paper exit[{position.get('arm', '')}]: {position['symbol']} {reason} "
               f"{position['pnl_usd']:+.4f} on {position['cost_usd']:.2f}", flush=True)
         log_trade({"ts": int(ts), "action": "paper_sell", "mint": position["mint"],
                    "symbol": position["symbol"], "pool": position["pool"],
+                   "arm": position.get("arm", ""),
                    "token_raw": position.get("token_raw", 0),
                    "usd_value": round(proceeds, 4), "reason": reason,
                    "note": f"paper pnl {position['pnl_usd']:+.4f}"})
@@ -333,7 +403,11 @@ class Trader:
                 # mistakes a frozen number for a live one.
                 position["no_route_checks"] = position.get("no_route_checks", 0) + 1
                 position["value_stale"] = True
-            reason = exit_reason(position, value_usd, ts, self.cfg)
+            rules = self.cfg
+            if position.get("exit"):
+                rules = dict(self.cfg)
+                rules["exit"] = position["exit"]
+            reason = exit_reason(position, value_usd, ts, rules)
             if position.get("paper"):
                 if reason:
                     self.paper_close(position, value_usd, reason, ts)

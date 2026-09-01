@@ -14,7 +14,7 @@ from pathlib import Path
 
 TRADE_FIELDS = [
     "ts", "action", "mint", "symbol", "pool", "sol_lamports", "token_raw",
-    "usd_value", "gecko_price_usd", "reason", "signature", "note",
+    "usd_value", "gecko_price_usd", "reason", "signature", "note", "arm",
 ]
 SIGNAL_FIELDS = [
     "ts", "mint", "symbol", "pool", "age_hours", "reserve_usd",
@@ -62,6 +62,15 @@ def save_state(state: dict) -> None:
 def _append(name: str, fields: list[str], row: dict) -> None:
     path = state_dir() / name
     exists = path.exists()
+    if exists:
+        # A changed schema must not be appended under the old header: the
+        # columns would silently shift and every later reader would
+        # misattribute values. Keep the old file, start a new one.
+        with open(path) as fh:
+            header = (fh.readline().strip().split(",") if fh else [])
+        if header and header != fields:
+            path.rename(path.with_name(f"{path.stem}_v1{path.suffix}"))
+            exists = False
     with open(path, "a", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=fields, extrasaction="ignore")
         if not exists:

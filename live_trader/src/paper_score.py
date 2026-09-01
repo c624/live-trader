@@ -81,11 +81,61 @@ def report(returns: list[float], ticket: float) -> str:
     return "\n".join(lines)
 
 
+def by_arm(rows: list[dict]) -> dict:
+    """Group closed trades by the arm that took them."""
+    groups: dict[str, list[dict]] = {}
+    for row in rows:
+        groups.setdefault(row.get("arm") or "(unlabelled)", []).append(row)
+    return groups
+
+
+def leaderboard(groups: dict, ticket: float) -> str:
+    """One line per arm, so arms are compared rather than admired.
+
+    Sorted by the lower bound of the interval, not the mean: an arm with a
+    high mean on six trades is not beating an arm with a modest mean on two
+    hundred, and sorting by mean would put it on top every time.
+    """
+    lines = [f"{'arm':<12} {'n':>4} {'mean':>9} {'median':>9} {'win':>5} "
+             f"{'95% interval':>22}  verdict"]
+    scored = []
+    for name, rows in groups.items():
+        returns = pct_returns(rows, ticket)
+        if not returns:
+            continue
+        mean = statistics.fmean(returns)
+        if len(returns) > 1:
+            stderr = statistics.stdev(returns) / math.sqrt(len(returns))
+            low, high = mean - 2 * stderr, mean + 2 * stderr
+        else:
+            low, high = float("-inf"), float("inf")
+        scored.append((low, name, returns, mean, high))
+    for low, name, returns, mean, high in sorted(scored, reverse=True):
+        n = len(returns)
+        win = 100 * sum(1 for r in returns if r > 0) / n
+        if low > 0:
+            verdict = "PROFITABLE"
+        elif high < 0:
+            verdict = "losing"
+        else:
+            verdict = "inconclusive"
+        span = ("     n too small" if n < 2
+                else f"{low:+8.1f}% to {high:+8.1f}%")
+        lines.append(f"{name:<12} {n:>4} {mean:>+8.2f}% "
+                     f"{statistics.median(returns):>+8.2f}% {win:>4.0f}% "
+                     f"{span:>22}  {verdict}")
+    return "\n".join(lines)
+
+
 def main() -> None:
     base = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("state/paper")
     ticket = float(sys.argv[2]) if len(sys.argv) > 2 else 2.0
     rows = read_closed(base / "trades.csv")
     print(f"=== PAPER RESULT ({base}) ===")
+    groups = by_arm(rows)
+    if len(groups) > 1 or (groups and "(unlabelled)" not in groups):
+        print(leaderboard(groups, ticket))
+        print()
     print(report(pct_returns(rows, ticket), ticket))
 
 

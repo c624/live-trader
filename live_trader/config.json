@@ -19,8 +19,41 @@
         "sl_pct": null,
         "hold_hours": 0.0333
     },
-    "loop_minutes": 25,
+    "loop_minutes": 20,
     "check_seconds": 15,
     "detect_every_n_checks": 1,
-    "pilot_start_ts": 1788219525
+    "pilot_start_ts": 1788219525,
+    "arms": [
+        {
+            "name": "birth",
+            "min_age_s": 0,
+            "hold_hours": 0.0333
+        },
+        {
+            "name": "wait30",
+            "min_age_s": 30,
+            "hold_hours": 0.0333
+        },
+        {
+            "name": "wait60",
+            "min_age_s": 60,
+            "hold_hours": 0.0333
+        },
+        {
+            "name": "wait120",
+            "min_age_s": 120,
+            "hold_hours": 0.0333
+        },
+        {
+            "name": "hold10m",
+            "min_age_s": 0,
+            "hold_hours": 0.1667
+        },
+        {
+            "name": "trail",
+            "min_age_s": 30,
+            "hold_hours": 0.1667,
+            "tp_pct": 300
+        }
+    ]
 }
