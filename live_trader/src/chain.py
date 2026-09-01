@@ -58,6 +58,7 @@ class Rpc:
                 ("helius", f"https://mainnet.helius-rpc.com/?api-key={key}"))
         self._endpoints.extend(FREE_ENDPOINTS)
         self._client = client or httpx.Client(timeout=30.0)
+        self.last_holders_error = ""
 
     @property
     def _url(self) -> str:
@@ -108,12 +109,23 @@ class Rpc:
         return info if isinstance(info, dict) else None
 
     def largest_holders(self, mint: str) -> list[dict] | None:
-        """Top token accounts by balance, for a concentration read."""
+        """Top token accounts by balance, for a concentration read.
+
+        Returned empty for every token on the free endpoints, so the reason is
+        surfaced rather than folded into "no holders": an unsupported method
+        and a genuinely empty book are different facts, and only one of them
+        says anything about the token.
+        """
         result = self._call("getTokenLargestAccounts", [mint])
-        if not result:
+        if result is None:
+            self.last_holders_error = "call_failed"
             return None
         value = result.get("value")
-        return value if isinstance(value, list) else None
+        if not isinstance(value, list):
+            self.last_holders_error = "unexpected_shape"
+            return None
+        self.last_holders_error = "" if value else "empty"
+        return value
 
     def sign_and_send(self, tx_b64: str, keypair: Keypair) -> str | None:
         """Sign Jupiter's unsigned transaction and submit. Returns signature."""

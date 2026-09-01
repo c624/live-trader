@@ -372,6 +372,9 @@ class Trader:
                if row.get("first_trade_ts") else "")
         log_features({"ts": int(ts), "mint": mint, "symbol": symbol,
                       "arm": name, "entry_lag_s": lag, "danger": danger or "",
+                      "price_impact_pct": impact, "quoted_out": tokens,
+                      "sol_in_lamports": lamports,
+                      "holders_error": getattr(self.rpc, "last_holders_error", ""),
                       **(features or {})})
         if arm and arm.get("require_safe") and danger:
             log_signal(_signal_row(row, "skip", f"rug_{danger}", ts))

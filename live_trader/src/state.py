@@ -81,7 +81,12 @@ def _append(name: str, fields: list[str], row: dict) -> None:
 FEATURE_FIELDS = [
     "ts", "mint", "symbol", "arm", "entry_lag_s", "mint_authority",
     "freeze_authority", "top1_share", "top5_share", "holders_sampled",
-    "decimals", "danger",
+    "decimals", "danger", "holders_error",
+    # Computed for every entry already and previously discarded. Unlike the
+    # authority flags -- constant across every pump.fun launch, so incapable
+    # of separating anything -- this varies, and it is the closest free read
+    # on how much depth the pool actually has.
+    "price_impact_pct", "quoted_out", "sol_in_lamports",
 ]
 
 
