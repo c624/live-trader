@@ -14,7 +14,7 @@ from .decisions import exit_reason, parse_created, pick_entries, utc_day
 from .gecko import Gecko
 from .jupiter import SOL_MINT, Jupiter, price_impact_pct
 from .notify import send
-from .state import load_state, log_signal, log_trade, save_state
+from .state import load_state, log_signal, log_trade, save_state, use_paper_state
 
 LAMPORTS = 1_000_000_000
 
@@ -54,8 +54,15 @@ def _signal_row(row: dict, decision: str, reason: str, ts: float) -> dict:
 class Trader:
     def __init__(self):
         self.cfg = load_config()
-        self.state = load_state()
         self.keypair = load_keypair()
+        # Paper runs keep their own ledger. Sharing one would let simulated
+        # fills feed the loss cap and the daily spend cap that govern real
+        # money, and would leave paper positions sitting in live state if the
+        # bot were later armed. A separate directory makes that impossible
+        # rather than merely unlikely.
+        if not self.live:
+            use_paper_state()
+        self.state = load_state()
         self.jup = Jupiter()
         self.rpc = Rpc()
         self.gecko = Gecko()
@@ -107,7 +114,7 @@ class Trader:
         kill = kill_switch()
         for row in buys:
             if not self.live:
-                log_signal(_signal_row(row, "would_buy", "dry_run", ts))
+                self.paper_buy(row, ts)
                 continue
             if kill:
                 log_signal(_signal_row(row, "skip", f"kill_switch_{kill}", ts))
@@ -216,6 +223,76 @@ class Trader:
              f"(TP +{self.cfg['exit']['tp_pct']}% / SL -{self.cfg['exit']['sl_pct']}% "
              f"/ {self.cfg['exit']['hold_hours']}h hold)")
 
+    def paper_buy(self, row: dict, ts: float) -> None:
+        """Take the position on paper, priced by real quotes.
+
+        Dry run used to log "would_buy" and stop, which records an intention
+        and no outcome -- so a paper run could never say whether the strategy
+        made money. That matters more than it sounds: a $30 pilot buys 15
+        trades, and against a per-trade spread of roughly 50 points, 15 trades
+        cannot distinguish a +8.7% edge from nothing. Paper trades are free,
+        so the edge question is answered here and the pilot is left to answer
+        only whether transactions land.
+
+        Same feed, same filters, same quotes as the live path. The only thing
+        missing is the send, which is the one part that costs money.
+        """
+        mint, symbol = row["token"], row.get("symbol", "?")
+        if not self.sol_price:
+            log_signal(_signal_row(row, "skip", "no_sol_price", ts))
+            return
+        lamports = int(self.cfg["ticket_usd"] / self.sol_price * LAMPORTS)
+        quote = self.jup.quote(SOL_MINT, mint, lamports, self.cfg["slippage_bps"])
+        if not quote:
+            log_signal(_signal_row(row, "skip", "no_route", ts))
+            return
+        impact = price_impact_pct(quote)
+        if impact is not None and impact > self.cfg["max_price_impact_pct"]:
+            log_signal(_signal_row(row, "skip", "impact_too_high", ts))
+            return
+        tokens = int(quote["outAmount"])
+        # The same exit check the live path makes, so the paper record is not
+        # flattered by entries the real bot would have refused.
+        if not self.jup.quote(mint, SOL_MINT, tokens, self.cfg["slippage_bps"]):
+            log_signal(_signal_row(row, "skip", "no_exit_route", ts))
+            return
+
+        self.state["positions"].append({
+            "mint": mint,
+            "symbol": symbol,
+            "pool": row.get("pool", ""),
+            "status": "open",
+            "paper": True,
+            "opened_ts": ts,
+            "token_raw": tokens,
+            "cost_usd": self.cfg["ticket_usd"],
+            "peak_usd": self.cfg["ticket_usd"],
+            "entry_lag_s": round(ts - float(row["first_trade_ts"]), 1)
+            if row.get("first_trade_ts") else "",
+        })
+        log_signal(_signal_row(row, "paper_buy", "", ts))
+        log_trade({"ts": int(ts), "action": "paper_buy", "mint": mint,
+                   "symbol": symbol, "pool": row.get("pool", ""),
+                   "sol_lamports": lamports, "token_raw": tokens,
+                   "usd_value": self.cfg["ticket_usd"],
+                   "gecko_price_usd": row.get("price_usd") or "",
+                   "note": "paper"})
+        save_state(self.state)
+
+    def paper_close(self, position: dict, value_usd: float | None,
+                    reason: str, ts: float) -> None:
+        """Close at the quoted price. No route means it is worth nothing."""
+        proceeds = value_usd if value_usd is not None else 0.0
+        position["status"] = "closed"
+        position["close_reason"] = reason
+        position["proceeds_usd"] = round(proceeds, 4)
+        position["pnl_usd"] = round(proceeds - position["cost_usd"], 4)
+        log_trade({"ts": int(ts), "action": "paper_sell", "mint": position["mint"],
+                   "symbol": position["symbol"], "pool": position["pool"],
+                   "token_raw": position.get("token_raw", 0),
+                   "usd_value": round(proceeds, 4), "reason": reason,
+                   "note": f"paper pnl {position['pnl_usd']:+.4f}"})
+
     # ------------------------------------------------------------ selling
     def check_exits(self, ts: float) -> None:
         kill = kill_switch()
@@ -242,6 +319,11 @@ class Trader:
                 position["no_route_checks"] = position.get("no_route_checks", 0) + 1
                 position["value_stale"] = True
             reason = exit_reason(position, value_usd, ts, self.cfg)
+            if position.get("paper"):
+                if reason:
+                    self.paper_close(position, value_usd, reason, ts)
+                save_state(self.state)
+                continue
             if reason == "dead":
                 position["status"] = "closed"
                 position["close_reason"] = "dead"

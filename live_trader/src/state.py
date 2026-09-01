@@ -28,6 +28,21 @@ def state_dir() -> Path:
     return path
 
 
+def use_paper_state() -> Path:
+    """Point this process's ledger at a paper subdirectory.
+
+    Paper and live must never share a ledger: simulated fills would feed the
+    loss cap and daily spend cap that govern real money, and paper positions
+    left in live state would be treated as real holdings if the bot were
+    armed afterwards. Redirecting the directory makes the mixture impossible
+    instead of relying on every reader to check a flag.
+    """
+    path = state_dir() / "paper"
+    path.mkdir(parents=True, exist_ok=True)
+    os.environ["STATE_DIR"] = str(path)
+    return path
+
+
 def load_state() -> dict:
     path = state_dir() / "live_state.json"
     if path.exists():
