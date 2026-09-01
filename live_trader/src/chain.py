@@ -94,6 +94,27 @@ class Rpc:
                 print(f"rpc {label} exhausted on {method}, trying the next")
         return None
 
+    def mint_info(self, mint: str) -> dict | None:
+        """The mint account's parsed fields: authorities, supply, decimals."""
+        result = self._call("getAccountInfo",
+                            [mint, {"encoding": "jsonParsed"}])
+        if not result:
+            return None
+        value = result.get("value") or {}
+        data = value.get("data") or {}
+        if not isinstance(data, dict):
+            return None
+        info = (data.get("parsed") or {}).get("info")
+        return info if isinstance(info, dict) else None
+
+    def largest_holders(self, mint: str) -> list[dict] | None:
+        """Top token accounts by balance, for a concentration read."""
+        result = self._call("getTokenLargestAccounts", [mint])
+        if not result:
+            return None
+        value = result.get("value")
+        return value if isinstance(value, list) else None
+
     def sign_and_send(self, tx_b64: str, keypair: Keypair) -> str | None:
         """Sign Jupiter's unsigned transaction and submit. Returns signature."""
         tx = VersionedTransaction.from_bytes(base64.b64decode(tx_b64))

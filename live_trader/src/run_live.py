@@ -15,7 +15,9 @@ from .decisions import exit_reason, parse_created, pick_entries, utc_day
 from .gecko import Gecko
 from .jupiter import SOL_MINT, Jupiter, price_impact_pct
 from .notify import send
-from .state import load_state, log_signal, log_trade, save_state, use_paper_state
+from .rugcheck import RugCheck, is_dangerous
+from .state import (load_state, log_features, log_signal, log_trade,
+                    save_state, use_paper_state)
 
 LAMPORTS = 1_000_000_000
 
@@ -51,6 +53,7 @@ LOGGED_SKIPS = {
     # A cap that silently stops all buying has to say so. The pilot's loss
     # cap blocked an entire run while the logs showed only "0 buys".
     "loss_cap", "too_old", "too_young", "missing_data", "clock_skew",
+    "rug_unknown", "rug_mint_open", "rug_freezable", "rug_concentrated",
 }
 
 
@@ -92,6 +95,7 @@ class Trader:
         self.sol_price: float | None = None
         self.wallet_low = False
         self.buffer: list[dict] = []
+        self.rug = RugCheck(self.rpc)
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -355,6 +359,21 @@ class Trader:
             log_signal(_signal_row(row, "skip", "no_exit_route", ts))
             return
 
+        # Read the chain's view of this token now, while the decision is being
+        # made. Recorded for every arm even when no arm acts on it, so the
+        # features can later be scored against outcomes instead of a filter
+        # being picked by intuition.
+        features = self.rug.features(mint, ts)
+        danger = is_dangerous(features)
+        lag = (round(ts - float(row["first_trade_ts"]), 1)
+               if row.get("first_trade_ts") else "")
+        log_features({"ts": int(ts), "mint": mint, "symbol": symbol,
+                      "arm": name, "entry_lag_s": lag, "danger": danger or "",
+                      **(features or {})})
+        if arm and arm.get("require_safe") and danger:
+            log_signal(_signal_row(row, "skip", f"rug_{danger}", ts))
+            return
+
         self.state["positions"].append({
             # The exit rules travel with the position. Reading them from the
             # live config at exit time would judge every arm by one rule and
@@ -370,8 +389,8 @@ class Trader:
             "token_raw": tokens,
             "cost_usd": cfg["ticket_usd"],
             "peak_usd": cfg["ticket_usd"],
-            "entry_lag_s": round(ts - float(row["first_trade_ts"]), 1)
-            if row.get("first_trade_ts") else "",
+            "entry_lag_s": lag,
+            "danger": danger or "",
         })
         log_signal(_signal_row(row, "paper_buy", name, ts))
         log_trade({"ts": int(ts), "action": "paper_buy", "mint": mint,

@@ -78,6 +78,22 @@ def _append(name: str, fields: list[str], row: dict) -> None:
         writer.writerow(row)
 
 
+FEATURE_FIELDS = [
+    "ts", "mint", "symbol", "arm", "entry_lag_s", "mint_authority",
+    "freeze_authority", "top1_share", "top5_share", "holders_sampled",
+    "decimals", "danger",
+]
+
+
+def log_features(row: dict) -> None:
+    """What the chain said about a token at the moment it was bought.
+
+    Kept beside the trades so entry-time facts can be scored against outcomes
+    later, rather than a filter being chosen from folklore and then defended.
+    """
+    _append("features.csv", FEATURE_FIELDS, row)
+
+
 def log_trade(row: dict) -> None:
     _append("trades.csv", TRADE_FIELDS, row)
 

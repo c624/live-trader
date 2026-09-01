@@ -54,6 +54,24 @@
             "min_age_s": 30,
             "hold_hours": 0.1667,
             "tp_pct": 300
+        },
+        {
+            "name": "safe",
+            "min_age_s": 0,
+            "hold_hours": 0.0333,
+            "require_safe": true
+        },
+        {
+            "name": "safe60",
+            "min_age_s": 60,
+            "hold_hours": 0.0333,
+            "require_safe": true
+        },
+        {
+            "name": "safe10m",
+            "min_age_s": 0,
+            "hold_hours": 0.1667,
+            "require_safe": true
         }
     ]
 }
