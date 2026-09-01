@@ -14,7 +14,7 @@ on:
         type: string
         default: "10"
       probe:
-        description: "'ws' websocket, 'mints' polling, 'rpc' raw RPC, 'yes' shapes"
+        description: "'exec' trading path timing (no key), 'ws', 'mints', 'rpc', 'yes'"
         type: string
         default: "no"
 
@@ -31,13 +31,15 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: pip install httpx websockets
+        run: pip install httpx websockets solders
       - name: Race
         working-directory: latency
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
         run: |
-          if [ "${{ inputs.probe }}" = "ws" ]; then
+          if [ "${{ inputs.probe }}" = "exec" ]; then
+            python -m src.exectime 10
+          elif [ "${{ inputs.probe }}" = "ws" ]; then
             python -m src.wswatch "${{ inputs.minutes }}"
           elif [ "${{ inputs.probe }}" = "mints" ]; then
             python -m src.mintwatch "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
