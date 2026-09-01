@@ -14,7 +14,7 @@ on:
         type: string
         default: "10"
       probe:
-        description: "'exec' path timing, 'rpcshop' free-RPC survey, 'ws', 'mints', 'rpc', 'yes'"
+        description: "'slippage' round-trip cost, 'exec' path timing, 'rpcshop' RPC survey, 'ws', 'mints', 'rpc'"
         type: string
         default: "no"
 
@@ -42,6 +42,8 @@ jobs:
             python -m src.exectime 10
           elif [ "${{ inputs.probe }}" = "rpcshop" ]; then
             python -m src.rpcshop 15
+          elif [ "${{ inputs.probe }}" = "slippage" ]; then
+            python -m src.slippage "${{ inputs.minutes }}" "${{ inputs.poll_seconds }}"
           elif [ "${{ inputs.probe }}" = "ws" ]; then
             python -m src.wswatch "${{ inputs.minutes }}"
           elif [ "${{ inputs.probe }}" = "mints" ]; then
