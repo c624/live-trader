@@ -41,35 +41,35 @@
             "max_age_s": 900
         },
         {
-            "name": "wait600",
-            "min_age_s": 600,
-            "hold_hours": 0.0333,
-            "max_age_s": 1800
-        },
-        {
-            "name": "safe",
+            "name": "hot",
             "min_age_s": 0,
             "hold_hours": 0.0333,
-            "require_safe": true
+            "min_tx_count": 200
         },
         {
-            "name": "safe120",
+            "name": "hot120",
             "min_age_s": 120,
             "hold_hours": 0.0333,
-            "require_safe": true
+            "min_tx_count": 200
         },
         {
-            "name": "safe300",
+            "name": "hot300",
             "min_age_s": 300,
             "hold_hours": 0.0333,
             "max_age_s": 900,
-            "require_safe": true
+            "min_tx_count": 200
         },
         {
-            "name": "safe10m",
-            "min_age_s": 0,
+            "name": "hot500",
+            "min_age_s": 120,
+            "hold_hours": 0.0333,
+            "min_tx_count": 500
+        },
+        {
+            "name": "hot10m",
+            "min_age_s": 120,
             "hold_hours": 0.1667,
-            "require_safe": true
+            "min_tx_count": 200
         }
     ]
 }

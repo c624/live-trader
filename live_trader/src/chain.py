@@ -127,7 +127,7 @@ class Rpc:
         self.last_holders_error = "" if value else "empty"
         return value
 
-    def signature_activity(self, mint: str, limit: int = 200) -> dict | None:
+    def signature_activity(self, mint: str, limit: int = 1000) -> dict | None:
         """How much traffic this mint has already attracted.
 
         One call. Entry timing turned out to carry no alpha -- waiting only
@@ -135,6 +135,11 @@ class Rpc:
         cost -- so the open question is which token to buy rather than when.
         A token drawing real buyers behaves differently from one nobody
         touched, and transaction count is the cheapest read of that.
+
+        The page limit is the endpoint's maximum rather than a round number,
+        because at 200 the median reading sat exactly on the cap: half the
+        sample was pinned at the ceiling, so the feature measured "at least
+        200" instead of how busy a token actually is.
         """
         rows = self._call("getSignaturesForAddress", [mint, {"limit": limit}])
         if not isinstance(rows, list):

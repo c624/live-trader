@@ -57,6 +57,7 @@ LOGGED_SKIPS = {
     # cap blocked an entire run while the logs showed only "0 buys".
     "loss_cap", "too_old", "too_young", "missing_data", "clock_skew",
     "rug_unknown", "rug_mint_open", "rug_freezable", "rug_concentrated",
+    "low_traction",
 }
 
 
@@ -379,6 +380,19 @@ class Trader:
         if arm and arm.get("require_safe") and danger:
             log_signal(_signal_row(row, "skip", f"rug_{danger}", ts))
             return
+
+        # Traction, on trial. A first reading over 23 entries put busy tokens
+        # at +2.6% against -64.6% for quiet ones, which is a lead and not a
+        # result: eight features were examined and two separated, which is
+        # what noise produces at that size. The threshold is the old page
+        # limit rather than a number picked off that reading, so the arms
+        # below test it on data that did not suggest it.
+        min_tx = arm.get("min_tx_count") if arm else None
+        if min_tx:
+            seen_tx = (features or {}).get("tx_count")
+            if seen_tx is None or seen_tx < min_tx:
+                log_signal(_signal_row(row, "skip", "low_traction", ts))
+                return
 
         self.state["positions"].append({
             # The exit rules travel with the position. Reading them from the
