@@ -14,15 +14,24 @@ Four things matter, and none of them require spending SOL:
                 makes several calls per cycle and a 429 mid-trade is a stuck
                 position rather than a slow one
 
-sendTransaction is deliberately not exercised: landing a real transaction costs
-real fees, and the pilot itself measures that honestly. What this can rule out
-is an endpoint that cannot even be read from reliably.
+Sending is checked too, and it has to be, because a public endpoint that reads
+fine may still throttle or refuse sendTransaction -- and that failure mode is
+a position we bought and cannot sell. It is checked without spending anything:
+the transaction is signed by a freshly generated keypair holding zero SOL, so
+it cannot pay a fee and therefore cannot land. What comes back separates the
+two cases. "insufficient funds" or "account not found" means the endpoint
+processed the send and the path is open; a 403, 410 or "unsupported method"
+means sending is disabled there and the endpoint is useless to us no matter
+how fast it reads.
+
+Our own wallet is never involved in that check.
 
 Usage: python -m src.rpcshop [burst]
 """
 
 from __future__ import annotations
 
+import base64
 import os
 import statistics
 import sys
@@ -62,6 +71,54 @@ def call(client: httpx.Client, url: str, method: str, params: list):
     return payload.get("result"), "", elapsed
 
 
+# Errors that prove the endpoint accepted and processed a send. The transaction
+# is unfunded, so a healthy endpoint rejects it for exactly these reasons.
+PROCESSED = ("insufficient funds", "account not found", "accountnotfound",
+             "attempt to debit", "blockhash not found", "insufficientfunds")
+# Errors that prove sending is closed to us regardless of read speed.
+REFUSED = ("unsupported", "not supported", "disabled", "forbidden",
+           "unauthorized", "rate limit", "too many requests", "method not found")
+
+
+def can_send(client: httpx.Client, url: str) -> tuple[str, str, float]:
+    """Is sendTransaction open here? Costs nothing: the signer has no SOL."""
+    started = time.time()
+    try:
+        from solders.hash import Hash
+        from solders.keypair import Keypair
+        from solders.message import MessageV0
+        from solders.system_program import TransferParams, transfer
+        from solders.transaction import VersionedTransaction
+    except Exception as exc:
+        return "unknown", f"solders unavailable: {exc}", time.time() - started
+
+    blockhash, err, _ = call(client, url, "getLatestBlockhash", [])
+    if err:
+        return "unknown", f"no blockhash: {err}", time.time() - started
+
+    broke = Keypair()          # generated here, holds nothing, cannot pay a fee
+    ix = transfer(TransferParams(from_pubkey=broke.pubkey(),
+                                 to_pubkey=broke.pubkey(), lamports=1))
+    msg = MessageV0.try_compile(
+        broke.pubkey(), [ix], [],
+        Hash.from_string(blockhash["value"]["blockhash"]))
+    tx = VersionedTransaction(msg, [broke])
+    encoded = base64.b64encode(bytes(tx)).decode()
+
+    started = time.time()
+    result, err, elapsed = call(client, url, "sendTransaction",
+                                [encoded, {"encoding": "base64"}])
+    if result:
+        # Should be unreachable: an unfunded transaction cannot land.
+        return "OPEN", f"accepted (unexpected) {str(result)[:40]}", elapsed
+    low = err.lower()
+    if any(m in low for m in PROCESSED):
+        return "OPEN", "processed the send, rejected the unfunded tx", elapsed
+    if any(m in low for m in REFUSED):
+        return "CLOSED", err[:70], elapsed
+    return "unclear", err[:70], elapsed
+
+
 def measure(name: str, url: str, burst: int) -> None:
     print(f"=== {name} ===", flush=True)
     with httpx.Client(timeout=15.0) as client:
@@ -77,6 +134,9 @@ def measure(name: str, url: str, burst: int) -> None:
         else:
             lamports = (bal or {}).get("value", 0)
             print(f"  balance    {elapsed*1000:.0f}ms  ({lamports/1e9:.4f} SOL)")
+
+        sendable, detail, elapsed = can_send(client, url)
+        print(f"  send       {sendable}  {detail} ({elapsed*1000:.0f}ms)")
 
         times, refused = [], 0
         for _ in range(burst):
@@ -108,9 +168,10 @@ def main() -> None:
             print(f"=== {name} ===\n  probe crashed: {type(exc).__name__}: {exc}")
         print(flush=True)
 
-    print("A usable endpoint answers a blockhash in well under a second and")
-    print("survives the burst. The loop makes a handful of calls per cycle, so")
-    print("refusals under a 15-call burst mean a trade can stick mid-flight.")
+    print("A usable endpoint answers a blockhash in well under a second,")
+    print("survives the burst, and shows send OPEN. Reads alone are not enough:")
+    print("an endpoint that reads fine but refuses sends leaves us holding a")
+    print("position we cannot exit, which is worse than not entering at all.")
 
 
 if __name__ == "__main__":
