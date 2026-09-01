@@ -39,6 +39,7 @@ QUOTE = "https://lite-api.jup.ag/swap/v1/quote"
 SOL = "So11111111111111111111111111111111111111112"
 TICKET_LAMPORTS = 20_000_000     # ~$2, the pilot's ticket
 SLIPPAGE_BPS = 500
+BATCH = 12                       # quotes per cycle, to stay under rate limits
 ASSUMED_ROUND_TRIP = 3.2         # what the backtest charges
 BREAK_EVEN = 12.6                # where the +8.7% modelled edge is wiped out
 
@@ -77,6 +78,20 @@ def round_trip(client: httpx.Client, mint: str):
     return cost, "", buy_impact
 
 
+def partition_ready(waiting, now, target_age, cap=BATCH):
+    """Split the queue into what gets quoted now and what stays queued.
+
+    Every row lands in exactly one of the two lists. An earlier version sliced
+    the ready list and let the remainder fall on the floor, so tokens were
+    never quoted and never counted -- a sample quietly smaller and more
+    arrival-ordered than the totals claimed.
+    """
+    ready, still = [], []
+    for row in waiting:
+        (ready if now - row["first_trade_ts"] >= target_age else still).append(row)
+    return ready[:cap], still + ready[cap:]
+
+
 def main() -> None:
     minutes = float(sys.argv[1]) if len(sys.argv) > 1 else 12
     target_age = float(sys.argv[2]) if len(sys.argv) > 2 else 30
@@ -91,6 +106,7 @@ def main() -> None:
     waiting: list[dict] = []
     costs: list[float] = []
     impacts: list[float] = []
+    ages: list[float] = []
     no_route = 0
     buy_only = 0
     quoted = 0
@@ -100,13 +116,15 @@ def main() -> None:
             if time.time() < deadline:
                 waiting.extend(stream.drain())
 
-            now = time.time()
-            ready = [r for r in waiting if now - r["first_trade_ts"] >= target_age]
-            waiting = [r for r in waiting if now - r["first_trade_ts"] < target_age]
+            # Quoting is rate limited, so only a batch goes per cycle; the
+            # rest stay queued rather than being discarded.
+            batch, waiting = partition_ready(waiting, time.time(), target_age)
 
-            for row in ready[:12]:          # keep the quote rate sane
+            for row in batch:
+                age = time.time() - row["first_trade_ts"]
                 cost, err, impact = round_trip(client, row["token"])
                 quoted += 1
+                ages.append(age)
                 if impact is not None:
                     impacts.append(impact)
                 if cost is None:
@@ -114,18 +132,25 @@ def main() -> None:
                         buy_only += 1
                     else:
                         no_route += 1
-                    print(f"  {row['symbol'][:12]:12} {err}", flush=True)
+                    print(f"  {row['symbol'][:12]:12} {age:5.0f}s  {err}", flush=True)
                 else:
                     costs.append(cost)
-                    print(f"  {row['symbol'][:12]:12} round trip {cost:6.2f}%  "
+                    print(f"  {row['symbol'][:12]:12} {age:5.0f}s  "
+                          f"round trip {cost:6.2f}%  "
                           f"(buy impact {impact:.2f}%)", flush=True)
 
-            if not ready:
+            if not batch:
                 time.sleep(2)
             if time.time() >= deadline and not waiting:
                 break
 
     print(f"\n=== ROUND-TRIP COST AT ~{target_age:.0f}s OLD ===")
+    if ages:
+        ages.sort()
+        # The age asked for is not necessarily the age measured: a backed-up
+        # quote queue ages a token before its turn comes. Report what happened.
+        print(f"age when quoted    median {statistics.median(ages):.0f}s  "
+              f"(youngest {ages[0]:.0f}s, oldest {ages[-1]:.0f}s)")
     print(f"launches seen      {stream.launches}")
     print(f"quoted             {quoted}")
     print(f"no route at all    {no_route}")
