@@ -302,7 +302,8 @@ class Trader:
         save_state(self.state)
         if self.feed is not None:
             print(f"feed: {self.feed.messages} messages, {self.feed.launches} launches, "
-                  f"{self.feed.errors} errors")
+                  f"{self.feed.errors} errors, {self.feed.throttled} throttled, "
+                  f"{self.feed.skipped_busy} skipped")
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
 

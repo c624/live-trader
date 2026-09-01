@@ -68,9 +68,23 @@ def mint_from_parsed(tx: dict) -> str | None:
 class LaunchFeed:
     """Subscribes in the background; drain() returns launches seen since last call."""
 
-    def __init__(self, api_key: str, max_pending: int = 200):
+    def __init__(
+        self,
+        api_key: str,
+        max_pending: int = 200,
+        resolve_per_second: float = 2.0,
+        enough_pending: int = 8,
+    ):
         self._key = api_key
         self._max_pending = max_pending
+        # Resolving costs an API call and the same key quotes, signs, sends
+        # and - the part that matters - exits. Spending it on discovery until
+        # the provider throttles would leave open positions unsellable, which
+        # is the one failure worth engineering against.
+        self._min_gap = 1.0 / resolve_per_second if resolve_per_second else 0.0
+        self._enough_pending = enough_pending
+        self._last_resolve = 0.0
+        self._backoff_until = 0.0
         self._lock = threading.Lock()
         self._pending: list[dict] = []
         self._seen: set[str] = set()
@@ -79,6 +93,8 @@ class LaunchFeed:
         self.messages = 0
         self.launches = 0
         self.errors = 0
+        self.throttled = 0
+        self.skipped_busy = 0
 
     def start(self) -> None:
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -100,13 +116,43 @@ class LaunchFeed:
                 self._pending = self._pending[-(self._max_pending // 2):]
             self._pending.append(row)
 
+    def _should_resolve(self, now_ts: float) -> bool:
+        """Whether this transaction is worth an API call right now.
+
+        BondingCurveV3 marks bonding-curve activity, not creation: it fires
+        around 350 times a minute while roughly nine of those are genuinely
+        new mints. Parsing all of them spent the key's budget discovering
+        tokens already known and earned an HTTP 429 on the account the
+        trading path depends on.
+        """
+        if now_ts < self._backoff_until:
+            self.throttled += 1
+            return False
+        with self._lock:
+            pending = len(self._pending)
+        # The loop buys at most a couple of launches per pass. A queue deeper
+        # than that is discovery nobody will act on before it goes stale.
+        if pending >= self._enough_pending:
+            self.skipped_busy += 1
+            return False
+        if now_ts - self._last_resolve < self._min_gap:
+            self.skipped_busy += 1
+            return False
+        return True
+
     def _resolve(self, client: httpx.Client, signature: str) -> dict | None:
+        self._last_resolve = time.time()
         try:
             response = client.post(
                 PARSE_URL.format(key=self._key),
                 json={"transactions": [signature]},
                 timeout=10.0,
             )
+            if response.status_code == 429:
+                # Back off hard: the same credits are what sell a position.
+                self._backoff_until = time.time() + 30
+                self.throttled += 1
+                return None
             payload = response.json()
         except (httpx.HTTPError, ValueError):
             self.errors += 1
@@ -152,6 +198,8 @@ class LaunchFeed:
                                  or {}).get("value") or {}
                         signature = value.get("signature")
                         if not signature or not looks_like_launch(value.get("logs") or []):
+                            continue
+                        if not self._should_resolve(time.time()):
                             continue
                         row = self._resolve(client, signature)
                         if row:
