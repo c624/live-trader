@@ -21,6 +21,27 @@ LAMPORTS = 1_000_000_000
 
 # Qualified signals get a ledger row; unqualified pool listings do not, so
 # signals.csv stays one row per unique candidate, not a firehose.
+# How long a launch stays eligible. A waiting arm needs the row to still be
+# around when the pool is finally old enough to qualify.
+BUFFER_SECONDS = 420
+# Consecutive identical cycle errors before the run gives up and fails loudly.
+MAX_REPEATED_ERRORS = 5
+
+
+def repeat_count(exc_repr: str, last_error: str, repeats: int) -> int:
+    """How many cycles in a row this same failure has happened."""
+    return repeats + 1 if exc_repr == last_error else 1
+
+
+def should_abort(repeats: int) -> bool:
+    """The same error every cycle is a broken build, not a blip.
+
+    Ninety-nine identical NameErrors ran for twenty-five minutes and the job
+    still reported success, because a per-cycle catch treated a permanent
+    failure as a transient one.
+    """
+    return repeats >= MAX_REPEATED_ERRORS
+
 LOGGED_SKIPS = {
     "loop_cap", "position_cap", "daily_spend_cap", "already_held",
     "no_route", "impact_too_high", "wallet_low",
@@ -479,6 +500,7 @@ class Trader:
         print(f"live-trader starting: {mode}, {loop_minutes:.0f} min loop, "
               f"{len(self.open_positions())} open positions")
         check = 0
+        last_error, repeats = "", 0
         while time.monotonic() < deadline:
             started = time.monotonic()
             ts = now()
@@ -493,8 +515,19 @@ class Trader:
                 # positions are closed on quoted prices and never signed.
                 self.check_exits(ts)
             except Exception as exc:  # one bad loop must not kill the job
-                print(f"loop error: {exc!r}")
-                send(f"live-trader loop error: {exc!r}")
+                print(f"loop error: {exc!r}", flush=True)
+                repeats = repeat_count(repr(exc), last_error, repeats)
+                last_error = repr(exc)
+                if repeats == 1:
+                    send(f"live-trader loop error: {exc!r}")
+                if should_abort(repeats):
+                    # The same failure every cycle is a broken build, not a
+                    # blip, and swallowing it produced a twenty-five minute
+                    # run that reported success while doing nothing at all.
+                    print(f"aborting: {exc!r} on {repeats} consecutive cycles",
+                          flush=True)
+                    send(f"live-trader aborted: {exc!r} x{repeats}")
+                    raise
             save_state(self.state)
             check += 1
             remaining = check_seconds - (time.monotonic() - started)
