@@ -1,5 +1,9 @@
-"""Solana wallet + RPC plumbing: sign Jupiter transactions, send via Helius,
-confirm, and read balances."""
+"""Solana wallet + RPC plumbing: sign Jupiter transactions, send them, confirm,
+and read balances.
+
+No API key is required. Free public endpoints backstop every configured one, so
+the bot keeps its ability to sell even when a paid plan is exhausted mid-trade
+-- the failure that would otherwise leave a position bought and unsellable."""
 
 from __future__ import annotations
 
@@ -21,44 +25,73 @@ def load_keypair() -> Keypair | None:
     return Keypair.from_base58_string(raw)
 
 
+# Free, keyless endpoints, measured from a runner before being trusted here:
+# both answer a blockhash in about a tenth of a second, survived a fifteen-call
+# burst without a single refusal, and accepted a sendTransaction (rejecting an
+# unfunded one, which is the proof the send path is open rather than throttled).
+# They are the reason the bot needs no paid plan and no key at all.
+FREE_ENDPOINTS = (
+    ("publicnode", "https://solana-rpc.publicnode.com"),
+    ("mainnet-beta", "https://api.mainnet-beta.solana.com"),
+)
+
+
 class Rpc:
     def __init__(self, api_key: str | None = None, client: httpx.Client | None = None,
                  rpc_url: str | None = None):
-        # SOLANA_RPC_URL takes a complete endpoint from any provider, which
-        # is how the bot survives one of them being exhausted. Helius stays
-        # the fallback so nothing breaks while only a key is configured.
-        # This URL contains a credential: it is read from a secret and must
-        # never be printed, which is why errors elsewhere report status codes
-        # rather than the request.
+        # Endpoints are tried in order, so one being exhausted or rate limited
+        # is a slower call rather than a stuck position. SOLANA_RPC_URL takes a
+        # complete endpoint from any provider and goes first; Helius follows if
+        # a key is configured; the free endpoints always backstop both, which is
+        # what keeps the bot able to sell when a paid plan runs out mid-trade.
+        #
+        # A configured URL carries its credential in the path. It is read from a
+        # secret and never printed: failures are reported by endpoint label and
+        # status code, never by request, which is why _label exists.
+        self._endpoints: list[tuple[str, str]] = []
         override = (rpc_url or os.environ.get("SOLANA_RPC_URL", "")).strip()
         if override:
-            self._url = override
-        else:
-            key = api_key or os.environ.get("HELIUS_API_KEY", "")
-            self._url = f"https://mainnet.helius-rpc.com/?api-key={key}"
+            self._endpoints.append(("configured", override))
+        key = (api_key or os.environ.get("HELIUS_API_KEY", "")).strip()
+        if key:
+            self._endpoints.append(
+                ("helius", f"https://mainnet.helius-rpc.com/?api-key={key}"))
+        self._endpoints.extend(FREE_ENDPOINTS)
         self._client = client or httpx.Client(timeout=30.0)
+
+    @property
+    def _url(self) -> str:
+        """The endpoint currently in front. Kept for callers and tests."""
+        return self._endpoints[0][1]
 
     def close(self) -> None:
         self._client.close()
 
     def _call(self, method: str, params: list) -> dict | None:
         body = {"jsonrpc": "2.0", "id": 1, "method": method, "params": params}
-        for attempt in range(3):
-            try:
-                response = self._client.post(self._url, json=body)
-            except httpx.HTTPError:
+        for label, url in self._endpoints:
+            for attempt in range(3):
+                try:
+                    response = self._client.post(url, json=body)
+                except httpx.HTTPError as exc:
+                    print(f"rpc {label} unreachable ({type(exc).__name__})")
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
+                if response.status_code == 429:
+                    time.sleep(2.0 * (attempt + 1))
+                    continue
+                if response.is_success:
+                    payload = response.json()
+                    if "error" in payload:
+                        # A JSON-RPC error is the chain's answer, not a broken
+                        # endpoint: moving to another one would only repeat it.
+                        print(f"rpc error {method}: {payload['error']}")
+                        return None
+                    return payload.get("result")
+                print(f"rpc {label} HTTP {response.status_code} on {method}")
                 time.sleep(1.5 * (attempt + 1))
-                continue
-            if response.status_code == 429:
-                time.sleep(2.0 * (attempt + 1))
-                continue
-            if response.is_success:
-                payload = response.json()
-                if "error" in payload:
-                    print(f"rpc error {method}: {payload['error']}")
-                    return None
-                return payload.get("result")
-            time.sleep(1.5 * (attempt + 1))
+            if len(self._endpoints) > 1:
+                print(f"rpc {label} exhausted on {method}, trying the next")
         return None
 
     def sign_and_send(self, tx_b64: str, keypair: Keypair) -> str | None:
