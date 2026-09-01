@@ -28,7 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 29
     steps:
+      # Follow the branch, not the SHA that happened to trigger this run.
+      # A self-chaining loop otherwise pins itself to whatever commit was
+      # current when the chain started: runs dispatched seven hours after a
+      # fix were still executing the code from before it, which made every
+      # correction look like it had no effect.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
