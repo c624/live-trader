@@ -32,6 +32,7 @@ Usage: python -m src.rpcshop [burst]
 from __future__ import annotations
 
 import base64
+import json
 import os
 import statistics
 import sys
@@ -67,7 +68,9 @@ def call(client: httpx.Client, url: str, method: str, params: list):
     except Exception:
         return None, "not JSON", elapsed
     if "error" in payload:
-        return None, str(payload["error"])[:60], elapsed
+        # Kept whole: the reason a send was rejected lives inside this object,
+        # and truncating it here is what made the first send check "unclear".
+        return None, json.dumps(payload["error"]), elapsed
     return payload.get("result"), "", elapsed
 
 
@@ -112,11 +115,19 @@ def can_send(client: httpx.Client, url: str) -> tuple[str, str, float]:
         # Should be unreachable: an unfunded transaction cannot land.
         return "OPEN", f"accepted (unexpected) {str(result)[:40]}", elapsed
     low = err.lower()
-    if any(m in low for m in PROCESSED):
-        return "OPEN", "processed the send, rejected the unfunded tx", elapsed
-    if any(m in low for m in REFUSED):
-        return "CLOSED", err[:70], elapsed
-    return "unclear", err[:70], elapsed
+    try:
+        code = json.loads(err).get("code")
+    except Exception:
+        code = None
+
+    # -32002 is "Transaction simulation failed": the endpoint accepted the
+    # transaction and ran it. That is precisely what we are asking -- the send
+    # path is open, and simulation failed only because the signer is empty.
+    if code == -32002 or any(m in low for m in PROCESSED):
+        return "OPEN", "ran the send; rejected the unfunded tx as expected", elapsed
+    if code in (-32601, -32000, -32005) or any(m in low for m in REFUSED):
+        return "CLOSED", err[:100], elapsed
+    return "unclear", err[:100], elapsed
 
 
 def measure(name: str, url: str, burst: int) -> None:
