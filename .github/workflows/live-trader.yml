@@ -9,6 +9,10 @@ on:
         description: "Force dry-run (no trades) regardless of config"
         type: boolean
         default: false
+      loop_minutes:
+        description: "Override loop length. Actions only publishes logs when a job ends, so a short run is the only way to see a cycle work."
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -50,7 +54,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
-          LOOP_MINUTES: "25"
+          LOOP_MINUTES: ${{ inputs.loop_minutes || '25' }}
         run: python -m live_trader.src.run_live
 
       - name: Commit state back
