@@ -1,0 +1,38 @@
+# Finds wallets that were early in more than one token that actually ran.
+# The winners come from our own paper record, so the input is measured rather
+# than taken from a list. Read-only: no keys, no trades, no signing.
+name: wallet-discover
+
+on:
+  workflow_dispatch:
+    inputs:
+      per_token:
+        description: "Transactions to inspect per winning token"
+        type: string
+        default: "60"
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install httpx solders
+      - name: Discover
+        run: |
+          python -m wallet_pnl.src.discover wallet_pnl/winners.json \
+            wallets.json "${{ inputs.per_token }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: discovered-wallets
+          path: wallets.json
