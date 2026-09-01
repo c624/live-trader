@@ -87,6 +87,9 @@ FEATURE_FIELDS = [
     # of separating anything -- this varies, and it is the closest free read
     # on how much depth the pool actually has.
     "price_impact_pct", "quoted_out", "sol_in_lamports",
+    # Traction: the first recorded signal that differs between one launch and
+    # the next, and the only remaining candidate for choosing which token.
+    "tx_count", "tx_span_s", "tx_per_min", "tx_capped",
 ]
 
 

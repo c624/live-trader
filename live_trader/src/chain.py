@@ -127,6 +127,26 @@ class Rpc:
         self.last_holders_error = "" if value else "empty"
         return value
 
+    def signature_activity(self, mint: str, limit: int = 200) -> dict | None:
+        """How much traffic this mint has already attracted.
+
+        One call. Entry timing turned out to carry no alpha -- waiting only
+        removes rugs, and past that the result converges on the round-trip
+        cost -- so the open question is which token to buy rather than when.
+        A token drawing real buyers behaves differently from one nobody
+        touched, and transaction count is the cheapest read of that.
+        """
+        rows = self._call("getSignaturesForAddress", [mint, {"limit": limit}])
+        if not isinstance(rows, list):
+            return None
+        times = [r.get("blockTime") for r in rows
+                 if isinstance(r.get("blockTime"), (int, float))]
+        out = {"tx_count": len(rows), "tx_capped": len(rows) >= limit}
+        if times:
+            out["tx_span_s"] = int(max(times) - min(times))
+            out["tx_oldest"] = int(min(times))
+        return out
+
     def sign_and_send(self, tx_b64: str, keypair: Keypair) -> str | None:
         """Sign Jupiter's unsigned transaction and submit. Returns signature."""
         tx = VersionedTransaction.from_bytes(base64.b64decode(tx_b64))

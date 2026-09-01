@@ -96,6 +96,20 @@ class RugCheck:
             out["top5_share"] = None
         out["holders_sampled"] = len(amounts)
 
+        # Traction. The authority flags proved constant across every launch
+        # and so could separate nothing; how much traffic a token has already
+        # drawn is the first recorded signal that genuinely varies between
+        # one launch and the next.
+        activity = self.rpc.signature_activity(mint)
+        if activity:
+            out.update(activity)
+            span = activity.get("tx_span_s") or 0
+            out["tx_per_min"] = (round(activity["tx_count"] / (span / 60.0), 2)
+                                 if span >= 5 else None)
+        else:
+            out["tx_count"] = None
+            out["tx_per_min"] = None
+
         self._cache[mint] = (now, out)
         self._prune(now)
         return out
