@@ -25,51 +25,76 @@
     "pilot_start_ts": 1788219525,
     "arms": [
         {
-            "name": "birth",
-            "min_age_s": 0,
-            "hold_hours": 0.0333
-        },
-        {
             "name": "wait120",
             "min_age_s": 120,
             "hold_hours": 0.0333
         },
         {
-            "name": "wait300",
-            "min_age_s": 300,
-            "hold_hours": 0.0333,
-            "max_age_s": 900
-        },
-        {
-            "name": "hot",
-            "min_age_s": 0,
-            "hold_hours": 0.0333,
-            "min_tx_count": 200
-        },
-        {
-            "name": "hot120",
+            "name": "dexctl",
             "min_age_s": 120,
-            "hold_hours": 0.0333,
-            "min_tx_count": 200
-        },
-        {
-            "name": "hot300",
-            "min_age_s": 300,
-            "hold_hours": 0.0333,
-            "max_age_s": 900,
-            "min_tx_count": 200
-        },
-        {
-            "name": "hot500",
-            "min_age_s": 120,
-            "hold_hours": 0.0333,
-            "min_tx_count": 500
-        },
-        {
-            "name": "hot10m",
-            "min_age_s": 120,
+            "max_age_s": 7200,
             "hold_hours": 0.1667,
-            "min_tx_count": 200
+            "where": {
+                "m5_buys": 0
+            }
+        },
+        {
+            "name": "boost",
+            "min_age_s": 0,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "boosts": 1
+            }
+        },
+        {
+            "name": "boost1h",
+            "min_age_s": 0,
+            "max_age_s": 7200,
+            "hold_hours": 1.0,
+            "where": {
+                "boosts": 1
+            }
+        },
+        {
+            "name": "surge",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "m5_buys": 30,
+                "buy_ratio_m5": 2.0
+            }
+        },
+        {
+            "name": "surge1h",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 1.0,
+            "where": {
+                "m5_buys": 30,
+                "buy_ratio_m5": 2.0
+            }
+        },
+        {
+            "name": "volume",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "vol_m5_usd": 5000,
+                "chg_m5_pct": 5
+            }
+        },
+        {
+            "name": "deep",
+            "min_age_s": 300,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "liquidity_usd": 20000,
+                "buy_ratio_m5": 1.5
+            }
         }
     ]
 }

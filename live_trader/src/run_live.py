@@ -15,6 +15,7 @@ from .decisions import exit_reason, parse_created, pick_entries, utc_day
 from .gecko import Gecko
 from .jupiter import SOL_MINT, Jupiter, price_impact_pct
 from .notify import send
+from .attention import Attention
 from .rugcheck import RugCheck, is_dangerous
 from .state import (load_state, log_features, log_signal, log_trade,
                     save_state, use_paper_state)
@@ -28,7 +29,31 @@ LAMPORTS = 1_000_000_000
 # the largest min_age any arm uses plus its window -- at 420 an arm waiting ten
 # minutes could never fire, and would have reported zero trades as though the
 # rule simply never matched.
-BUFFER_SECONDS = 2100
+# Attention rows describe tokens up to two hours old, and the prune is by
+# creation time rather than by when the row arrived: at 2100 a freshly
+# boosted one-hour-old token was evicted the moment it was merged. The
+# buffer stays small regardless, since each token is held once.
+BUFFER_SECONDS = 7500
+# How often to refresh attention and momentum stats. They describe tokens
+# already trading, so seconds of staleness matter less than for a launch.
+ATTENTION_EVERY_S = 60
+ATTENTION_FIELDS = ("source", "boosts", "m5_buys", "m5_sells", "buy_ratio_m5",
+                    "h1_buys", "h1_sells", "vol_m5_usd", "vol_h1_usd",
+                    "chg_m5_pct", "chg_h1_pct", "liquidity_usd")
+
+
+def passes(row: dict, where: dict | None) -> bool:
+    """Does the row clear every minimum the arm asks for?
+
+    A field the row does not carry fails the check. A launch-feed row has no
+    buy counts, and letting it through an arm that requires buy pressure
+    would fill a momentum arm with exactly the rows it exists to exclude.
+    """
+    for field, minimum in (where or {}).items():
+        value = row.get(field)
+        if value is None or value < minimum:
+            return False
+    return True
 # Consecutive identical cycle errors before the run gives up and fails loudly.
 MAX_REPEATED_ERRORS = 5
 
@@ -100,6 +125,8 @@ class Trader:
         self.wallet_low = False
         self.buffer: list[dict] = []
         self.rug = RugCheck(self.rpc)
+        self.attention = Attention()
+        self._attention_at = 0.0
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -141,6 +168,18 @@ class Trader:
         # feed hands each launch over once, at an age of a few seconds, and a
         # row skipped as too_young was simply dropped.
         self.buffer.extend(rows)
+        # Attention and momentum rows, polled less often than the launch feed
+        # because they describe tokens that are already trading. Boosted
+        # tokens come with their own stats; the GeckoTerminal listing supplies
+        # the post-launch population and is enriched with the same stats, so
+        # arms testing momentum on survivors and arms testing attention both
+        # draw from rows carrying identical fields.
+        if self.arms and ts - self._attention_at >= ATTENTION_EVERY_S:
+            self._attention_at = ts
+            listing = [r["token"] for r in self.gecko.candidate_pools()
+                       if r.get("token")]
+            fresh = self.attention.candidates(listing)
+            self._merge(fresh, ts)
         cutoff = ts - BUFFER_SECONDS
         self.buffer = [r for r in self.buffer
                        if float(r.get("first_trade_ts") or ts) >= cutoff]
@@ -275,6 +314,16 @@ class Trader:
              f"(TP +{self.cfg['exit']['tp_pct']}% / SL -{self.cfg['exit']['sl_pct']}% "
              f"/ {self.cfg['exit']['hold_hours']}h hold)")
 
+    def _merge(self, fresh: list[dict], ts: float) -> None:
+        """Newer stats replace older rows for the same token."""
+        by = {r["token"]: r for r in fresh if r.get("first_trade_ts")}
+        kept = [r for r in self.buffer if r.get("token") not in by]
+        for row in by.values():
+            row["detected_ts"] = row.get("detected_ts") or ts
+        self.buffer = kept + list(by.values())
+        print(f"attention: {len(fresh)} rows, {len(by)} aged, "
+              f"{self.attention.failures} failures", flush=True)
+
     def arm_config(self, arm: dict) -> dict:
         """This arm's rules, over the shared config."""
         cfg = dict(self.cfg)
@@ -317,8 +366,8 @@ class Trader:
         for arm in self.arms:
             name = arm["name"]
             cfg = self.arm_config(arm)
-            buys, skipped = pick_entries(
-                self.buffer, self.arm_state(name), ts, cfg)
+            pool = [r for r in self.buffer if passes(r, arm.get("where"))]
+            buys, skipped = pick_entries(pool, self.arm_state(name), ts, cfg)
             tally = Counter(reason for _r, reason in skipped)
             why = " ".join(f"{r}={n}" for r, n in tally.most_common(4))
             print(f"  arm[{name}]: {len(buys)} buys, {len(skipped)} skipped"
@@ -373,6 +422,7 @@ class Trader:
                if row.get("first_trade_ts") else "")
         log_features({"ts": int(ts), "mint": mint, "symbol": symbol,
                       "arm": name, "entry_lag_s": lag, "danger": danger or "",
+                      **{k: row.get(k) for k in ATTENTION_FIELDS},
                       "price_impact_pct": impact, "quoted_out": tokens,
                       "sol_in_lamports": lamports,
                       "holders_error": getattr(self.rpc, "last_holders_error", ""),
