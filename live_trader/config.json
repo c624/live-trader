@@ -36,7 +36,8 @@
             "hold_hours": 0.1667,
             "where": {
                 "m5_buys": 0
-            }
+            },
+            "max_new_per_loop": 10
         },
         {
             "name": "boost",
@@ -45,7 +46,8 @@
             "hold_hours": 0.1667,
             "where": {
                 "boosts": 1
-            }
+            },
+            "max_new_per_loop": 10
         },
         {
             "name": "boost1h",
@@ -54,7 +56,8 @@
             "hold_hours": 1.0,
             "where": {
                 "boosts": 1
-            }
+            },
+            "max_new_per_loop": 10
         },
         {
             "name": "surge",
