@@ -26,6 +26,7 @@ jobs:
       - name: Check secrets
         env:
           HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
           TRADER_PRIVATE_KEY: ${{ secrets.TRADER_PRIVATE_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -34,6 +35,20 @@ jobs:
           import os, httpx
 
           helius = os.environ.get("HELIUS_API_KEY", "").strip()
+          rpc_url = os.environ.get("SOLANA_RPC_URL", "").strip()
+          if rpc_url:
+              # Never print the URL itself: it carries the credential.
+              try:
+                  r = httpx.post(rpc_url, json={"jsonrpc": "2.0", "id": 1,
+                                                "method": "getHealth"}, timeout=15)
+                  body = r.json()
+                  ok = body.get("result") == "ok"
+                  print(f"SOLANA_RPC_URL: {'WORKS' if ok else 'REACHED but unhealthy'}"
+                        f" (http {r.status_code})")
+              except Exception as exc:
+                  print(f"SOLANA_RPC_URL: SET BUT FAILING ({type(exc).__name__})")
+          else:
+              print("SOLANA_RPC_URL: not set, falling back to Helius")
           if not helius:
               print("HELIUS_API_KEY: MISSING")
           else:

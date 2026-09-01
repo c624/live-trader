@@ -22,9 +22,20 @@ def load_keypair() -> Keypair | None:
 
 
 class Rpc:
-    def __init__(self, api_key: str | None = None, client: httpx.Client | None = None):
-        key = api_key or os.environ.get("HELIUS_API_KEY", "")
-        self._url = f"https://mainnet.helius-rpc.com/?api-key={key}"
+    def __init__(self, api_key: str | None = None, client: httpx.Client | None = None,
+                 rpc_url: str | None = None):
+        # SOLANA_RPC_URL takes a complete endpoint from any provider, which
+        # is how the bot survives one of them being exhausted. Helius stays
+        # the fallback so nothing breaks while only a key is configured.
+        # This URL contains a credential: it is read from a secret and must
+        # never be printed, which is why errors elsewhere report status codes
+        # rather than the request.
+        override = (rpc_url or os.environ.get("SOLANA_RPC_URL", "")).strip()
+        if override:
+            self._url = override
+        else:
+            key = api_key or os.environ.get("HELIUS_API_KEY", "")
+            self._url = f"https://mainnet.helius-rpc.com/?api-key={key}"
         self._client = client or httpx.Client(timeout=30.0)
 
     def close(self) -> None:
