@@ -46,6 +46,16 @@ ASSUMED_ROUND_TRIP = 3.2         # what the backtest charges
 BREAK_EVEN = 12.6                # where the +8.7% modelled edge is wiped out
 
 
+# "We could not ask" is not "there is no route". The first run counted 78
+# tokens as unroutable when many of those lines were HTTP 429 -- Jupiter rate
+# limiting us -- which would have understated how tradeable launches are.
+UNAVAILABLE = ("HTTP 429", "HTTP 5", "Timeout", "Connect", "Read", "not JSON")
+
+
+def is_unavailable(err: str) -> bool:
+    return any(marker in err for marker in UNAVAILABLE)
+
+
 def quote(client: httpx.Client, src: str, dst: str, amount: int):
     try:
         r = client.get(QUOTE, params={"inputMint": src, "outputMint": dst,
@@ -110,6 +120,7 @@ def main() -> None:
     impacts: list[float] = []
     ages: list[float] = []
     no_route = 0
+    unavailable = 0
     buy_only = 0
     quoted = 0
 
@@ -135,7 +146,9 @@ def main() -> None:
                 if impact is not None:
                     impacts.append(impact)
                 if cost is None:
-                    if "buy only" in err:
+                    if is_unavailable(err):
+                        unavailable += 1
+                    elif "buy only" in err:
                         buy_only += 1
                     else:
                         no_route += 1
@@ -165,6 +178,8 @@ def main() -> None:
     print(f"launches seen      {stream.launches}")
     print(f"quoted             {quoted}")
     print(f"no route at all    {no_route}")
+    print(f"could not ask      {unavailable}   <- rate limited or errored, "
+          f"not a statement about the token")
     print(f"buy but no sell    {buy_only}   <- would be an unsellable position")
     if not costs:
         print("\nNo token could be round-tripped. If that holds, the strategy")

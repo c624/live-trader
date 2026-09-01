@@ -23,6 +23,9 @@ LAMPORTS = 1_000_000_000
 LOGGED_SKIPS = {
     "loop_cap", "position_cap", "daily_spend_cap", "already_held",
     "no_route", "impact_too_high", "wallet_low",
+    # One in nine launches could be bought but not sold. A skip for that has
+    # to be visible, or the filter looks like the market simply went quiet.
+    "no_exit_route",
     # A cap that silently stops all buying has to say so. The pilot's loss
     # cap blocked an entire run while the logs showed only "0 buys".
     "loss_cap", "too_old", "too_young", "missing_data", "clock_skew",
@@ -62,11 +65,12 @@ class Trader:
 
     @property
     def live(self) -> bool:
-        return bool(
-            self.cfg["trading_enabled"]
-            and self.keypair is not None
-            and os.environ.get("HELIUS_API_KEY")
-        )
+        # Deliberately no key check. This used to require HELIUS_API_KEY, which
+        # became a trap the moment the RPC layer stopped needing one: an armed
+        # bot with no key would have reported itself live-capable as "dry run"
+        # and quietly never traded. What actually gates trading is the config
+        # flag and a signing key -- the endpoints are keyless now.
+        return bool(self.cfg["trading_enabled"] and self.keypair is not None)
 
     @property
     def pubkey(self) -> str:
@@ -134,6 +138,19 @@ class Trader:
         if impact is not None and impact > self.cfg["max_price_impact_pct"]:
             log_signal(_signal_row(row, "skip", "impact_too_high", ts))
             return
+
+        # Check the way out before taking the way in. Measured on 279 live
+        # launches, 31 of them -- about one in nine -- could be bought at
+        # thirty seconds old and had no sell route at all. Buying one of those
+        # is a position that cannot be exited, roughly a total loss, and at
+        # that rate it wipes out the entire modelled edge on its own. A quote
+        # costs about 66ms against an entry budget of tens of seconds, so
+        # there is no reason not to ask first.
+        if not self.jup.quote(mint, SOL_MINT, int(quote["outAmount"]),
+                              self.cfg["slippage_bps"]):
+            log_signal(_signal_row(row, "skip", "no_exit_route", ts))
+            return
+
         tx = self.jup.swap_transaction(quote, self.pubkey)
         signature = self.rpc.sign_and_send(tx, self.keypair) if tx else None
         if not signature:
