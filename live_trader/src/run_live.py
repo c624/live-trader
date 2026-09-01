@@ -6,6 +6,7 @@ KILL / KILL_ALL files. With any gate shut this is a signal logger.
 from __future__ import annotations
 
 import os
+from collections import Counter
 import time
 
 from .chain import Rpc, load_keypair
@@ -106,8 +107,14 @@ class Trader:
         # a blind detector in the run logs.
         ages = [ts - float(r["first_trade_ts"]) for r in rows if r.get("first_trade_ts")]
         age_note = f", ages {min(ages):.0f}-{max(ages):.0f}s" if ages else ""
+        # Counts alone cannot explain a run that buys nothing. Twice now a
+        # cycle has reported "0 buys" while the reason sat only in a CSV
+        # nobody was reading, so the reasons go on the same line as the count.
+        tally = Counter(reason for _row, reason in skipped)
+        why = " ".join(f"{reason}={n}" for reason, n in tally.most_common(6))
         print(f"detect[{source}]: {len(rows)} rows, {len(buys)} buys, "
-              f"{len(skipped)} skipped{age_note}")
+              f"{len(skipped)} skipped{age_note}"
+              + (f" [{why}]" if why else ""), flush=True)
         for row, reason in skipped:
             if reason in LOGGED_SKIPS:
                 log_signal(_signal_row(row, "skip", reason, ts))
@@ -404,8 +411,8 @@ class Trader:
         save_state(self.state)
         if self.feed is not None:
             print(f"feed: {self.feed.messages} messages, {self.feed.launches} launches, "
-                  f"{self.feed.errors} errors, {self.feed.throttled} throttled, "
-                  f"{self.feed.skipped_busy} skipped")
+                  f"{self.feed.errors} errors, "
+                  f"{self.feed.dropped} dropped")
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
 

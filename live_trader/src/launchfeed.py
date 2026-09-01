@@ -67,6 +67,10 @@ class LaunchStream:
         self.messages = 0
         self.launches = 0
         self.errors = 0
+        # Launches shed when the queue overflows. Reported at the end of a
+        # run because a discovery path quietly throwing work away looks
+        # exactly like a quiet market.
+        self.dropped = 0
 
     @property
     def healthy(self) -> bool:
@@ -108,7 +112,9 @@ class LaunchStream:
         with self._lock:
             if len(self._pending) >= self._max_pending:
                 # Keep the newest: a queued launch goes stale in seconds.
-                self._pending = self._pending[-(self._max_pending // 2):]
+                keep = self._max_pending // 2
+                self.dropped += len(self._pending) - keep
+                self._pending = self._pending[-keep:]
             self._pending.append(row)
         return row
 
