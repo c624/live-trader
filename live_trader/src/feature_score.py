@@ -30,7 +30,12 @@ import sys
 from pathlib import Path
 
 NUMERIC = ["tx_count", "tx_per_min", "tx_span_s", "price_impact_pct",
-           "entry_lag_s", "top1_share", "holders_sampled"]
+           "entry_lag_s", "top1_share", "holders_sampled",
+           # Attention and momentum. The analyser predated these fields and
+           # silently scored everything except the category under study.
+           "boosts", "m5_buys", "m5_sells", "buy_ratio_m5", "h1_buys",
+           "h1_sells", "vol_m5_usd", "vol_h1_usd", "chg_m5_pct", "chg_h1_pct",
+           "liquidity_usd"]
 BOOLEAN = ["mint_authority", "freeze_authority", "tx_capped"]
 
 
