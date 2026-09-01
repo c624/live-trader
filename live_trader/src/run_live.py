@@ -317,18 +317,22 @@ class Trader:
         their exits run, and the poller can still find something, however
         late. Discovery degrading is survivable, exits going unmanaged is not.
         """
-        key = os.environ.get("HELIUS_API_KEY")
-        if not key or os.environ.get("DISABLE_FEED"):
+        if os.environ.get("DISABLE_FEED"):
             print("launch feed: disabled, falling back to polling")
             return
+        # A launch stream sends one message per launch. The old subscription
+        # took every log on the program - about 38,000 a minute to find
+        # thirty - and exhausted a month of RPC credits in eight minutes.
+        # Discovery needs no API key at all now, which is the point: it can
+        # no longer spend the budget the exits depend on.
         try:
-            from .wsfeed import LaunchFeed
-            feed = LaunchFeed(key)
-            feed.start()
-            self.feed = feed
-            print("launch feed: subscribed")
+            from .launchfeed import LaunchStream
+            stream = LaunchStream()
+            stream.start()
+            self.feed = stream
+            print(f"launch stream: subscribing to {stream.url}")
         except Exception as exc:
-            print(f"launch feed unavailable ({exc!r}); falling back to polling")
+            print(f"launch stream unavailable ({exc!r}); falling back to polling")
 
 
 def main() -> None:
