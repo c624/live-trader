@@ -294,6 +294,8 @@ class Trader:
         position["close_reason"] = reason
         position["proceeds_usd"] = round(proceeds, 4)
         position["pnl_usd"] = round(proceeds - position["cost_usd"], 4)
+        print(f"paper exit: {position['symbol']} {reason} "
+              f"{position['pnl_usd']:+.4f} on {position['cost_usd']:.2f}", flush=True)
         log_trade({"ts": int(ts), "action": "paper_sell", "mint": position["mint"],
                    "symbol": position["symbol"], "pool": position["pool"],
                    "token_raw": position.get("token_raw", 0),
@@ -304,6 +306,12 @@ class Trader:
     def check_exits(self, ts: float) -> None:
         kill = kill_switch()
         for position in list(self.open_positions()):
+            if not self.live and not position.get("paper"):
+                # A real position left in this ledger is not ours to sell
+                # while running on paper. Say so rather than skip in silence.
+                print(f"exit skipped: {position.get('symbol')} is a real "
+                      f"position and this run is on paper", flush=True)
+                continue
             if position["status"] == "pending":
                 self._reconcile_pending(position, ts)
                 continue
@@ -394,8 +402,12 @@ class Trader:
             try:
                 if check % self.cfg["detect_every_n_checks"] == 0:
                     self.detect_and_buy(ts)
-                if self.live:
-                    self.check_exits(ts)
+                # Exits run in paper too. Gating them behind live meant paper
+                # positions opened and never closed: the cap filled at five and
+                # every later launch was refused, so a run that looked healthy
+                # produced five stuck entries and no results at all. Paper
+                # positions are closed on quoted prices and never signed.
+                self.check_exits(ts)
             except Exception as exc:  # one bad loop must not kill the job
                 print(f"loop error: {exc!r}")
                 send(f"live-trader loop error: {exc!r}")
