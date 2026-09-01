@@ -81,12 +81,15 @@ class Trader:
         # GeckoTerminal lists a pool 160 seconds after its first trade and
         # the edge is gone by 60, so polling it is a slow way to lose. The
         # poller stays as the fallback for a dead socket.
-        if self.feed is not None:
+        # A feed that exists but delivers nothing is worse than no feed: the
+        # first armed cycle ran blind for twenty-five minutes because a dead
+        # socket looked exactly like a quiet market.
+        if self.feed is not None and self.feed.healthy:
             rows = self.feed.drain()
             source = "feed"
         else:
             rows = self.gecko.candidate_pools()
-            source = "gecko"
+            source = "gecko(feed down)" if self.feed is not None else "gecko"
         buys, skipped = pick_entries(rows, self.state, ts, self.cfg)
         # One line per detection so a silent market is distinguishable from
         # a blind detector in the run logs.

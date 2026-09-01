@@ -95,6 +95,8 @@ class LaunchFeed:
         self.errors = 0
         self.throttled = 0
         self.skipped_busy = 0
+        self._failures = 0
+        self.connected_at: float | None = None
 
     def start(self) -> None:
         self._thread = threading.Thread(target=self._run, daemon=True)
@@ -187,6 +189,8 @@ class LaunchFeed:
                         "params": [{"mentions": [PUMP_FUN]},
                                    {"commitment": "processed"}],
                     }))
+                    self._failures = 0
+                    self.connected_at = time.time()
                     while not self._stop.is_set():
                         raw = socket.recv(timeout=30)
                         self.messages += 1
@@ -207,6 +211,25 @@ class LaunchFeed:
                             self._offer(row)
             except Exception as exc:  # a dropped socket must not stop trading
                 self.errors += 1
-                print(f"launch feed reconnecting after: {type(exc).__name__}: {exc}")
-                time.sleep(2)
+                # Backing off matters more than reconnecting. A flat two-second
+                # retry made 715 attempts in one cycle against a server already
+                # answering 429, which can only deepen the throttle it is
+                # trying to escape.
+                self._failures += 1
+                delay = min(60.0, 2.0 * (2 ** min(self._failures - 1, 5)))
+                if self._failures <= 3 or self._failures % 10 == 0:
+                    print(f"launch feed reconnect #{self._failures} in {delay:.0f}s "
+                          f"after: {type(exc).__name__}: {exc}")
+                time.sleep(delay)
         client.close()
+
+
+    @property
+    def healthy(self) -> bool:
+        """Whether the feed is actually delivering, not merely constructed.
+
+        The loop used the feed whenever one existed, so a socket that never
+        connected read as a quiet market: an armed bot saw zero launches for
+        a full cycle and bought nothing, with no fallback and no alarm.
+        """
+        return self.messages > 0
