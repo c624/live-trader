@@ -252,14 +252,20 @@ class Trader:
         entry = dict(cfg["entry"])
         entry["min_age_hours"] = arm.get("min_age_s", 0) / 3600
         entry["max_age_hours"] = arm.get("max_age_s", 300) / 3600
-        entry["max_new_per_loop"] = arm.get("max_new_per_loop", 2)
+        entry["max_new_per_loop"] = arm.get("max_new_per_loop", 4)
         cfg["entry"] = entry
         cfg["exit"] = {
             "tp_pct": arm.get("tp_pct", self.cfg["exit"]["tp_pct"]),
             "sl_pct": arm.get("sl_pct", self.cfg["exit"]["sl_pct"]),
             "hold_hours": arm.get("hold_hours", self.cfg["exit"]["hold_hours"]),
         }
-        cfg["max_open_positions"] = arm.get("max_open_positions", 5)
+        cfg["max_open_positions"] = arm.get("max_open_positions", 20)
+        # Money controls do not belong on a paper arm. The loss cap and the
+        # daily spend ceiling exist to bound a real pilot's downside; applied
+        # here they cap how much evidence the study is allowed to gather,
+        # which is the opposite of what is wanted when the trades are free.
+        cfg["max_loss_usd"] = None
+        cfg["max_daily_spend_usd"] = 10_000_000
         return cfg
 
     def arm_state(self, name: str) -> dict:
@@ -361,7 +367,11 @@ class Trader:
         proceeds = value_usd if value_usd is not None else 0.0
         position["status"] = "closed"
         position["close_reason"] = reason
-        position["proceeds_usd"] = round(proceeds, 4)
+        # exit_usd is the field realized_pnl_usd reads. Writing proceeds_usd
+        # instead meant every closed paper trade scored as a total loss of its
+        # cost, which tripped the -$15 loss cap after twelve trades and froze
+        # the whole study behind a money control it should never have touched.
+        position["exit_usd"] = round(proceeds, 4)
         position["pnl_usd"] = round(proceeds - position["cost_usd"], 4)
         print(f"paper exit[{position.get('arm', '')}]: {position['symbol']} {reason} "
               f"{position['pnl_usd']:+.4f} on {position['cost_usd']:.2f}", flush=True)
