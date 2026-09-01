@@ -29,7 +29,7 @@ jobs:
         run: pip install httpx solders
       - name: Discover
         run: |
-          python -m wallet_pnl.src.discover wallet_pnl/winners.json \
+          python -m wallet_pnl.src.discover_rpc wallet_pnl/winners.json \
             wallets.json "${{ inputs.per_token }}"
       - uses: actions/upload-artifact@v4
         if: always()
