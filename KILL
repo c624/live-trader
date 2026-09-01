@@ -1,0 +1,16 @@
+Paused 2026-09-01: Helius free-tier credits exhausted.
+
+The bot signs, sends, quotes AND SELLS through Helius. With the plan
+exhausted those calls fail, so a position bought now could not be exited -
+the two-minute timer would fire against an RPC that returns nothing, and a
+$2 ticket would sit unsellable until credits return.
+
+Discovery falling back to GeckoTerminal does not help: that path finds pools
+at 160 seconds, where the measured edge is -18%, and it would still need
+Helius to trade them.
+
+Buying stays off until the RPC is healthy. Delete this file then.
+
+Cause: a websocket measurement pushed 950,616 messages in eight minutes
+(~38,000/min) and exhausted the month's credits. The subscription must be
+made cheaper before it is used again on any plan.
