@@ -19,7 +19,7 @@
         "sl_pct": null,
         "hold_hours": 0.0333
     },
-    "loop_minutes": 20,
+    "loop_minutes": 8,
     "check_seconds": 15,
     "detect_every_n_checks": 1,
     "pilot_start_ts": 1788219525,
