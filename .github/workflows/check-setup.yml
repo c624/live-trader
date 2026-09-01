@@ -52,21 +52,41 @@ jobs:
           if not key:
               print("TRADER_PRIVATE_KEY: MISSING")
           else:
+              # The key check and the balance check are separate questions.
+              # Wrapping both in one try meant any balance failure printed
+              # "NOT A VALID KEY" about a key that had just parsed fine, and
+              # the real error was never shown. A pre-flight that misreports
+              # which thing is broken is worse than no pre-flight.
+              kp = None
               try:
                   from solders.keypair import Keypair
                   kp = Keypair.from_base58_string(key)
                   print(f"TRADER_PRIVATE_KEY: VALID, wallet address {kp.pubkey()}")
-                  if helius:
+              except Exception as exc:
+                  print(f"TRADER_PRIVATE_KEY: NOT A VALID KEY ({exc!r}) "
+                        "- re-export from Phantom")
+
+              if kp is not None and helius:
+                  try:
                       r = httpx.post(
                           f"https://mainnet.helius-rpc.com/?api-key={helius}",
                           json={"jsonrpc": "2.0", "id": 1, "method": "getBalance",
-                                "params": [str(kp.pubkey())]},
+                                "params": [str(kp.pubkey()),
+                                           {"commitment": "confirmed"}]},
                           timeout=15,
                       )
-                      lamports = ((r.json().get("result") or {}).get("value")) or 0
-                      print(f"WALLET BALANCE: {lamports / 1e9:.4f} SOL")
-              except Exception:
-                  print("TRADER_PRIVATE_KEY: SET BUT NOT A VALID KEY (re-export from Phantom)")
+                      body = r.json()
+                      if "error" in body:
+                          print(f"WALLET BALANCE: RPC error {str(body['error'])[:120]}")
+                      else:
+                          lamports = ((body.get("result") or {}).get("value")) or 0
+                          sol = lamports / 1e9
+                          usable = max(0.0, sol - 0.05)
+                          print(f"WALLET BALANCE: {sol:.4f} SOL "
+                                f"({usable:.4f} usable after the 0.05 reserve)")
+                  except Exception as exc:
+                      print(f"WALLET BALANCE: could not read (http "
+                            f"{getattr(r, 'status_code', '?')}) {exc!r}")
 
           tg = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
           if not tg:
