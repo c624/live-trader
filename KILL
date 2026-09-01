@@ -1,16 +1,39 @@
+Buying is OFF. Delete this file to arm the bot.
+
 Paused 2026-09-01: Helius free-tier credits exhausted.
 
 The bot signs, sends, quotes AND SELLS through Helius. With the plan
-exhausted those calls fail, so a position bought now could not be exited -
+exhausted those calls fail, so a position bought then could not be exited -
 the two-minute timer would fire against an RPC that returns nothing, and a
 $2 ticket would sit unsellable until credits return.
-
-Discovery falling back to GeckoTerminal does not help: that path finds pools
-at 160 seconds, where the measured edge is -18%, and it would still need
-Helius to trade them.
-
-Buying stays off until the RPC is healthy. Delete this file then.
 
 Cause: a websocket measurement pushed 950,616 messages in eight minutes
 (~38,000/min) and exhausted the month's credits. The subscription must be
 made cheaper before it is used again on any plan.
+
+--- That blocker is now resolved (2026-09-01, later the same night) ---
+
+The bot no longer depends on Helius, or on any paid plan or key. Two free
+public endpoints were measured from a runner and now backstop every
+configured one: a blockhash in about a tenth of a second, fifteen calls
+with no refusal, and an accepted sendTransaction, which is what proves the
+send path is open rather than throttled. Endpoints are tried in order, so
+one being exhausted is a slower call rather than an unsellable position.
+
+Execution was measured too, since it had only ever been assumed: quote,
+build and sign together take 0.17 seconds, not the ten to twenty this plan
+was designed around. With detection at about a second, entry lands far
+inside the window where the measured edge is positive.
+
+What has NOT been established, and what the pilot exists to find out:
+
+  - that a transaction actually LANDS under real congestion. The probe
+    proves an endpoint accepts a send; only spending real fees proves
+    landing, which is why the pilot is $30 and not $300.
+  - that real slippage is anywhere near the 3.2% round-trip the backtest
+    assumes. Break-even is 12.6% against a +8.7% modelled edge, so if
+    slippage runs worse than modelled the edge is gone. This is the single
+    number the pilot must measure.
+
+So this file stays until Carter says go. The reason it was written no
+longer applies; the decision to spend real money is still his.
