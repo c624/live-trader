@@ -40,6 +40,8 @@ SOL = "So11111111111111111111111111111111111111112"
 TICKET_LAMPORTS = 20_000_000     # ~$2, the pilot's ticket
 SLIPPAGE_BPS = 500
 BATCH = 12                       # quotes per cycle, to stay under rate limits
+QUOTE_TIMEOUT = 8.0              # a stalled quote is a lost sample, not a reason to wait
+GRACE_SECONDS = 120              # hard ceiling past the listening window
 ASSUMED_ROUND_TRIP = 3.2         # what the backtest charges
 BREAK_EVEN = 12.6                # where the +8.7% modelled edge is wiped out
 
@@ -111,8 +113,13 @@ def main() -> None:
     buy_only = 0
     quoted = 0
 
-    with httpx.Client(timeout=20.0) as client:
-        while time.time() < deadline or waiting:
+    # Without a ceiling the drain phase can outlast the listening window many
+    # times over when quotes start timing out, and the run reports nothing at
+    # all -- a measurement that never finishes is worth less than a partial one.
+    hard_stop = deadline + GRACE_SECONDS
+
+    with httpx.Client(timeout=QUOTE_TIMEOUT) as client:
+        while time.time() < hard_stop and (time.time() < deadline or waiting):
             if time.time() < deadline:
                 waiting.extend(stream.drain())
 
@@ -143,6 +150,10 @@ def main() -> None:
                 time.sleep(2)
             if time.time() >= deadline and not waiting:
                 break
+
+    if waiting:
+        print(f"\nstopped at the {GRACE_SECONDS}s ceiling with {len(waiting)} "
+              f"still queued; reporting what was priced")
 
     print(f"\n=== ROUND-TRIP COST AT ~{target_age:.0f}s OLD ===")
     if ages:
