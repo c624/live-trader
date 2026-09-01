@@ -24,8 +24,11 @@ LAMPORTS = 1_000_000_000
 # Qualified signals get a ledger row; unqualified pool listings do not, so
 # signals.csv stays one row per unique candidate, not a firehose.
 # How long a launch stays eligible. A waiting arm needs the row to still be
-# around when the pool is finally old enough to qualify.
-BUFFER_SECONDS = 420
+# around when the pool is finally old enough to qualify, so this has to exceed
+# the largest min_age any arm uses plus its window -- at 420 an arm waiting ten
+# minutes could never fire, and would have reported zero trades as though the
+# rule simply never matched.
+BUFFER_SECONDS = 2100
 # Consecutive identical cycle errors before the run gives up and fails loudly.
 MAX_REPEATED_ERRORS = 5
 
@@ -561,6 +564,9 @@ class Trader:
             print(f"feed: {self.feed.messages} messages, {self.feed.launches} launches, "
                   f"{self.feed.errors} errors, "
                   f"{self.feed.dropped} dropped")
+        if self.rug.calls or self.rug.hits:
+            print(f"rugcheck: {self.rug.calls} reads, {self.rug.hits} cached, "
+                  f"{self.rug.failures} unreadable", flush=True)
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
 

@@ -30,30 +30,21 @@
             "hold_hours": 0.0333
         },
         {
-            "name": "wait30",
-            "min_age_s": 30,
-            "hold_hours": 0.0333
-        },
-        {
-            "name": "wait60",
-            "min_age_s": 60,
-            "hold_hours": 0.0333
-        },
-        {
             "name": "wait120",
             "min_age_s": 120,
             "hold_hours": 0.0333
         },
         {
-            "name": "hold10m",
-            "min_age_s": 0,
-            "hold_hours": 0.1667
+            "name": "wait300",
+            "min_age_s": 300,
+            "hold_hours": 0.0333,
+            "max_age_s": 900
         },
         {
-            "name": "trail",
-            "min_age_s": 30,
-            "hold_hours": 0.1667,
-            "tp_pct": 300
+            "name": "wait600",
+            "min_age_s": 600,
+            "hold_hours": 0.0333,
+            "max_age_s": 1800
         },
         {
             "name": "safe",
@@ -62,9 +53,16 @@
             "require_safe": true
         },
         {
-            "name": "safe60",
-            "min_age_s": 60,
+            "name": "safe120",
+            "min_age_s": 120,
             "hold_hours": 0.0333,
+            "require_safe": true
+        },
+        {
+            "name": "safe300",
+            "min_age_s": 300,
+            "hold_hours": 0.0333,
+            "max_age_s": 900,
             "require_safe": true
         },
         {
