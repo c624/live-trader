@@ -35,8 +35,10 @@ import time
 
 
 class RugCheck:
-    def __init__(self, rpc, ttl_seconds: float = 900.0, max_entries: int = 4000):
+    def __init__(self, rpc, ttl_seconds: float = 900.0, max_entries: int = 4000,
+                 read_holders: bool = False):
         self.rpc = rpc
+        self.read_holders = read_holders
         self.ttl = ttl_seconds
         self.max_entries = max_entries
         self._cache: dict[str, tuple[float, dict | None]] = {}
@@ -78,7 +80,11 @@ class RugCheck:
         except (TypeError, ValueError):
             supply = 0.0
 
-        holders = self.rpc.largest_holders(mint) or []
+        # getTokenLargestAccounts failed on 190 of 192 reads against the free
+        # endpoints -- not intermittently, essentially always -- so asking is
+        # a wasted call per token. Kept behind a flag rather than deleted, in
+        # case a provider that answers it is ever configured.
+        holders = (self.rpc.largest_holders(mint) or []) if self.read_holders else []
         amounts = []
         for row in holders:
             try:
