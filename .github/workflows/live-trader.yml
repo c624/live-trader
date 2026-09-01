@@ -61,7 +61,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
-          LOOP_MINUTES: ${{ inputs.loop_minutes || '25' }}
+          # Empty when no input is given, so the config decides.
+          LOOP_MINUTES: ${{ inputs.loop_minutes }}
         run: python -m live_trader.src.run_live
 
       - name: Commit state back

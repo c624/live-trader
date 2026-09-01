@@ -514,7 +514,12 @@ class Trader:
 
     # --------------------------------------------------------------- loop
     def run(self) -> None:
-        loop_minutes = float(os.environ.get("LOOP_MINUTES", self.cfg["loop_minutes"]))
+        # An empty LOOP_MINUTES means "not specified", not zero. The workflow
+        # sets it from an optional input, so a chained run passes an empty
+        # string; treating that as absent lets the config be authoritative
+        # instead of every chained cycle silently falling back to 25 minutes.
+        loop_minutes = float(os.environ.get("LOOP_MINUTES") or
+                             self.cfg["loop_minutes"])
         deadline = time.monotonic() + loop_minutes * 60
         self._start_feed()
         check_seconds = self.cfg["check_seconds"]
