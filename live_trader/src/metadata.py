@@ -25,9 +25,11 @@ import httpx
 
 META_FIELDS = ("has_telegram", "has_twitter", "has_website")
 UNKNOWN = {k: None for k in META_FIELDS}
-# Fetches per call. The loop checks every fifteen seconds and a launch stays
-# eligible for minutes, so a modest cap still reaches most of the window.
-MAX_FETCH_PER_CALL = 20
+# Fetches per call. A check takes minutes once every arm has read the chain,
+# so a launch gets about one check inside its entry window: whatever is not
+# read on that check is never read. Twenty covered a fifth of the eligible
+# rows; sixty at a third of a second each costs twenty seconds a check.
+MAX_FETCH_PER_CALL = 60
 TIMEOUT_S = 6.0
 # Launch metadata is pinned on IPFS and the URI usually names the public
 # ipfs.io gateway, which is slow and rate-limited: three of the first four
