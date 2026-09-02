@@ -18,6 +18,7 @@ every link field, not zero: "we could not look" must never pass as "no link".
 
 from __future__ import annotations
 
+import re
 import time
 
 import httpx
@@ -27,7 +28,13 @@ UNKNOWN = {k: None for k in META_FIELDS}
 # Fetches per call. The loop checks every fifteen seconds and a launch stays
 # eligible for minutes, so a modest cap still reaches most of the window.
 MAX_FETCH_PER_CALL = 20
-TIMEOUT_S = 4.0
+TIMEOUT_S = 6.0
+# Launch metadata is pinned on IPFS and the URI usually names the public
+# ipfs.io gateway, which is slow and rate-limited: three of the first four
+# reads failed there. The same content is served by the gateway the launch
+# platform itself uses, so that is tried first and the original last.
+GATEWAYS = ("https://pump.mypinata.cloud/ipfs/{cid}",)
+IPFS_PATH = re.compile(r"/ipfs/([A-Za-z0-9]+)")
 # A failed fetch is retried once after this long; gateways hiccup.
 RETRY_AFTER_S = 45.0
 LINK_KEYS = {
@@ -35,6 +42,18 @@ LINK_KEYS = {
     "has_twitter": ("twitter", "x"),
     "has_website": ("website", "web"),
 }
+
+
+def candidates(uri: str) -> list[str]:
+    """Where to read this URI from, fastest first, the URI itself last."""
+    found = IPFS_PATH.search(uri or "")
+    if not found:
+        return [uri] if uri else []
+    cid = found.group(1)
+    urls = [g.format(cid=cid) for g in GATEWAYS]
+    if uri not in urls:
+        urls.append(uri)
+    return urls
 
 
 def links_from(meta: dict | None) -> dict:
@@ -68,19 +87,27 @@ class Metadata:
         self._client.close()
 
     def fetch(self, uri: str) -> dict | None:
+        """The metadata document, from the first gateway that serves it.
+        One fetch is counted per token however many gateways were tried;
+        a failure means none of them answered."""
         self.calls += 1
+        for url in candidates(uri):
+            payload = self._get(url)
+            if payload is not None:
+                return payload
+        self.failures += 1
+        return None
+
+    def _get(self, url: str) -> dict | None:
         try:
-            r = self._client.get(uri)
+            r = self._client.get(url)
         except httpx.HTTPError:
-            self.failures += 1
             return None
         if r.status_code != 200:
-            self.failures += 1
             return None
         try:
             payload = r.json()
         except ValueError:
-            self.failures += 1
             return None
         return payload if isinstance(payload, dict) else None
 
