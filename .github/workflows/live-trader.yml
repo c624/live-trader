@@ -60,6 +60,8 @@ jobs:
           TRADER_PRIVATE_KEY: ${{ secrets.TRADER_PRIVATE_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # X search is paid per read; the loop runs without it when unset.
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
           # Empty when no input is given, so the config decides.
           LOOP_MINUTES: ${{ inputs.loop_minutes }}

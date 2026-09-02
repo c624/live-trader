@@ -35,7 +35,8 @@ NUMERIC = ["tx_count", "tx_per_min", "tx_span_s", "price_impact_pct",
            # silently scored everything except the category under study.
            "boosts", "m5_buys", "m5_sells", "buy_ratio_m5", "h1_buys",
            "h1_sells", "vol_m5_usd", "vol_h1_usd", "chg_m5_pct", "chg_h1_pct",
-           "liquidity_usd"]
+           "liquidity_usd",
+           "mentions_15m", "mentions_1h", "authors_1h", "reach_1h"]
 BOOLEAN = ["mint_authority", "freeze_authority", "tx_capped"]
 
 

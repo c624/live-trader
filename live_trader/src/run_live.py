@@ -17,6 +17,7 @@ from .jupiter import SOL_MINT, Jupiter, price_impact_pct
 from .notify import send
 from .attention import Attention
 from .rugcheck import RugCheck, is_dangerous
+from .social import SOCIAL_FIELDS, Social
 from .state import (load_state, log_features, log_signal, log_trade,
                     save_state, use_paper_state)
 
@@ -40,18 +41,30 @@ ATTENTION_EVERY_S = 60
 ATTENTION_FIELDS = ("source", "boosts", "m5_buys", "m5_sells", "buy_ratio_m5",
                     "h1_buys", "h1_sells", "vol_m5_usd", "vol_h1_usd",
                     "chg_m5_pct", "chg_h1_pct", "liquidity_usd")
+# How often to search X. Every search is paid for, so this is slower than the
+# free feeds; the read budget in Social is the hard stop regardless.
+SOCIAL_EVERY_S = 120
+# Only tokens this young are searched. Conversation about a day-old token is
+# not early, and the buffer holds far more tokens than one query can carry.
+SOCIAL_MAX_AGE_S = 7200
 
 
-def passes(row: dict, where: dict | None) -> bool:
-    """Does the row clear every minimum the arm asks for?
+def passes(row: dict, where: dict | None, where_max: dict | None = None) -> bool:
+    """Does the row clear every minimum, and stay under every maximum?
 
     A field the row does not carry fails the check. A launch-feed row has no
     buy counts, and letting it through an arm that requires buy pressure
     would fill a momentum arm with exactly the rows it exists to exclude.
+    The same rule holds for maxima: a control arm asking for zero mentions
+    must not be filled with tokens whose mentions were never counted.
     """
     for field, minimum in (where or {}).items():
         value = row.get(field)
         if value is None or value < minimum:
+            return False
+    for field, maximum in (where_max or {}).items():
+        value = row.get(field)
+        if value is None or value > maximum:
             return False
     return True
 # Consecutive identical cycle errors before the run gives up and fails loudly.
@@ -127,6 +140,10 @@ class Trader:
         self.rug = RugCheck(self.rpc)
         self.attention = Attention()
         self._attention_at = 0.0
+        # Reads already spent are carried in the ledger so the budget holds
+        # across loops. Disabled without a token, and harmless that way.
+        self.social = Social(reads=self.state.get("social_reads", 0))
+        self._social_at = 0.0
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -183,6 +200,11 @@ class Trader:
         cutoff = ts - BUFFER_SECONDS
         self.buffer = [r for r in self.buffer
                        if float(r.get("first_trade_ts") or ts) >= cutoff]
+        if self.arms and self.social.enabled:
+            if ts - self._social_at >= SOCIAL_EVERY_S:
+                self._social_at = ts
+                self.poll_social(ts)
+            self.annotate_social(ts)
         if self.arms:
             self.run_arms(ts, source)
             return
@@ -324,6 +346,25 @@ class Trader:
         print(f"attention: {len(fresh)} rows, {len(by)} aged, "
               f"{self.attention.failures} failures", flush=True)
 
+    def poll_social(self, ts: float) -> None:
+        """One paid search over the youngest tokens with market stats."""
+        young = [r for r in self.buffer
+                 if r.get("source") and r.get("token") and r.get("first_trade_ts")
+                 and ts - float(r["first_trade_ts"]) <= SOCIAL_MAX_AGE_S]
+        young.sort(key=lambda r: -float(r["first_trade_ts"]))
+        mints = [r["token"] for r in young]
+        found = self.social.poll(mints, ts)
+        self.state["social_reads"] = self.social.reads
+        print(f"social: {len(mints)} candidates, {found} mentions ingested, "
+              f"{self.social.reads}/{self.social.budget} reads", flush=True)
+
+    def annotate_social(self, ts: float) -> None:
+        """Mention velocity onto every buffered row, unknowns included, so
+        the arms filter on it and the features file records it."""
+        for row in self.buffer:
+            if row.get("token"):
+                row.update(self.social.features(row["token"], ts))
+
     def arm_config(self, arm: dict) -> dict:
         """This arm's rules, over the shared config."""
         cfg = dict(self.cfg)
@@ -366,7 +407,8 @@ class Trader:
         for arm in self.arms:
             name = arm["name"]
             cfg = self.arm_config(arm)
-            pool = [r for r in self.buffer if passes(r, arm.get("where"))]
+            pool = [r for r in self.buffer
+                    if passes(r, arm.get("where"), arm.get("where_max"))]
             buys, skipped = pick_entries(pool, self.arm_state(name), ts, cfg)
             tally = Counter(reason for _r, reason in skipped)
             why = " ".join(f"{r}={n}" for r, n in tally.most_common(4))
@@ -423,6 +465,7 @@ class Trader:
         log_features({"ts": int(ts), "mint": mint, "symbol": symbol,
                       "arm": name, "entry_lag_s": lag, "danger": danger or "",
                       **{k: row.get(k) for k in ATTENTION_FIELDS},
+                      **{k: row.get(k) for k in SOCIAL_FIELDS},
                       "price_impact_pct": impact, "quoted_out": tokens,
                       "sol_in_lamports": lamports,
                       "holders_error": getattr(self.rpc, "last_holders_error", ""),
@@ -639,6 +682,8 @@ class Trader:
         if self.rug.calls or self.rug.hits:
             print(f"rugcheck: {self.rug.calls} reads, {self.rug.hits} cached, "
                   f"{self.rug.failures} unreadable", flush=True)
+        if self.social.enabled:
+            print(self.social.summary(), flush=True)
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
 

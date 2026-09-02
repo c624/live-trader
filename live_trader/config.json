@@ -98,6 +98,39 @@
                 "liquidity_usd": 20000,
                 "buy_ratio_m5": 1.5
             }
+        },
+        {
+            "name": "social",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "authors_1h": 2
+            },
+            "max_new_per_loop": 10
+        },
+        {
+            "name": "social1h",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 1.0,
+            "where": {
+                "authors_1h": 2
+            },
+            "max_new_per_loop": 10
+        },
+        {
+            "name": "socctl",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "mentions_1h": 0
+            },
+            "where_max": {
+                "mentions_1h": 0
+            },
+            "max_new_per_loop": 10
         }
     ]
 }

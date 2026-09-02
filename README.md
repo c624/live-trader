@@ -25,6 +25,17 @@ GitHub Actions loop; state (positions, trade log, signal log) lives on the
 | `HELIUS_API_KEY` | A fresh Helius API key (rotate any key that has ever been pasted in a chat). |
 | `TELEGRAM_BOT_TOKEN` | Token from @BotFather (optional; alerts are skipped without it). |
 | `TELEGRAM_CHAT_ID` | Your chat id; run `python -m live_trader.src.notify` after messaging the bot to discover it. |
+| `X_BEARER_TOKEN` | Optional. Bearer token from an X developer account on pay-per-use billing, with a hard spending cap set on the X side first. Without it the social arms simply never fire. The loop keeps its own read budget (`social_reads` in the paper ledger, 19,000 reads) and stops searching when it is spent. |
+
+### The social test
+
+Three paper arms compare tokens whose contract address is being posted on X
+against tokens from the same population that were searched and not mentioned:
+`social` (two or more authors in the last hour, 10-minute hold), `social1h`
+(same entry, 1-hour hold) and `socctl` (searched, zero mentions). The bar was
+fixed before the first read: `social` must beat `socctl` with non-overlapping
+95% intervals over at least 100 closed trades, and mention velocity must
+separate outcomes in the feature scorer. Anything short of that ends the test.
 
 ## How a trade happens
 
