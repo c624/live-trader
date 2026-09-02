@@ -36,6 +36,23 @@ SOCIAL_FIELDS = ("mentions_15m", "mentions_1h", "authors_1h", "reach_1h")
 UNKNOWN = {k: None for k in SOCIAL_FIELDS}
 
 
+def mention_text(post: dict) -> str:
+    """Everything in a post an address could be found in.
+
+    The first live search returned seven posts for a query of twenty
+    addresses and only one carried an address in its text. X matches the
+    query against expanded links as well, and a post that says "ape this"
+    over a t.co link to pump.fun/coin/<mint> is a mention of that mint; the
+    visible text is not where the address lives. So the expanded and
+    unwound URLs count too, and a post is still one mention per mint.
+    """
+    parts = [post.get("text") or ""]
+    for url in (post.get("entities") or {}).get("urls") or []:
+        parts.append(url.get("expanded_url") or "")
+        parts.append(url.get("unwound_url") or "")
+    return " ".join(parts)
+
+
 class Social:
     def __init__(self, token: str | None = None, client: httpx.Client | None = None,
                  budget: int = DEFAULT_BUDGET, reads: int = 0):
@@ -74,7 +91,7 @@ class Social:
             return None
         params = {
             "query": query, "max_results": max_results,
-            "tweet.fields": "created_at,author_id,public_metrics",
+            "tweet.fields": "created_at,author_id,public_metrics,entities",
             "expansions": "author_id",
             "user.fields": "public_metrics",
         }
@@ -141,9 +158,8 @@ class Social:
                 continue
             if pid:
                 self._seen_posts.add(pid)
-            text = post.get("text") or ""
             author = post.get("author_id") or ""
-            for mint in set(CA.findall(text)):
+            for mint in set(CA.findall(mention_text(post))):
                 if mint in used:
                     self._mentions.setdefault(mint, []).append(
                         (now, author, followers.get(author, 0)))

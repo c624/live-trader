@@ -44,6 +44,11 @@ ATTENTION_FIELDS = ("source", "boosts", "m5_buys", "m5_sells", "buy_ratio_m5",
 # How often to search X. Every search is paid for, so this is slower than the
 # free feeds; the read budget in Social is the hard stop regardless.
 SOCIAL_EVERY_S = 120
+# Queries per poll. One query holds about ten addresses, and a cycle with
+# eleven arms takes long enough that one query per cycle covered twenty
+# tokens a run out of a hundred candidates. Reads are only charged for posts
+# returned, so a second query over tokens nobody mentions costs nothing.
+SOCIAL_QUERIES = 2
 # Only tokens this young are searched. Conversation about a day-old token is
 # not early, and the buffer holds far more tokens than one query can carry.
 SOCIAL_MAX_AGE_S = 7200
@@ -354,7 +359,16 @@ class Trader:
                  and ts - float(r["first_trade_ts"]) <= SOCIAL_MAX_AGE_S]
         young.sort(key=lambda r: -float(r["first_trade_ts"]))
         mints = [r["token"] for r in young]
-        found = self.social.poll(mints, ts)
+        found = 0
+        for _ in range(SOCIAL_QUERIES):
+            # Each query takes the least recently searched tokens, so the
+            # second covers different ones from the first. When the first
+            # query held them all, a second would search the same tokens
+            # again and pay twice for the same posts.
+            pending = [m for m in mints if self.social.polled.get(m) != ts]
+            if not pending:
+                break
+            found += self.social.poll(pending, ts)
         # Until the first real mention has ever been read, check once per run
         # that the query form finds anything: the most-boosted token in the
         # buffer is paid to be talked about, so zero posts for it means the
