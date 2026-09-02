@@ -29,6 +29,7 @@ import httpx
 SEARCH = "https://api.x.com/2/tweets/search/recent"
 DEFAULT_BUDGET = 19_000        # post reads, under a $100 cap at $0.005 each
 MAX_RESULTS = 100              # the endpoint's ceiling per request
+CANARY_RESULTS = 10            # the endpoint's floor per request
 QUERY_CHARS = 480              # under the endpoint's query length ceiling
 CA = re.compile(r"\b[1-9A-HJ-NP-Za-km-z]{32,44}\b")
 SOCIAL_FIELDS = ("mentions_15m", "mentions_1h", "authors_1h", "reach_1h")
@@ -62,16 +63,17 @@ class Social:
         self._client.close()
 
     # ------------------------------------------------------------ reading
-    def _search(self, query: str, since_id: str | None = None) -> dict | None:
+    def _search(self, query: str, since_id: str | None = None,
+                max_results: int = MAX_RESULTS) -> dict | None:
         if self.exhausted or not self.enabled:
             return None
-        if self.reads + MAX_RESULTS > self.budget:
+        if self.reads + max_results > self.budget:
             # Stop before the request that would overrun, and say so once.
             self.exhausted = True
             print(f"social: read budget exhausted at {self.reads}", flush=True)
             return None
         params = {
-            "query": query, "max_results": MAX_RESULTS,
+            "query": query, "max_results": max_results,
             "tweet.fields": "created_at,author_id,public_metrics",
             "expansions": "author_id",
             "user.fields": "public_metrics",
@@ -148,6 +150,21 @@ class Social:
                     count += 1
         self._prune(now)
         return count
+
+    def canary(self, mint: str) -> int | None:
+        """How many recent posts carry this one address, on a ten-read cap.
+
+        Two searches over twenty tokens returned nothing at all, which is
+        either a fact about those tokens or a fact about the query: X might
+        not index a bare 44-character address the way it indexes a word.
+        Searching for a token that is certainly being talked about tells
+        the two apart, and costs at most ten reads. None means the search
+        itself could not be made.
+        """
+        payload = self._search(mint, max_results=CANARY_RESULTS)
+        if payload is None:
+            return None
+        return len(payload.get("data") or [])
 
     def _prune(self, now: float, keep_s: float = 7200.0) -> None:
         for mint in list(self._mentions):

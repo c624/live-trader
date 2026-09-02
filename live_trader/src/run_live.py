@@ -144,6 +144,7 @@ class Trader:
         # across loops. Disabled without a token, and harmless that way.
         self.social = Social(reads=self.state.get("social_reads", 0))
         self._social_at = 0.0
+        self._canary_done = False
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -354,6 +355,19 @@ class Trader:
         young.sort(key=lambda r: -float(r["first_trade_ts"]))
         mints = [r["token"] for r in young]
         found = self.social.poll(mints, ts)
+        # Until the first real mention has ever been read, check once per run
+        # that the query form finds anything: the most-boosted token in the
+        # buffer is paid to be talked about, so zero posts for it means the
+        # search is wrong, not the market quiet. Stops itself once any
+        # mention has been charged for, so it never becomes a running cost.
+        if not self._canary_done and self.social.reads == 0:
+            self._canary_done = True
+            boosted = [r for r in self.buffer if r.get("boosts") and r.get("token")]
+            if boosted:
+                top = max(boosted, key=lambda r: r["boosts"])
+                hits = self.social.canary(top["token"])
+                print(f"social canary: {hits} posts for {top.get('symbol', '?')} "
+                      f"(boosts {top['boosts']})", flush=True)
         self.state["social_reads"] = self.social.reads
         print(f"social: {len(mints)} candidates, {found} mentions ingested, "
               f"{self.social.reads}/{self.social.budget} reads", flush=True)
