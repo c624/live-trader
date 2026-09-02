@@ -368,12 +368,23 @@ class Trader:
              f"/ {self.cfg['exit']['hold_hours']}h hold)")
 
     def _merge(self, fresh: list[dict], ts: float) -> None:
-        """Newer stats replace older rows for the same token."""
+        """Newer stats join older rows for the same token.
+
+        The stats row wins on every field it carries, but it does not carry
+        what the launch said about itself -- the metadata URI, the creator's
+        buy, the links already read -- and replacing the row wholesale threw
+        those away for exactly the tokens old enough to be bought. The first
+        run of the metadata arms read two tokens in ten minutes for that
+        reason: everything else had lost its URI to a stats refresh.
+        """
         by = {r["token"]: r for r in fresh if r.get("first_trade_ts")}
+        old = {r.get("token"): r for r in self.buffer if r.get("token") in by}
         kept = [r for r in self.buffer if r.get("token") not in by]
-        for row in by.values():
+        merged = []
+        for token, row in by.items():
             row["detected_ts"] = row.get("detected_ts") or ts
-        self.buffer = kept + list(by.values())
+            merged.append({**old.get(token, {}), **row})
+        self.buffer = kept + merged
         print(f"attention: {len(fresh)} rows, {len(by)} aged, "
               f"{self.attention.failures} failures", flush=True)
 
