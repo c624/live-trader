@@ -53,6 +53,34 @@ def extract_created_ts(payload: dict, now: float) -> float:
     return now
 
 
+def extract_dev_buy_sol(payload: dict) -> float | None:
+    """How much SOL the creator put in at launch, or None if the feed did
+    not say.
+
+    Public data on 830,000 launches puts the creator's own buy among the
+    strongest predictors of a token leaving the bonding curve. The feed
+    reports it directly as the SOL spent on the creating transaction; when
+    only the curve's balance is given, the amount above the 30 SOL virtual
+    reserve every curve starts with is the creator's money.
+    """
+    for key in ("solAmount", "sol_amount", "initialBuySol"):
+        value = payload.get(key)
+        if isinstance(value, (int, float)) and value >= 0:
+            return round(float(value), 4)
+    curve = payload.get("vSolInBondingCurve")
+    if isinstance(curve, (int, float)) and curve >= 30:
+        return round(float(curve) - 30.0, 4)
+    return None
+
+
+def extract_uri(payload: dict) -> str:
+    for key in ("uri", "metadataUri", "metadata_uri"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.startswith("http"):
+            return value
+    return ""
+
+
 class LaunchStream:
     """Background subscriber exposing drain(); one message per launch."""
 
@@ -108,6 +136,10 @@ class LaunchStream:
             "pool": payload.get("pool") or payload.get("bondingCurveKey") or "",
             "first_trade_ts": extract_created_ts(payload, now),
             "detected_ts": now,
+            # What the launch said about itself, for the arms that filter on
+            # it. Missing is None, never zero.
+            "dev_buy_sol": extract_dev_buy_sol(payload),
+            "uri": extract_uri(payload),
         }
         with self._lock:
             if len(self._pending) >= self._max_pending:

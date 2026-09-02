@@ -27,15 +27,33 @@ GitHub Actions loop; state (positions, trade log, signal log) lives on the
 | `TELEGRAM_CHAT_ID` | Your chat id; run `python -m live_trader.src.notify` after messaging the bot to discover it. |
 | `X_BEARER_TOKEN` | Optional. Bearer token from an X developer account on pay-per-use billing, with a hard spending cap set on the X side first. Without it the social arms simply never fire. The loop keeps its own read budget (`social_reads` in the paper ledger, 19,000 reads) and stops searching when it is spent. |
 
-### The social test
+### The social test (closed 2026-09-02)
 
-Three paper arms compare tokens whose contract address is being posted on X
-against tokens from the same population that were searched and not mentioned:
-`social` (two or more authors in the last hour, 10-minute hold), `social1h`
-(same entry, 1-hour hold) and `socctl` (searched, zero mentions). The bar was
-fixed before the first read: `social` must beat `socctl` with non-overlapping
-95% intervals over at least 100 closed trades, and mention velocity must
-separate outcomes in the feature scorer. Anything short of that ends the test.
+Tokens whose address was being posted on X, against tokens from the same
+feed that were searched and not mentioned. The one-author arm ended at 85
+trades on the fee floor with its interval overlapping the control's; the
+two-author arms were the worst in the study. The X feed is only read while
+an arm filters on a mention field, so with none configured it costs nothing.
+
+### The graduation-signal test (open 2026-09-02)
+
+Public data on 830,000 launches says two things visible at creation predict
+a token leaving the bonding curve: a Telegram link in its metadata (about
+nine times the graduation rate) and the creator's own buy. Graduation is not
+a trade, so each is a paper arm beside a control from its own population:
+
+- `links` (Telegram present) and `nolinks` (metadata read, none present),
+  both 10-minute holds on the launch feed; unknown metadata is in neither.
+- `devbuy` (creator put in 1 SOL or more) against `launchctl`, the plain
+  launch-feed population with the same hold.
+- `surgeliq` and `surgeliq1h` (a five-minute buy surge in a graduated pool
+  holding $10k-50k of liquidity) against `liqctl`, that liquidity band with
+  no signal. A post-hoc slice of the earlier `surge` arm suggested this band;
+  the arm exists to test it on data that did not.
+
+The bar, fixed before the first trade: a signal arm passes only with 100 or
+more closed trades AND a 95% interval lying entirely above its control's.
+Anything short of that closes the arm.
 
 ## How a trade happens
 

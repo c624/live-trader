@@ -96,6 +96,10 @@ FEATURE_FIELDS = [
     "liquidity_usd",
     # Conversation on X, recorded as None when it was not looked for.
     "mentions_15m", "mentions_1h", "authors_1h", "reach_1h",
+    # What the launch said about itself: the creator's own buy and the links
+    # in the metadata. Both predict graduation in the public data; whether
+    # they predict a trade is what the arms measure.
+    "dev_buy_sol", "has_telegram", "has_twitter", "has_website",
 ]
 
 

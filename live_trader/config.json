@@ -1,146 +1,122 @@
 {
-    "trading_enabled": false,
-    "ticket_usd": 2,
-    "max_open_positions": 5,
-    "max_daily_spend_usd": 30,
-    "max_loss_usd": 15,
-    "min_wallet_reserve_sol": 0.05,
-    "slippage_bps": 500,
-    "max_price_impact_pct": 5.0,
-    "entry": {
-        "min_age_hours": 0.0,
-        "max_age_hours": 0.084,
-        "min_reserve_usd": 5000,
-        "max_new_per_loop": 2,
-        "seen_ttl_days": 7
+  "trading_enabled": false,
+  "ticket_usd": 2,
+  "max_open_positions": 5,
+  "max_daily_spend_usd": 30,
+  "max_loss_usd": 15,
+  "min_wallet_reserve_sol": 0.05,
+  "slippage_bps": 500,
+  "max_price_impact_pct": 5.0,
+  "entry": {
+    "min_age_hours": 0.0,
+    "max_age_hours": 0.084,
+    "min_reserve_usd": 5000,
+    "max_new_per_loop": 2,
+    "seen_ttl_days": 7
+  },
+  "exit": {
+    "tp_pct": 100,
+    "sl_pct": null,
+    "hold_hours": 0.0333
+  },
+  "loop_minutes": 8,
+  "check_seconds": 15,
+  "detect_every_n_checks": 1,
+  "pilot_start_ts": 1788219525,
+  "arms": [
+    {
+      "name": "wait120",
+      "min_age_s": 120,
+      "hold_hours": 0.0333
     },
-    "exit": {
-        "tp_pct": 100,
-        "sl_pct": null,
-        "hold_hours": 0.0333
+    {
+      "name": "launchctl",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "max_new_per_loop": 10
     },
-    "loop_minutes": 8,
-    "check_seconds": 15,
-    "detect_every_n_checks": 1,
-    "pilot_start_ts": 1788219525,
-    "arms": [
-        {
-            "name": "wait120",
-            "min_age_s": 120,
-            "hold_hours": 0.0333
-        },
-        {
-            "name": "dexctl",
-            "min_age_s": 120,
-            "max_age_s": 86400,
-            "hold_hours": 0.1667,
-            "where": {
-                "m5_buys": 0
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "boost",
-            "min_age_s": 0,
-            "max_age_s": 86400,
-            "hold_hours": 0.1667,
-            "where": {
-                "boosts": 1
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "boost1h",
-            "min_age_s": 0,
-            "max_age_s": 86400,
-            "hold_hours": 1.0,
-            "where": {
-                "boosts": 1
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "surge",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "m5_buys": 30,
-                "buy_ratio_m5": 2.0
-            }
-        },
-        {
-            "name": "surge1h",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 1.0,
-            "where": {
-                "m5_buys": 30,
-                "buy_ratio_m5": 2.0
-            }
-        },
-        {
-            "name": "volume",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "vol_m5_usd": 5000,
-                "chg_m5_pct": 5
-            }
-        },
-        {
-            "name": "deep",
-            "min_age_s": 300,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "liquidity_usd": 20000,
-                "buy_ratio_m5": 1.5
-            }
-        },
-        {
-            "name": "social",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "authors_1h": 2
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "social1h",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 1.0,
-            "where": {
-                "authors_1h": 2
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "socctl",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "mentions_1h": 0
-            },
-            "where_max": {
-                "mentions_1h": 0
-            },
-            "max_new_per_loop": 10
-        },
-        {
-            "name": "social1",
-            "min_age_s": 120,
-            "max_age_s": 7200,
-            "hold_hours": 0.1667,
-            "where": {
-                "authors_1h": 1
-            },
-            "max_new_per_loop": 10
-        }
-    ]
+    {
+      "name": "links",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "where": {
+        "has_telegram": 1
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "nolinks",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "where": {
+        "has_telegram": 0
+      },
+      "where_max": {
+        "has_telegram": 0
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "devbuy",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "where": {
+        "dev_buy_sol": 1.0
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "surge",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 0.1667,
+      "where": {
+        "m5_buys": 30,
+        "buy_ratio_m5": 2.0
+      }
+    },
+    {
+      "name": "surgeliq",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 0.1667,
+      "where": {
+        "m5_buys": 30,
+        "buy_ratio_m5": 2.0,
+        "liquidity_usd": 10000
+      },
+      "where_max": {
+        "liquidity_usd": 50000
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "surgeliq1h",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 1.0,
+      "where": {
+        "m5_buys": 30,
+        "buy_ratio_m5": 2.0,
+        "liquidity_usd": 10000
+      },
+      "where_max": {
+        "liquidity_usd": 50000
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "liqctl",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 0.1667,
+      "where": {
+        "liquidity_usd": 10000
+      },
+      "where_max": {
+        "liquidity_usd": 50000
+      },
+      "max_new_per_loop": 10
+    }
+  ]
 }

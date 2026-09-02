@@ -16,6 +16,7 @@ from .gecko import Gecko
 from .jupiter import SOL_MINT, Jupiter, price_impact_pct
 from .notify import send
 from .attention import Attention
+from .metadata import META_FIELDS, Metadata
 from .rugcheck import RugCheck, is_dangerous
 from .social import SOCIAL_FIELDS, Social
 from .state import (load_state, log_features, log_signal, log_trade,
@@ -52,6 +53,19 @@ SOCIAL_QUERIES = 2
 # Only tokens this young are searched. Conversation about a day-old token is
 # not early, and the buffer holds far more tokens than one query can carry.
 SOCIAL_MAX_AGE_S = 7200
+# What the launch feed says about a token at creation, beyond its address.
+LAUNCH_FIELDS = ("dev_buy_sol",)
+
+
+def arms_use(arms: list[dict], fields: tuple) -> bool:
+    """Whether any arm filters on one of these fields. A paid feed is only
+    read while an arm is actually testing it; otherwise the study is over
+    and the reads would be spent recording nothing."""
+    for arm in arms or []:
+        rules = {**(arm.get("where") or {}), **(arm.get("where_max") or {})}
+        if any(k in fields for k in rules):
+            return True
+    return False
 
 
 def passes(row: dict, where: dict | None, where_max: dict | None = None) -> bool:
@@ -150,6 +164,9 @@ class Trader:
         self.social = Social(reads=self.state.get("social_reads", 0))
         self._social_at = 0.0
         self._canary_done = False
+        # What each launch said about itself, read lazily for the arms that
+        # filter on it.
+        self.meta = Metadata()
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -206,11 +223,19 @@ class Trader:
         cutoff = ts - BUFFER_SECONDS
         self.buffer = [r for r in self.buffer
                        if float(r.get("first_trade_ts") or ts) >= cutoff]
-        if self.arms and self.social.enabled:
+        if self.arms and self.social.enabled and arms_use(self.arms, SOCIAL_FIELDS):
             if ts - self._social_at >= SOCIAL_EVERY_S:
                 self._social_at = ts
                 self.poll_social(ts)
             self.annotate_social(ts)
+        if self.arms and arms_use(self.arms, META_FIELDS):
+            # Only tokens old enough for some arm to act on are read, so the
+            # fetches go to launches that survived rather than the firehose.
+            youngest = min((a.get("min_age_s", 0) for a in self.arms
+                            if arms_use([a], META_FIELDS)), default=0)
+            eligible = [r for r in self.buffer if r.get("first_trade_ts")
+                        and ts - float(r["first_trade_ts"]) >= youngest]
+            self.meta.annotate(eligible, ts)
         if self.arms:
             self.run_arms(ts, source)
             return
@@ -494,6 +519,8 @@ class Trader:
                       "arm": name, "entry_lag_s": lag, "danger": danger or "",
                       **{k: row.get(k) for k in ATTENTION_FIELDS},
                       **{k: row.get(k) for k in SOCIAL_FIELDS},
+                      **{k: row.get(k) for k in LAUNCH_FIELDS},
+                      **{k: row.get(k) for k in META_FIELDS},
                       "price_impact_pct": impact, "quoted_out": tokens,
                       "sol_in_lamports": lamports,
                       "holders_error": getattr(self.rpc, "last_holders_error", ""),
@@ -712,6 +739,9 @@ class Trader:
                   f"{self.rug.failures} unreadable", flush=True)
         if self.social.enabled:
             print(self.social.summary(), flush=True)
+        if self.meta.calls:
+            print(self.meta.summary(), flush=True)
+        if self.feed is not None:
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
 
