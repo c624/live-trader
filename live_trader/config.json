@@ -131,6 +131,16 @@
                 "mentions_1h": 0
             },
             "max_new_per_loop": 10
+        },
+        {
+            "name": "social1",
+            "min_age_s": 120,
+            "max_age_s": 7200,
+            "hold_hours": 0.1667,
+            "where": {
+                "authors_1h": 1
+            },
+            "max_new_per_loop": 10
         }
     ]
 }
