@@ -23,6 +23,7 @@ from __future__ import annotations
 import os
 import re
 import time
+from datetime import datetime, timezone
 
 import httpx
 
@@ -33,7 +34,29 @@ CANARY_RESULTS = 10            # the endpoint's floor per request
 QUERY_CHARS = 480              # under the endpoint's query length ceiling
 CA = re.compile(r"\b[1-9A-HJ-NP-Za-km-z]{32,44}\b")
 SOCIAL_FIELDS = ("mentions_15m", "mentions_1h", "authors_1h", "reach_1h")
+# How far back a search looks. Mentions older than this never count, so
+# asking for them only pays for posts that are then thrown away -- and each
+# loop is a fresh process, so without a window every run would buy the same
+# week of posts again.
+WINDOW_S = 7200
 UNKNOWN = {k: None for k in SOCIAL_FIELDS}
+
+
+def posted_at(post: dict, fallback: float) -> float:
+    """When the post was written, not when it was read.
+
+    A search returns posts up to a week old. Stamping them with the poll time
+    made a six-day-old post count as a mention in the last fifteen minutes,
+    which is exactly the velocity this feed exists to measure and the one
+    thing it must not invent.
+    """
+    raw = post.get("created_at")
+    if not raw:
+        return fallback
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return fallback
 
 
 def mention_text(post: dict) -> str:
@@ -81,7 +104,8 @@ class Social:
 
     # ------------------------------------------------------------ reading
     def _search(self, query: str, since_id: str | None = None,
-                max_results: int = MAX_RESULTS) -> dict | None:
+                max_results: int = MAX_RESULTS,
+                start_time: str | None = None) -> dict | None:
         if self.exhausted or not self.enabled:
             return None
         if self.reads + max_results > self.budget:
@@ -97,6 +121,8 @@ class Social:
         }
         if since_id:
             params["since_id"] = since_id
+        if start_time:
+            params["start_time"] = start_time
         self.calls += 1
         try:
             r = self._client.get(SEARCH, params=params,
@@ -140,7 +166,11 @@ class Social:
         used = self.choose(mints, now)
         if not used:
             return 0
-        payload = self._search(" OR ".join(used))
+        # The endpoint refuses a start_time inside the last ten seconds, so
+        # the window is anchored a little behind now.
+        since = datetime.fromtimestamp(now - WINDOW_S, tz=timezone.utc)
+        payload = self._search(" OR ".join(used),
+                               start_time=since.strftime("%Y-%m-%dT%H:%M:%SZ"))
         if payload is None:
             return 0
         for mint in used:
@@ -159,10 +189,11 @@ class Social:
             if pid:
                 self._seen_posts.add(pid)
             author = post.get("author_id") or ""
+            when = posted_at(post, now)
             for mint in set(CA.findall(mention_text(post))):
                 if mint in used:
                     self._mentions.setdefault(mint, []).append(
-                        (now, author, followers.get(author, 0)))
+                        (when, author, followers.get(author, 0)))
                     count += 1
         self._prune(now)
         return count
