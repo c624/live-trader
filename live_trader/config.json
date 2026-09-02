@@ -57,6 +57,27 @@
       "max_new_per_loop": 10
     },
     {
+      "name": "twitter",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "where": {
+        "has_twitter": 1
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "notwitter",
+      "min_age_s": 120,
+      "hold_hours": 0.1667,
+      "where": {
+        "has_twitter": 0
+      },
+      "where_max": {
+        "has_twitter": 0
+      },
+      "max_new_per_loop": 10
+    },
+    {
       "name": "devbuy",
       "min_age_s": 120,
       "hold_hours": 0.1667,

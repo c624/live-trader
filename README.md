@@ -51,6 +51,12 @@ a trade, so each is a paper arm beside a control from its own population:
   no signal. A post-hoc slice of the earlier `surge` arm suggested this band;
   the arm exists to test it on data that did not.
 
+Addendum, 23:15 UTC the same day: the first 74 metadata reads found a
+Twitter link on 50 and a website on 29, and a Telegram on none. The launch
+form appears not to carry one any more, so `links` may never fire. Rather
+than change it, `twitter` (Twitter link present) and `notwitter` (metadata
+read, none present) were added beside it under the same bar.
+
 The bar, fixed before the first trade: a signal arm passes only with 100 or
 more closed trades AND a 95% interval lying entirely above its control's.
 Anything short of that closes the arm.
