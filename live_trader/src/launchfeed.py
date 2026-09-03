@@ -99,6 +99,12 @@ class LaunchStream:
         # run because a discovery path quietly throwing work away looks
         # exactly like a quiet market.
         self.dropped = 0
+        # How many launches carried a metadata URI and a creator buy. A run
+        # in which the metadata arms saw nothing at all is either a feed that
+        # stopped sending these or a reader that stopped looking, and the
+        # counts say which.
+        self.with_uri = 0
+        self.with_dev_buy = 0
 
     @property
     def healthy(self) -> bool:
@@ -141,6 +147,8 @@ class LaunchStream:
             "dev_buy_sol": extract_dev_buy_sol(payload),
             "uri": extract_uri(payload),
         }
+        self.with_uri += 1 if row["uri"] else 0
+        self.with_dev_buy += 1 if row["dev_buy_sol"] is not None else 0
         with self._lock:
             if len(self._pending) >= self._max_pending:
                 # Keep the newest: a queued launch goes stale in seconds.

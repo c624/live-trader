@@ -235,7 +235,10 @@ class Trader:
                             if arms_use([a], META_FIELDS)), default=0)
             eligible = [r for r in self.buffer if r.get("first_trade_ts")
                         and ts - float(r["first_trade_ts"]) >= youngest]
-            self.meta.annotate(eligible, ts)
+            fetched = self.meta.annotate(eligible, ts)
+            with_uri = sum(1 for r in eligible if r.get("uri"))
+            print(f"metadata: {len(eligible)} eligible, {with_uri} with a URI, "
+                  f"{fetched} fetched", flush=True)
         if self.arms:
             self.run_arms(ts, source)
             return
@@ -744,14 +747,15 @@ class Trader:
         if self.feed is not None:
             print(f"feed: {self.feed.messages} messages, {self.feed.launches} launches, "
                   f"{self.feed.errors} errors, "
-                  f"{self.feed.dropped} dropped")
+                  f"{self.feed.dropped} dropped, "
+                  f"{getattr(self.feed, 'with_uri', 0)} with a URI, "
+                  f"{getattr(self.feed, 'with_dev_buy', 0)} with a creator buy")
         if self.rug.calls or self.rug.hits:
             print(f"rugcheck: {self.rug.calls} reads, {self.rug.hits} cached, "
                   f"{self.rug.failures} unreadable", flush=True)
         if self.social.enabled:
             print(self.social.summary(), flush=True)
-        if self.meta.calls:
-            print(self.meta.summary(), flush=True)
+        print(self.meta.summary(), flush=True)
         if self.feed is not None:
             self.feed.stop()
         print(f"loop done: {check} checks, {len(self.open_positions())} open positions")
