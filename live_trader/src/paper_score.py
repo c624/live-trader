@@ -8,7 +8,11 @@ pilot buys carry a standard error near 13 points, which cannot tell +8.7% from
 zero. So this reports the interval, not the mean alone, and says outright when
 there are too few trades to conclude anything.
 
-Usage: python -m live_trader.src.paper_score [state_dir]
+Usage: python -m live_trader.src.paper_score [state_dir] [ticket] [--since=T]
+
+--since=T keeps only trades closed at or after T (an ISO-8601 UTC time or a
+unix epoch), so a pre-registered follow-up can be scored on the trades taken
+after its cutoff and nothing before.
 """
 
 from __future__ import annotations
@@ -17,16 +21,39 @@ import csv
 import math
 import statistics
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 EDGE_HYPOTHESIS = 8.7      # the modelled per-trade edge, in percent
 
 
-def read_closed(path: Path) -> list[dict]:
+def parse_since(text: str) -> float:
+    """An epoch, or an ISO-8601 time (naive means UTC), as an epoch."""
+    try:
+        return float(text)
+    except ValueError:
+        pass
+    when = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    return when.timestamp()
+
+
+def read_closed(path: Path, since: float | None = None) -> list[dict]:
     if not path.exists():
         return []
     with open(path) as fh:
-        return [r for r in csv.DictReader(fh) if r.get("action") == "paper_sell"]
+        rows = [r for r in csv.DictReader(fh) if r.get("action") == "paper_sell"]
+    if since is None:
+        return rows
+    kept = []
+    for r in rows:
+        try:
+            if float(r.get("ts") or 0) >= since:
+                kept.append(r)
+        except ValueError:
+            continue
+    return kept
 
 
 def pct_returns(rows: list[dict], ticket: float) -> list[float]:
@@ -128,10 +155,18 @@ def leaderboard(groups: dict, ticket: float) -> str:
 
 
 def main() -> None:
-    base = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("state/paper")
-    ticket = float(sys.argv[2]) if len(sys.argv) > 2 else 2.0
-    rows = read_closed(base / "trades.csv")
-    print(f"=== PAPER RESULT ({base}) ===")
+    since = None
+    args = []
+    for arg in sys.argv[1:]:
+        if arg.startswith("--since="):
+            since = parse_since(arg[len("--since="):])
+        else:
+            args.append(arg)
+    base = Path(args[0]) if args else Path("state/paper")
+    ticket = float(args[1]) if len(args) > 1 else 2.0
+    rows = read_closed(base / "trades.csv", since)
+    label = f"{base}, closed since {since:.0f}" if since is not None else str(base)
+    print(f"=== PAPER RESULT ({label}) ===")
     groups = by_arm(rows)
     if len(groups) > 1 or (groups and "(unlabelled)" not in groups):
         print(leaderboard(groups, ticket))

@@ -35,7 +35,7 @@ trades on the fee floor with its interval overlapping the control's; the
 two-author arms were the worst in the study. The X feed is only read while
 an arm filters on a mention field, so with none configured it costs nothing.
 
-### The graduation-signal test (open 2026-09-02)
+### The graduation-signal test (closed 2026-09-03)
 
 Public data on 830,000 launches says two things visible at creation predict
 a token leaving the bonding curve: a Telegram link in its metadata (about
@@ -60,6 +60,44 @@ read, none present) were added beside it under the same bar.
 The bar, fixed before the first trade: a signal arm passes only with 100 or
 more closed trades AND a 95% interval lying entirely above its control's.
 Anything short of that closes the arm.
+
+Result, 23:11 UTC on 2026-09-03, after 26 hours:
+
+| arm | rule | n | mean | median | 95% interval | vs control |
+|---|---|---|---|---|---|---|
+| devbuy | creator buy >= 1 SOL | 685 | -4.7% | -2.6% | -6.6% to -2.9% | fail (launchctl -7.5%, intervals overlap) |
+| twitter | Twitter link present | 696 | -3.4% | -2.7% | -5.7% to -1.1% | fail (notwitter -5.9%, intervals overlap) |
+| links | Telegram present | 42 | -11.0% | -2.8% | -22.5% to +0.5% | fail (never reached 100; nolinks -3.5%) |
+| surgeliq | surge in a $10k-50k pool, 10-min hold | 106 | +4.2% | +3.9% | -10.9% to +19.3% | fail (liqctl +2.0%, -8.3% to +12.4%) |
+| surgeliq1h | same, one-hour hold | 103 | +30.7% | -11.9% | -3.6% to +64.9% | fail (lower bound below liqctl's upper) |
+
+Every launch-side signal lost, by less than its control but still below
+zero: a creator buy and a Twitter link shave two or three points off a
+losing population and nothing more. The ten-minute surge arm is its
+control with a different name (mean without its three best trades -2.1%,
+the control's -2.1%).
+
+The one-hour surge arm is the only thing in 13,700 paper trades whose
+number is large and positive: +$63 on $206 staked, 43 of 103 trades
+reaching the +100% take-profit and 48 going to zero or near it. It fails
+the bar because its interval still spans zero, and the bar exists so that
+a single +1232% trade does not decide the question. It also carries a
+flaw in the test's own design: it held for an hour against a control that
+held for ten minutes, so the comparison cannot say whether the surge or
+the hold did the work.
+
+### The hold-time test (open 2026-09-03)
+
+The flaw above is fixed by one more control: `liqctl1h`, the same $10k-50k
+graduated-pool population with no signal, held for one hour. `surgeliq1h`
+keeps running unchanged beside it. Pre-registered before the control's
+first trade:
+
+- Only trades closed at or after 2026-09-04 00:00 UTC count for either arm
+  (`python -m live_trader.src.paper_score state/paper --since=2026-09-04T00:00:00Z`).
+- `surgeliq1h` passes only with 100 or more closed trades in that window
+  AND a 95% interval lying entirely above `liqctl1h`'s.
+- Anything short of that closes the graduated-pool line of work.
 
 ## How a trade happens
 

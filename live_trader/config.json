@@ -138,6 +138,19 @@
         "liquidity_usd": 50000
       },
       "max_new_per_loop": 10
+    },
+    {
+      "name": "liqctl1h",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 1.0,
+      "where": {
+        "liquidity_usd": 10000
+      },
+      "where_max": {
+        "liquidity_usd": 50000
+      },
+      "max_new_per_loop": 10
     }
   ]
 }
