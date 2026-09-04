@@ -86,7 +86,7 @@ flaw in the test's own design: it held for an hour against a control that
 held for ten minutes, so the comparison cannot say whether the surge or
 the hold did the work.
 
-### The hold-time test (open 2026-09-03)
+### The hold-time test (stopped 2026-09-04)
 
 The flaw above is fixed by one more control: `liqctl1h`, the same $10k-50k
 graduated-pool population with no signal, held for one hour. `surgeliq1h`
@@ -98,6 +98,27 @@ first trade:
 - `surgeliq1h` passes only with 100 or more closed trades in that window
   AND a 95% interval lying entirely above `liqctl1h`'s.
 - Anything short of that closes the graduated-pool line of work.
+
+Stopped at 18:23 UTC on 2026-09-04 on Carter's instruction, two trades
+short of the count. The window at the stop:
+
+| arm | n | mean | median | win | 95% interval |
+|---|---|---|---|---|---|
+| surgeliq1h | 98 | -6.1% | -99.9% | 32% | -38.5% to +26.4% |
+| liqctl1h | 231 | -15.9% | -97.4% | 28% | -33.8% to +1.9% |
+| liqctl | 241 | -9.2% | -6.1% | 37% | -22.8% to +4.4% |
+
+The surge arm's interval never left zero and never separated from its
+control; the bar could not have been met by the two missing trades. With
+a proper one-hour control beside it, the +30% reading of the day before
+resolved into a losing arm whose mean is held up by a few take-profits
+against a majority of total losses. That closes the graduated-pool line
+and, with it, this project: over 17,240 paper trades and every entry
+signal available at trade time, nothing beat its own control.
+
+The loop's schedule and self-chain are removed; nothing runs unless
+dispatched by hand. The KILL file is in place and `trading_enabled` is
+false, as they were throughout.
 
 ## How a trade happens
 

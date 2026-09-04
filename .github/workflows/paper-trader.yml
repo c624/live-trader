@@ -4,9 +4,8 @@
 # best-effort cron; state lives on this repo's paper-state branch.
 name: paper-trader
 
+# Stopped 2026-09-04 on Carter's instruction: manual dispatch only.
 on:
-  schedule:
-    - cron: "41 1,3,5,7,9,11,13,15,17,19,21,23 * * *"
   workflow_dispatch: {}
 
 permissions:

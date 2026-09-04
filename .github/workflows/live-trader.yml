@@ -1,8 +1,8 @@
 name: live-trader
 
+# Stopped 2026-09-04 on Carter's instruction after the hold-time test: no
+# schedule and no self-chain, so nothing runs unless dispatched by hand.
 on:
-  schedule:
-    - cron: "7,37 * * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -77,35 +77,3 @@ jobs:
           git add -A
           git commit -q -m "live trader loop $(date -u +%FT%TZ)" || exit 0
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" live-state:live-state
-
-      # GitHub's cron has not fired once on this fresh repo, so the loop
-      # sustains itself: each successful run dispatches the next. A failing
-      # run breaks the chain (no infinite failure loops); the cron above and
-      # a manual dispatch both restart it.
-      - name: Chain next loop
-        if: success()
-        run: |
-          curl -sS -X POST \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/live-trader.yml/dispatches" \
-            -d '{"ref":"main"}'
-
-      # The cron scheduler proved unreliable for both repos, so this loop
-      # doubles as the research lab's heartbeat: when paper-state has not
-      # ticked in ~2 hours, fire the paper trader. Skips silently while the
-      # paper-state branch does not exist yet.
-      - name: Heartbeat the paper trader
-        if: success()
-        run: |
-          last=$(curl -sS -H "Authorization: Bearer ${{ github.token }}" \
-            "https://api.github.com/repos/${{ github.repository }}/branches/paper-state" \
-            | python3 -c "import sys,json,datetime;d=json.load(sys.stdin);print(int(datetime.datetime.fromisoformat(d['commit']['commit']['committer']['date'].replace('Z','+00:00')).timestamp()))" 2>/dev/null || echo 0)
-          age=$(( $(date +%s) - last ))
-          echo "paper-state age: ${age}s"
-          if [ "$last" != "0" ] && [ "$age" -gt 6600 ]; then
-            curl -sS -X POST -H "Authorization: Bearer ${{ github.token }}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${{ github.repository }}/actions/workflows/paper-trader.yml/dispatches" \
-              -d '{"ref":"main"}'
-          fi
