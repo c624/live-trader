@@ -1,0 +1,25 @@
+ts,action,mint,symbol,pool,sol_lamports,token_raw,usd_value,gecko_price_usd,reason,signature,note
+1788234479,paper_buy,HtNNc9h32bCqjuXwuwMLMuGupBcxQjRGyWMggzFCpump,USMS,9NtTD7c7oE3p4F3tWtwtsArPBM668f5aKVC91vqwULsi,19279764,26747926,2,1.1117771409541266e-05,,,paper
+1788234479,paper_buy,3vuyTkVPShgw2ZXwGpicTNXj1UqJCCT5RHdxM4RTpam6,AMRO,59FD9oqyb2gT23B9vvt6WqjMychdA2Lr7o8eggRASw5P,19279764,37323676232,2,5.262522099625234e-05,,,paper
+1788234524,paper_buy,wwzSoLxdiFNbjPGUmWfhGiiCkt81hb82conkE35pump,XCAT,pump,19283487,376862965461,2,,,,paper
+1788234524,paper_buy,A8WkkiyeBEfBJnrypkrqZBzQMBw9DiA6AZTVy5rQpump,100x,pump,19283487,580735885255,2,,,,paper
+1788234539,paper_buy,5ejqUFwxNpWQCtqtH3BeQWE3SxnYiSSVftDChs1pump, ,pump,19284502,680794731897,2,,,,paper
+1788235984,paper_sell,HtNNc9h32bCqjuXwuwMLMuGupBcxQjRGyWMggzFCpump,USMS,9NtTD7c7oE3p4F3tWtwtsArPBM668f5aKVC91vqwULsi,,26747926,2.1261,,time,,paper pnl +0.1261
+1788235984,paper_sell,3vuyTkVPShgw2ZXwGpicTNXj1UqJCCT5RHdxM4RTpam6,AMRO,59FD9oqyb2gT23B9vvt6WqjMychdA2Lr7o8eggRASw5P,,37323676232,0.1355,,time,,paper pnl -1.8645
+1788235984,paper_sell,wwzSoLxdiFNbjPGUmWfhGiiCkt81hb82conkE35pump,XCAT,pump,,376862965461,1.0786,,time,,paper pnl -0.9214
+1788235984,paper_sell,A8WkkiyeBEfBJnrypkrqZBzQMBw9DiA6AZTVy5rQpump,100x,pump,,580735885255,1.7453,,time,,paper pnl -0.2547
+1788235984,paper_sell,5ejqUFwxNpWQCtqtH3BeQWE3SxnYiSSVftDChs1pump, ,pump,,680794731897,1.9479,,time,,paper pnl -0.0521
+1788235999,paper_buy,Bqf4ShUVrryHiUNSsW4FG3K5ijsxaKzVjiSDLjFppump,GPRO INC,pump,19294732,672276321067,2,,,,paper
+1788235999,paper_buy,RczF8QNZnmCmjmaVre8ZpKdy5sAvwAJKcsfbwJgQGob,trader,pump,19294732,499429016931,2,,,,paper
+1788236014,paper_buy,3ysGNWEipNns7fWhxjHcFdXv8SuP6STuJAhBGAKtpump,GROKDOG,pump,19296321,603110378829,2,,,,paper
+1788236029,paper_buy,EXq7CtjxKCepVX7jGqPY6vChsrYqVrZg5wefTtRtpump,BOB,pump,19298238,681279362461,2,,,,paper
+1788236029,paper_buy,BQp6RfvQ1ZyHFgTtHGKHCWGrYsKiwJGfaVGZLXuSpump,ROGGRE,pump,19298238,647719276334,2,,,,paper
+1788236119,paper_sell,Bqf4ShUVrryHiUNSsW4FG3K5ijsxaKzVjiSDLjFppump,GPRO INC,pump,,672276321067,1.9238,,time,,paper pnl -0.0762
+1788236119,paper_sell,RczF8QNZnmCmjmaVre8ZpKdy5sAvwAJKcsfbwJgQGob,trader,pump,,499429016931,1.4294,,time,,paper pnl -0.5706
+1788236134,paper_buy,2ohxvHb1B8ctuiekqpcqgf1T3r8WWPgvUHBEYpk2pump,GOBLIN,pump,19269697,618926574137,2,,,,paper
+1788236134,paper_buy,4PhYVihSGseGs9ab1EStQgiVDd9iXucGTy5g2aoapump,foff,pump,19269697,677148759775,2,,,,paper
+1788236134,paper_sell,3ysGNWEipNns7fWhxjHcFdXv8SuP6STuJAhBGAKtpump,GROKDOG,pump,,603110378829,3.1893,,time,,paper pnl +1.1893
+1788236149,paper_sell,EXq7CtjxKCepVX7jGqPY6vChsrYqVrZg5wefTtRtpump,BOB,pump,,681279362461,1.9513,,time,,paper pnl -0.0487
+1788236149,paper_sell,BQp6RfvQ1ZyHFgTtHGKHCWGrYsKiwJGfaVGZLXuSpump,ROGGRE,pump,,647719276334,0.153,,time,,paper pnl -1.8470
+1788236254,paper_sell,2ohxvHb1B8ctuiekqpcqgf1T3r8WWPgvUHBEYpk2pump,GOBLIN,pump,,618926574137,1.7747,,time,,paper pnl -0.2253
+1788236254,paper_sell,4PhYVihSGseGs9ab1EStQgiVDd9iXucGTy5g2aoapump,foff,pump,,677148759775,0.1078,,time,,paper pnl -1.8922
