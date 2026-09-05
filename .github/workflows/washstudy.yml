@@ -1,0 +1,62 @@
+# Retrospective study: do the coins that doubled and the coins that died look
+# different at the transaction level in the minutes before the bot bought
+# them? Reads the paper ledger from live-state, walks each hot token's
+# signatures back from the present on free public RPC (no key, no secret),
+# and commits the measurements to the wash-study branch. Resumable: rows
+# already measured are skipped on the next dispatch.
+name: wash-study
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_tokens:
+        description: "Tokens to measure (pumps and dumps first)"
+        default: "400"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wash-study
+  cancel-in-progress: false
+
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install httpx solders
+      - name: Fetch the ledger and any earlier measurements
+        run: |
+          git fetch origin live-state:live-state
+          mkdir -p state out
+          git --work-tree=state checkout live-state -- .
+          git reset -q
+          if git fetch origin wash-study:wash-study 2>/dev/null; then
+            git --work-tree=out checkout wash-study -- . 2>/dev/null || true
+            git reset -q
+          fi
+          ls -la out || true
+      - name: Measure
+        env:
+          STUDY_MAX: ${{ inputs.max_tokens }}
+        run: |
+          timeout 20000 python -m live_trader.src.washstudy collect state/paper out/wash.csv --max "$STUDY_MAX" || echo "stopped at the time limit; partial rows kept"
+          python -m live_trader.src.washstudy analyze out/wash.csv | tee out/REPORT.txt
+      - name: Commit measurements
+        if: always()
+        run: |
+          cd out
+          git init -q -b wash-study
+          git config user.name "live-trader-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "wash study $(date -u +%FT%TZ)" || exit 0
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" wash-study:wash-study
