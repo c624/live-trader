@@ -120,6 +120,42 @@ The loop's schedule and self-chain are removed; nothing runs unless
 dispatched by hand. The KILL file is in place and `trading_enabled` is
 false, as they were throughout.
 
+### The wash-trade study (closed 2026-09-05)
+
+Carter's hypothesis: the aggregates cannot tell a pump from a dump because
+inflated buying is built to look like buying; the difference should show
+one level down, in how the transactions arrive. A retrospective study
+(`washstudy.py`, results on the `wash-study` branch) read the five
+minutes before entry from the chain for 545 of the ledger's hot tokens
+(106 that doubled, 180 that went to zero, 259 in between) on free public
+RPC: signature clustering into blocks, distinct buyers, size uniformity,
+buyer wallet age.
+
+| at entry (median) | pumps | dumps |
+|---|---|---|
+| share of transactions in same-block bursts | 35% | 67% |
+| transactions in the five minutes | 1,230 | 1,520 |
+| unevenness of arrival (CV of gaps) | 1.37 | 1.17 |
+| busiest single buyer's share of buys | 5.9% | 6.9% |
+| distinct buyers per buy | 0.97 | 0.97 |
+| buyers with fewer than ten lifetime transactions | 0% | 0% |
+
+The dumps are twice as bundled. That is the largest entry-time difference
+between pumps and dumps found anywhere in this project, and it points the
+way the hypothesis said. Split-sample, with the cut chosen on the first
+272 tokens by entry time and judged on the last 273: tokens under the
+bundling cut averaged +30% (interval -9% to +69%) against -10% for the
+rest, but their pump rate (25%) did not clear their dump rate (27%), and
+the interval spans zero. Under the bar fixed before the run, that is a
+fail. Every buyer wallet had ten or more transactions already: this is a
+market of bots trading with bots, and wallet freshness says nothing.
+
+What it means: bundling is the first signal in 17,000 trades that moved
+the out-of-sample mean in the predicted direction, and it is not proof.
+It would need a forward paper arm (hot tokens with low bundling against
+hot tokens regardless) run to 100 trades each under the usual bar. The
+loop is stopped and stays stopped unless Carter asks for that test.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
