@@ -345,12 +345,12 @@ def summarize(rows: list[dict]) -> str:
     return f"n={n:<4} pump {pumps:5.1%} dump {dumps:5.1%} mean {mean * 100:+6.1f}%{ci}"
 
 
-def analyze(path: Path) -> str:
+def analyze(path: Path, min_keep: int = 40) -> str:
     rows = [r for r in csv.DictReader(open(path)) if r.get("sig_n") not in ("", "0", None)]
     rows.sort(key=lambda r: float(r["entry_ts"]))
-    lines = [f"tokens measured: {len(rows)}  ({sum(1 for r in rows if r['label']=='pump')} pumps, "
-             f"{sum(1 for r in rows if r['label']=='dump')} dumps, "
-             f"{sum(1 for r in rows if r['label']=='middle')} middle)", ""]
+    counts = {lab: sum(1 for r in rows if r["label"] == lab) for lab in ("pump", "dump", "middle")}
+    lines = [f"tokens measured: {len(rows)}  ({counts['pump']} pumps, {counts['dump']} dumps, "
+             f"{counts['middle']} middle)", ""]
     lines.append(f"{'metric':<20}{'pumps med':>12}{'dumps med':>12}{'n':>6}")
     for m in METRICS:
         p = [_f(r[m]) for r in rows if r["label"] == "pump" and _f(r[m]) is not None]
@@ -359,16 +359,23 @@ def analyze(path: Path) -> str:
             lines.append(f"{m:<20}{statistics.median(p):>12.3g}{statistics.median(d):>12.3g}{len(p) + len(d):>6}")
     half = len(rows) // 2
     first, second = rows[:half], rows[half:]
-    lines += ["", f"split-sample: cut chosen on first {len(first)} tokens, judged on last {len(second)}",
-              f"  second half, no cut:  {summarize(second)}"]
+    # The halves must hold the same mix of outcomes, or a cut is judged
+    # against a different population than it was chosen on.
+    mix = lambda rs: " ".join(f"{lab} {sum(1 for r in rs if r['label'] == lab)}" for lab in ("pump", "dump", "middle"))
+    lines += ["", f"split-sample: cut chosen on first {len(first)} tokens ({mix(first)}), "
+                  f"judged on last {len(second)} ({mix(second)})",
+              f"  second half, no cut:  {summarize(second)}",
+              "  a cut is judged by the second half it keeps against the second half it drops:"]
     for m in METRICS:
-        cut = best_cut(first, m)
+        cut = best_cut(first, m, min_keep=min_keep)
         if not cut:
             continue
         direction, value, pr, dr = cut
         kept = apply_cut(second, m, direction, value)
-        lines.append(f"  {m:<18} {direction} {value:<8.3g} first: pump {pr:5.1%} dump {dr:5.1%}"
-                     f"  -> second: {summarize(kept)}")
+        dropped = [r for r in second if r not in kept and _f(r[m]) is not None]
+        lines.append(f"  {m:<18} {direction} {value:<8.3g} first: pump {pr:5.1%} dump {dr:5.1%}")
+        lines.append(f"      kept:    {summarize(kept)}")
+        lines.append(f"      dropped: {summarize(dropped)}")
     return "\n".join(lines)
 
 
