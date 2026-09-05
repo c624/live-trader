@@ -1,0 +1,28 @@
+tokens measured: 545  (106 pumps, 180 dumps, 259 middle)
+
+metric                 pumps med   dumps med     n
+sig_n                   1.23e+03    1.52e+03   286
+sig_fail_share             0.282       0.285   286
+slot_max_share            0.0112      0.0116   286
+slot_dense_share           0.353       0.665   286
+iat_cv                      1.37        1.17   286
+uniq_buyer_ratio           0.971       0.966   286
+top_buyer_share            0.059       0.069   286
+size_cv                     1.61        1.43   286
+size_dup_share               0.6       0.508   286
+median_sol               0.00236     0.00611   286
+fresh_wallet_share             0           0   286
+
+split-sample: cut chosen on first 272 tokens, judged on last 273
+  second half, no cut:  n=273  pump 18.3% dump 37.0% mean   +0.9% [-14,+16]
+  sig_n              ge 8.08e+03 first: pump 10.0% dump  0.0%  -> second: n=11   pump  0.0% dump  0.0% mean  -25.6% [-47,-4]
+  sig_fail_share     ge 0.615    first: pump 10.0% dump  0.0%  -> second: n=11   pump  9.1% dump  0.0% mean   -1.5% [-54,+51]
+  slot_max_share     le 0.0055   first: pump 31.0% dump 16.7%  -> second: n=12   pump 25.0% dump 16.7% mean  +65.0% [-41,+171]
+  slot_dense_share   le 0.248    first: pump 41.6% dump 27.3%  -> second: n=73   pump 24.7% dump 27.4% mean  +29.9% [-9,+69]
+  iat_cv             ge 2.47     first: pump 40.0% dump  5.0%  -> second: n=24   pump 37.5% dump 41.7% mean  +45.2% [-36,+126]
+  uniq_buyer_ratio   le 0.879    first: pump 26.5% dump 17.6%  -> second: n=26   pump 11.5% dump 23.1% mean   -0.6% [-32,+31]
+  top_buyer_share    le 0.0294   first: pump 44.0% dump 20.0%  -> second: n=36   pump 38.9% dump 30.6% mean  +63.4% [+2,+125]
+  size_cv            ge 3.36     first: pump 30.0% dump 15.0%  -> second: n=16   pump 25.0% dump 37.5% mean  +19.1% [-63,+102]
+  size_dup_share     ge 0.912    first: pump 25.0% dump  5.0%  -> second: n=14   pump 14.3% dump 21.4% mean   +2.2% [-40,+44]
+  median_sol         le 0.00212  first: pump 38.2% dump 20.0%  -> second: n=71   pump 23.9% dump 36.6% mean  +21.2% [-17,+60]
+  fresh_wallet_share le 0        first: pump 42.9% dump 23.8%  -> second: n=247  pump 18.6% dump 38.9% mean   -0.1% [-17,+16]
