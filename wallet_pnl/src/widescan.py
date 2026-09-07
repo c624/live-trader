@@ -26,6 +26,7 @@ Steps (each resumable, each shardable for parallel jobs):
   collect  out/tokens.json out/buyers-K.json --shard K --shards N [--max M]
   grade    out/ out/grades-K.csv --shard K --shards N [--max M] [--pages P] [--wallets a,b]
   report   out/
+  probe    <mint> [<mint> ...]      (which endpoint still has the history)
 """
 
 from __future__ import annotations
@@ -523,9 +524,66 @@ def main(argv: list[str] | None = None) -> None:
               only=[w for w in only.split(",") if w] if only else None)
     elif cmd == "report":
         print(report(Path(pos[0])))
+    elif cmd == "probe":
+        import os
+        probe(pos, helius_key=os.environ.get("HELIUS_API_KEY", "").strip())
     else:
         raise SystemExit(f"unknown command {cmd}\n{__doc__}")
 
 
 if __name__ == "__main__":
     main()
+
+
+# ------------------------------------------------------------------ probe
+PROBE_ENDPOINTS = (
+    ("publicnode", "https://solana-rpc.publicnode.com"),
+    ("mainnet-beta", "https://api.mainnet-beta.solana.com"),
+    ("drpc", "https://solana.drpc.org"),
+    ("ankr", "https://rpc.ankr.com/solana"),
+)
+
+
+def probe(mints: list[str], endpoints=PROBE_ENDPOINTS, helius_key: str = "") -> list[dict]:
+    """How far back each endpoint's signature history goes, on known mints.
+
+    Run 2 found buyers on every coin bought after 02:44 UTC on the day of
+    the run and on none bought before, which is a retention limit on the
+    free endpoint rather than a fact about the coins. This asks each
+    candidate endpoint for the first page on the same mints and reports
+    the count and the oldest block time, so the scan can be pointed at an
+    endpoint that still has the history. A Helius key, if present in the
+    environment, is used and never printed.
+    """
+    import httpx
+    rows = []
+    targets = list(endpoints)
+    if helius_key:
+        targets.append(("helius", f"https://mainnet.helius-rpc.com/?api-key={helius_key}"))
+    client = httpx.Client(timeout=30.0)
+    for label, url in targets:
+        for mint in mints:
+            body = {"jsonrpc": "2.0", "id": 1, "method": "getSignaturesForAddress",
+                    "params": [mint, {"limit": 1000}]}
+            row = {"endpoint": label, "mint": mint[:8], "status": "", "n": 0, "oldest": "", "newest": ""}
+            try:
+                r = client.post(url, json=body)
+                row["status"] = str(r.status_code)
+                if r.is_success:
+                    payload = r.json()
+                    if "error" in payload:
+                        row["status"] = f"rpc error {str(payload['error'])[:60]}"
+                    else:
+                        res = payload.get("result") or []
+                        times = [x["blockTime"] for x in res if isinstance(x.get("blockTime"), (int, float))]
+                        row["n"] = len(res)
+                        if times:
+                            row["oldest"] = datetime.fromtimestamp(min(times), timezone.utc).strftime("%m-%d %H:%M")
+                            row["newest"] = datetime.fromtimestamp(max(times), timezone.utc).strftime("%m-%d %H:%M")
+            except httpx.HTTPError as exc:
+                row["status"] = type(exc).__name__
+            rows.append(row)
+            print(f"{row['endpoint']:12} {row['mint']:8} {row['status']:>8} n={row['n']:4d} "
+                  f"oldest={row['oldest'] or '-':11} newest={row['newest'] or '-'}", flush=True)
+            time.sleep(0.5)
+    return rows

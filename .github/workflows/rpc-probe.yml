@@ -1,0 +1,31 @@
+# Which public RPC endpoint still serves signature history for coins that
+# are a few days old? Read-only; prints counts and block times only. The
+# Helius key, if configured, is used and never printed.
+name: rpc-probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      mints:
+        description: "Mints to probe, space-separated"
+        default: "C8nTxo8kVmpKR4RYpMbhkyJc4RUvDKVEsnALvRk3pump 852nrVz4Wc43eTMT3Nta4YL5H8gAGDy2HEBpZPpwaraH 9i3NFMa9pqR3suCUhyX3nQE1dy6i5wXafDtppUxYpump 38Hemrq1EwQizHr22389D3wtL3mpSX59FtDxDaCGcBty DZBBifstw1i9aqvHqoCGDx2WxvR7mjdu3cKGC3CLpump"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - name: Probe
+        env:
+          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+        run: python -m wallet_pnl.src.widescan probe ${{ inputs.mints }}
