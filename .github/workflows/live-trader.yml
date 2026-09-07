@@ -1,8 +1,10 @@
 name: live-trader
 
-# Stopped 2026-09-04 on Carter's instruction after the hold-time test: no
-# schedule and no self-chain, so nothing runs unless dispatched by hand.
+# Restarted 2026-09-07 for the bundling test, on Carter's instruction. The
+# research lab's heartbeat is not restored: only this loop runs.
 on:
+  schedule:
+    - cron: "7,37 * * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -77,3 +79,14 @@ jobs:
           git add -A
           git commit -q -m "live trader loop $(date -u +%FT%TZ)" || exit 0
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" live-state:live-state
+
+      # Each successful run dispatches the next; a failing run breaks the
+      # chain, and the cron above or a manual dispatch restarts it.
+      - name: Chain next loop
+        if: success()
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/live-trader.yml/dispatches" \
+            -d '{"ref":"main"}'

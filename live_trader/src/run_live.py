@@ -55,6 +55,11 @@ SOCIAL_QUERIES = 2
 SOCIAL_MAX_AGE_S = 7200
 # What the launch feed says about a token at creation, beyond its address.
 LAUNCH_FIELDS = ("dev_buy_sol",)
+# How the recent buying arrived, read from the chain at entry for the arms
+# that filter on it. One signature page per candidate, cached for a minute.
+BUNDLE_FIELDS = ("slot_dense_share", "sig_n5m")
+BUNDLE_TTL_S = 60.0
+BUNDLE_MAX_PER_CHECK = 30
 
 
 def arms_use(arms: list[dict], fields: tuple) -> bool:
@@ -167,6 +172,7 @@ class Trader:
         # What each launch said about itself, read lazily for the arms that
         # filter on it.
         self.meta = Metadata()
+        self._bundle_cache: dict[str, tuple] = {}
         # Arms run side by side on the same launches, so entry timing and
         # exit rules are compared on identical data rather than across
         # different nights and different markets. Paper only.
@@ -239,6 +245,8 @@ class Trader:
             with_uri = sum(1 for r in eligible if r.get("uri"))
             print(f"metadata: {len(eligible)} eligible, {with_uri} with a URI, "
                   f"{fetched} fetched", flush=True)
+        if self.arms and arms_use(self.arms, BUNDLE_FIELDS):
+            self.annotate_bundling(ts)
         if self.arms:
             self.run_arms(ts, source)
             return
@@ -432,6 +440,39 @@ class Trader:
             if row.get("token"):
                 row.update(self.social.features(row["token"], ts))
 
+    def annotate_bundling(self, ts: float) -> None:
+        """Read how the recent buying arrived for every row some arm could
+        act on once its other rules are met, so the bundling rule is judged
+        on the same population as the control. Rows read within the last
+        minute are not read again; a row that could not be read carries None
+        and passes no bundling rule, minimum or maximum."""
+        wanted: dict[str, dict] = {}
+        for arm in self.arms:
+            if not arms_use([arm], BUNDLE_FIELDS):
+                continue
+            where = {k: v for k, v in (arm.get("where") or {}).items() if k not in BUNDLE_FIELDS}
+            where_max = {k: v for k, v in (arm.get("where_max") or {}).items() if k not in BUNDLE_FIELDS}
+            lo, hi = arm.get("min_age_s", 0), arm.get("max_age_s", 300)
+            for row in self.buffer:
+                if not row.get("token") or not row.get("first_trade_ts"):
+                    continue
+                age = ts - float(row["first_trade_ts"])
+                if lo <= age <= hi and passes(row, where, where_max):
+                    wanted[row["token"]] = row
+        reads = 0
+        for token, row in list(wanted.items())[:BUNDLE_MAX_PER_CHECK]:
+            cached = self._bundle_cache.get(token)
+            if cached and ts - cached[0] < BUNDLE_TTL_S:
+                row.update(cached[1])
+                continue
+            activity = self.rpc.signature_activity(token) or {}
+            reads += 1
+            fields = {k: activity.get(k) for k in BUNDLE_FIELDS}
+            self._bundle_cache[token] = (ts, fields)
+            row.update(fields)
+        known = sum(1 for r in wanted.values() if r.get("slot_dense_share") is not None)
+        print(f"bundling: {len(wanted)} candidates, {reads} read, {known} known", flush=True)
+
     def arm_config(self, arm: dict) -> dict:
         """This arm's rules, over the shared config."""
         cfg = dict(self.cfg)
@@ -535,6 +576,7 @@ class Trader:
                       **{k: row.get(k) for k in SOCIAL_FIELDS},
                       **{k: row.get(k) for k in LAUNCH_FIELDS},
                       **{k: row.get(k) for k in META_FIELDS},
+                      **{k: row.get(k) for k in BUNDLE_FIELDS},
                       "price_impact_pct": impact, "quoted_out": tokens,
                       "sol_in_lamports": lamports,
                       "holders_error": getattr(self.rpc, "last_holders_error", ""),

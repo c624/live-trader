@@ -36,6 +36,33 @@ FREE_ENDPOINTS = (
 )
 
 
+# How much of the recent buying arrived in same-block bursts. The
+# retrospective wash-trade study found the coins that went to zero twice as
+# bundled as the coins that doubled (67% against 35% of their transactions
+# landing in slots with four or more), the largest entry-time difference
+# between the two found anywhere in the project. Read from the same
+# signature page the traction read already fetches, so it costs nothing.
+BUNDLE_WINDOW_S = 300
+BUNDLE_SLOT_MIN = 4
+
+
+def bundling(rows: list) -> dict:
+    """Share of the last five minutes' signatures that share a slot with
+    three or more others, and how many signatures that window held. None
+    when the page carried nothing datable."""
+    dated = [r for r in rows if isinstance(r.get("blockTime"), (int, float))
+             and isinstance(r.get("slot"), int)]
+    if not dated:
+        return {"slot_dense_share": None, "sig_n5m": None}
+    newest = max(r["blockTime"] for r in dated)
+    recent = [r for r in dated if r["blockTime"] >= newest - BUNDLE_WINDOW_S]
+    slots: dict[int, int] = {}
+    for r in recent:
+        slots[r["slot"]] = slots.get(r["slot"], 0) + 1
+    dense = sum(c for c in slots.values() if c >= BUNDLE_SLOT_MIN)
+    return {"slot_dense_share": round(dense / len(recent), 4), "sig_n5m": len(recent)}
+
+
 class Rpc:
     def __init__(self, api_key: str | None = None, client: httpx.Client | None = None,
                  rpc_url: str | None = None):
@@ -150,6 +177,7 @@ class Rpc:
         if times:
             out["tx_span_s"] = int(max(times) - min(times))
             out["tx_oldest"] = int(min(times))
+        out.update(bundling(rows))
         return out
 
     def sign_and_send(self, tx_b64: str, keypair: Keypair) -> str | None:

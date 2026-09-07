@@ -25,130 +25,52 @@
   "pilot_start_ts": 1788219525,
   "arms": [
     {
-      "name": "wait120",
-      "min_age_s": 120,
-      "hold_hours": 0.0333
-    },
-    {
-      "name": "launchctl",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "links",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "where": {
-        "has_telegram": 1
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "nolinks",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "where": {
-        "has_telegram": 0
-      },
-      "where_max": {
-        "has_telegram": 0
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "twitter",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "where": {
-        "has_twitter": 1
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "notwitter",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "where": {
-        "has_twitter": 0
-      },
-      "where_max": {
-        "has_twitter": 0
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "devbuy",
-      "min_age_s": 120,
-      "hold_hours": 0.1667,
-      "where": {
-        "dev_buy_sol": 1.0
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "surge",
+      "name": "organic",
       "min_age_s": 120,
       "max_age_s": 7200,
       "hold_hours": 0.1667,
       "where": {
-        "m5_buys": 30,
-        "buy_ratio_m5": 2.0
-      }
-    },
-    {
-      "name": "surgeliq",
-      "min_age_s": 120,
-      "max_age_s": 7200,
-      "hold_hours": 0.1667,
-      "where": {
-        "m5_buys": 30,
-        "buy_ratio_m5": 2.0,
-        "liquidity_usd": 10000
+        "m5_buys": 311,
+        "slot_dense_share": 0
       },
       "where_max": {
-        "liquidity_usd": 50000
+        "slot_dense_share": 0.25
       },
       "max_new_per_loop": 10
     },
     {
-      "name": "surgeliq1h",
+      "name": "hotctl",
+      "min_age_s": 120,
+      "max_age_s": 7200,
+      "hold_hours": 0.1667,
+      "where": {
+        "m5_buys": 311,
+        "slot_dense_share": 0
+      },
+      "max_new_per_loop": 10
+    },
+    {
+      "name": "organic1h",
       "min_age_s": 120,
       "max_age_s": 7200,
       "hold_hours": 1.0,
       "where": {
-        "m5_buys": 30,
-        "buy_ratio_m5": 2.0,
-        "liquidity_usd": 10000
+        "m5_buys": 311,
+        "slot_dense_share": 0
       },
       "where_max": {
-        "liquidity_usd": 50000
+        "slot_dense_share": 0.25
       },
       "max_new_per_loop": 10
     },
     {
-      "name": "liqctl",
-      "min_age_s": 120,
-      "max_age_s": 7200,
-      "hold_hours": 0.1667,
-      "where": {
-        "liquidity_usd": 10000
-      },
-      "where_max": {
-        "liquidity_usd": 50000
-      },
-      "max_new_per_loop": 10
-    },
-    {
-      "name": "liqctl1h",
+      "name": "hotctl1h",
       "min_age_s": 120,
       "max_age_s": 7200,
       "hold_hours": 1.0,
       "where": {
-        "liquidity_usd": 10000
-      },
-      "where_max": {
-        "liquidity_usd": 50000
+        "m5_buys": 311,
+        "slot_dense_share": 0
       },
       "max_new_per_loop": 10
     }

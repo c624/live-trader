@@ -37,7 +37,7 @@ NUMERIC = ["tx_count", "tx_per_min", "tx_span_s", "price_impact_pct",
            "h1_sells", "vol_m5_usd", "vol_h1_usd", "chg_m5_pct", "chg_h1_pct",
            "liquidity_usd",
            "mentions_15m", "mentions_1h", "authors_1h", "reach_1h",
-           "dev_buy_sol"]
+           "dev_buy_sol", "slot_dense_share", "sig_n5m"]
 BOOLEAN = ["mint_authority", "freeze_authority", "tx_capped",
            "has_telegram", "has_twitter", "has_website"]
 

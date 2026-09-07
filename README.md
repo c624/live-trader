@@ -156,6 +156,32 @@ It would need a forward paper arm (hot tokens with low bundling against
 hot tokens regardless) run to 100 trades each under the usual bar. The
 loop is stopped and stays stopped unless Carter asks for that test.
 
+### The bundling test (open 2026-09-07)
+
+Carter asked for the forward test. Four paper arms on the hot population
+(311 or more buys in the five minutes before entry, 120 seconds to two
+hours old), all of which require the bundling read to have succeeded so
+the arm and its control draw from the same tokens:
+
+- `organic`: share of the last five minutes' transactions in same-block
+  bursts at or below 0.25, ten-minute hold.
+- `hotctl`: the same population with no bundling rule, ten-minute hold.
+- `organic1h` and `hotctl1h`: the same pair with a one-hour hold.
+
+The bundling share is read at entry from the mint's newest thousand
+signatures (`chain.bundling`), the same page the traction read already
+fetches. The threshold 0.25 comes from the retrospective study, which
+measured the full five-minute window rather than the newest thousand
+signatures, so the two readings are close but not identical; the rule is
+fixed here before the first trade regardless.
+
+The bar, fixed before the first trade: an organic arm passes only with
+100 or more closed trades AND a 95% interval lying entirely above its
+control's. The two holds are judged separately. Anything short of that
+closes the bundling line of work.
+
+Paper only. The KILL file is in place and `trading_enabled` is false.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
