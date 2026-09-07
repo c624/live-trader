@@ -156,7 +156,7 @@ It would need a forward paper arm (hot tokens with low bundling against
 hot tokens regardless) run to 100 trades each under the usual bar. The
 loop is stopped and stays stopped unless Carter asks for that test.
 
-### The bundling test (open 2026-09-07)
+### The bundling test (closed 2026-09-07)
 
 Carter asked for the forward test. Four paper arms on the hot population
 (311 or more buys in the five minutes before entry, 120 seconds to two
@@ -188,6 +188,31 @@ candidates its organic partner still took, which would have drawn the
 two arms from different tokens. Every arm's cap is raised to sixty. This
 changes capacity, not selection, and is recorded here because it is a
 change after the first trade.
+
+Result, 12:23 UTC on 2026-09-07, ten hours in, both organic arms past 100:
+
+| arm | hold | n | mean | median | went to zero | doubled | 95% interval |
+|---|---|---|---|---|---|---|---|
+| organic | 10 min | 110 | +2.5% | +0.7% | 15% | 16% | -10.8% to +15.9% |
+| hotctl | 10 min | 463 | +0.8% | -7.0% | 28% | 19% | -10.1% to +11.7% |
+| organic1h | 1 hour | 103 | -3.3% | -24.3% | 27% | 24% | -20.2% to +13.7% |
+| hotctl1h | 1 hour | 383 | -4.2% | -66.9% | 42% | 30% | -17.2% to +8.8% |
+
+Both pairs fail the bar: neither organic interval lies above its
+control's, and both span zero.
+
+What did hold, forward and out of sample: the bundling filter halves the
+share of entries that go to zero, at both holds. That is the finding the
+retrospective study predicted, and it is real. It does not pay, because
+the same filter drops as many of the coins that double, and what remains
+is mostly trades that end within a few percent of where they started,
+paying the round trip for nothing. Without its three best trades the
+ten-minute organic arm reads -1.8%, the fee floor again.
+
+That closes the bundling line, and with it the last forward test this
+project had. The loop's schedule and self-chain are removed; nothing runs
+unless dispatched by hand. The KILL file is in place and `trading_enabled`
+is false.
 
 ## How a trade happens
 
