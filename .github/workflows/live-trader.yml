@@ -57,7 +57,11 @@ jobs:
       - name: Run trading loop
         env:
           STATE_DIR: ${{ github.workspace }}/state
-          HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
+          # Helius is left out on purpose: its monthly quota is exhausted and
+          # every call to it burned three retries before falling through to
+          # the free endpoints, which serve the loop fine on their own.
+          # Restore this line when the quota resets.
+          # HELIUS_API_KEY: ${{ secrets.HELIUS_API_KEY }}
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
           TRADER_PRIVATE_KEY: ${{ secrets.TRADER_PRIVATE_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
