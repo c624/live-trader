@@ -20,6 +20,12 @@ on:
       gecko:
         description: "Add today's GeckoTerminal runners (true/false)"
         default: "true"
+      grade_pages:
+        description: "Signature pages of history per graded wallet (1 = the bar's thousand)"
+        default: "1"
+      grade_wallets:
+        description: "Only grade these wallets (comma-separated prefixes; blank for the ranked list)"
+        default: ""
 
 permissions:
   contents: write
@@ -135,7 +141,8 @@ jobs:
         run: |
           timeout 19800 python -m wallet_pnl.src.widescan grade out \
             "out/grades-${{ matrix.shard }}.csv" --shard ${{ matrix.shard }} --shards "$SHARDS" \
-            --max "${{ inputs.grade_max }}" \
+            --max "${{ inputs.grade_max }}" --pages "${{ inputs.grade_pages }}" \
+            --wallets "${{ inputs.grade_wallets }}" \
             || echo "stopped at the time limit; wallets graded so far are kept"
       - uses: actions/upload-artifact@v4
         if: always()

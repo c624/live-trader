@@ -24,7 +24,7 @@ winners the project can measure.
 Steps (each resumable, each shardable for parallel jobs):
   tokens   state/paper out/tokens.json [--dumps N] [--gecko]
   collect  out/tokens.json out/buyers-K.json --shard K --shards N [--max M]
-  grade    out/ out/grades-K.csv --shard K --shards N [--max M]
+  grade    out/ out/grades-K.csv --shard K --shards N [--max M] [--pages P] [--wallets a,b]
   report   out/
 """
 
@@ -50,6 +50,12 @@ WIN_RET = 1.0             # doubled from our quoted entry
 DUMP_RET = -0.8           # lost 80% or more
 DUMP_SAMPLE = 300         # dumps read as the control
 WINDOW_S = 1800           # how long before the run a buy counts as early
+AFTER_S = 300             # and how long after the bot's own entry. Most of the
+                          # record was bought at birth, when nobody had bought
+                          # yet; the copyable wallets there are the ones that
+                          # bought in the first minutes, as the August study
+                          # measured them. Run 1 used 0 and saw nothing on 339
+                          # of 475 winners.
 MAX_PAGES = 40            # signature pages walked back before giving up
 SAMPLE_TX = 80            # transactions parsed per token, spread over the window
 PAUSE = 0.12              # between calls on a free endpoint
@@ -161,12 +167,12 @@ def gecko_runners(gecko: Gecko | None = None, pages: int = 5) -> list[dict]:
 
 
 # ---------------------------------------------------------------- collect
-def window_signatures(rpc: Rpc, mint: str, end_ts: int, window_s: int = WINDOW_S,
+def window_signatures(rpc: Rpc, mint: str, lo_ts: int, hi_ts: int,
                       max_pages: int = MAX_PAGES) -> tuple[list, int, bool]:
-    """Signatures on the mint inside [end - window, end], walked back from
-    the present. The flag says whether the walk reached the window's start;
-    a token too busy for the page budget is reported, never sampled from
-    the middle of its later life."""
+    """Signatures on the mint inside [lo, hi], walked back from the present.
+    The flag says whether the walk reached the window's start; a token too
+    busy for the page budget is reported, never sampled from the middle of
+    its later life."""
     rows: list = []
     before = None
     pages = 0
@@ -183,11 +189,11 @@ def window_signatures(rpc: Rpc, mint: str, end_ts: int, window_s: int = WINDOW_S
             break
         for r in page:
             bt = r.get("blockTime")
-            if isinstance(bt, (int, float)) and end_ts - window_s <= bt <= end_ts and r.get("err") is None:
+            if isinstance(bt, (int, float)) and lo_ts <= bt <= hi_ts and r.get("err") is None:
                 rows.append(r)
         oldest = page[-1].get("blockTime")
         before = page[-1].get("signature")
-        if isinstance(oldest, (int, float)) and oldest < end_ts - window_s:
+        if isinstance(oldest, (int, float)) and oldest < lo_ts:
             reached = True
             break
         if len(page) < 1000:
@@ -206,9 +212,10 @@ def spaced(rows: list, n: int) -> list:
 
 
 def early_buyers(rpc: Rpc, token: dict) -> dict:
-    sigs, pages, reached = window_signatures(rpc, token["mint"], int(token["entry_ts"]))
+    entry = int(token["entry_ts"])
+    sigs, pages, reached = window_signatures(rpc, token["mint"], entry - WINDOW_S, entry + AFTER_S)
     out = {"label": token["label"], "source": token["source"], "entry_ts": token["entry_ts"],
-           "ret": token.get("ret"), "pages": pages, "reached": reached,
+           "ret": token.get("ret"), "pages": pages, "reached": reached, "after_s": AFTER_S,
            "in_window": len(sigs), "sampled": 0, "buyers": []}
     if not reached:
         return out
@@ -234,7 +241,8 @@ def collect(tokens_path: Path, out_path: Path, shard: int = 0, shards: int = 1,
     done: dict = {}
     if Path(out_path).exists():
         done = json.loads(Path(out_path).read_text())
-    todo = [t for t in mine if t["mint"] not in done]
+    # A row read with a different window is stale, not done.
+    todo = [t for t in mine if done.get(t["mint"], {}).get("after_s") != AFTER_S]
     if max_tokens is not None:
         todo = todo[:max_tokens]
     print(f"shard {shard}/{shards}: {len(mine)} tokens, {len(done)} done, {len(todo)} to read", flush=True)
@@ -294,10 +302,22 @@ def chance_selection(buyers: dict) -> float | None:
 
 
 # ------------------------------------------------------------------ grade
-def wallet_swaps(rpc: Rpc, wallet: str) -> list[Swap]:
-    rows = rpc._call("getSignaturesForAddress", [wallet, {"limit": MAX_SIGNATURES}])
-    if not isinstance(rows, list):
-        return []
+def wallet_swaps(rpc: Rpc, wallet: str, pages: int = 1) -> list[Swap]:
+    """A wallet's recent trading against SOL: one page of a thousand
+    signatures by default, more when a fast wallet needs a longer look."""
+    rows: list = []
+    before = None
+    for _ in range(max(1, pages)):
+        params: list = [wallet, {"limit": MAX_SIGNATURES}]
+        if before:
+            params[1]["before"] = before
+        page = rpc._call("getSignaturesForAddress", params)
+        if not isinstance(page, list) or not page:
+            break
+        rows.extend(page)
+        before = page[-1].get("signature")
+        if len(page) < MAX_SIGNATURES:
+            break
     swaps: list[Swap] = []
     for row in rows:
         sig = row.get("signature")
@@ -320,8 +340,9 @@ def passes(row: dict, bar: dict = BAR) -> bool:
             and row["hold_min"] >= bar["min_hold_min"] and row["harsh_pct"] >= bar["min_harsh_pct"])
 
 
-def grade_wallet(rpc: Rpc, nominee: dict, swaps: list[Swap] | None = None) -> dict:
-    swaps = wallet_swaps(rpc, nominee["wallet"]) if swaps is None else swaps
+def grade_wallet(rpc: Rpc, nominee: dict, swaps: list[Swap] | None = None,
+                 pages: int = 1) -> dict:
+    swaps = wallet_swaps(rpc, nominee["wallet"], pages) if swaps is None else swaps
     report = build_report(nominee["wallet"], swaps)
     tokens = len(report.scored)
     row = {"wallet": nominee["wallet"], "wins": nominee["wins"], "dumps": nominee["dumps"],
@@ -345,8 +366,12 @@ def grade_wallet(rpc: Rpc, nominee: dict, swaps: list[Swap] | None = None) -> di
 
 
 def grade(out_dir: Path, out_csv: Path, shard: int = 0, shards: int = 1,
-          max_wallets: int = GRADE_MAX, rpc: Rpc | None = None) -> list[dict]:
-    nominees = nominate(load_buyers(out_dir))[:max_wallets]
+          max_wallets: int = GRADE_MAX, rpc: Rpc | None = None, pages: int = 1,
+          only: list[str] | None = None) -> list[dict]:
+    nominees = nominate(load_buyers(out_dir))
+    if only:
+        nominees = [n for n in nominees if any(n["wallet"].startswith(w) for w in only)]
+    nominees = nominees[:max_wallets]
     mine = [n for i, n in enumerate(nominees) if i % shards == shard]
     done: dict[str, dict] = {}
     if Path(out_csv).exists():
@@ -357,7 +382,7 @@ def grade(out_dir: Path, out_csv: Path, shard: int = 0, shards: int = 1,
         if n["wallet"] in done:
             continue
         try:
-            row = grade_wallet(rpc, n)
+            row = grade_wallet(rpc, n, pages=pages)
         except Exception as exc:
             print(f"{n['wallet'][:10]} error {type(exc).__name__}: {exc}", flush=True)
             continue
@@ -491,8 +516,11 @@ def main(argv: list[str] | None = None) -> None:
         collect(Path(pos[0]), Path(pos[1]), int(_opt(rest, "--shard", 0)),
                 int(_opt(rest, "--shards", 1)), int(maxt) if maxt else None)
     elif cmd == "grade":
+        only = _opt(rest, "--wallets")
         grade(Path(pos[0]), Path(pos[1]), int(_opt(rest, "--shard", 0)),
-              int(_opt(rest, "--shards", 1)), int(_opt(rest, "--max", GRADE_MAX)))
+              int(_opt(rest, "--shards", 1)), int(_opt(rest, "--max", GRADE_MAX)),
+              pages=int(_opt(rest, "--pages", 1)),
+              only=[w for w in only.split(",") if w] if only else None)
     elif cmd == "report":
         print(report(Path(pos[0])))
     else:

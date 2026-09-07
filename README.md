@@ -244,6 +244,20 @@ that wallet. None closes the copy-trade line on the widest set of winners
 the project can measure. Results land on the `wallet-scan` branch as
 `REPORT.txt`.
 
+**Run 1, 13:10 to 14:12 UTC: no wallet passes, and the window was wrong.**
+775 coins read (475 winners, 300 dumps, 22 busy winners skipped at the
+page budget), 9,238 early buys by 6,878 wallets, 92 wallets early in three
+or more winners, the top 40 graded. None passed. But the window stopped at
+the bot's own entry, and most of the record was bought at birth, when
+nobody had bought yet: 339 of 475 winners and 270 of 300 dumps had no
+buyers to read, so the dump control was empty and every nominee scored a
+perfect selection ratio by default. What was read looked like August:
+wallets that buy everything at 1 to 3 SOL and lose the fee (honest -1% to
+-4%), dust sprayers at thousands of tokens a day, and two fast bots whose
+thousand signatures covered under two hours. Run 2 widens the window to
+five minutes after the entry, which is where the August study read its
+early buyers, with the bar unchanged.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
