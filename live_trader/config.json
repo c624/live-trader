@@ -36,7 +36,8 @@
       "where_max": {
         "slot_dense_share": 0.25
       },
-      "max_new_per_loop": 10
+      "max_new_per_loop": 10,
+      "max_open_positions": 60
     },
     {
       "name": "hotctl",
@@ -47,7 +48,8 @@
         "m5_buys": 311,
         "slot_dense_share": 0
       },
-      "max_new_per_loop": 10
+      "max_new_per_loop": 10,
+      "max_open_positions": 60
     },
     {
       "name": "organic1h",
@@ -61,7 +63,8 @@
       "where_max": {
         "slot_dense_share": 0.25
       },
-      "max_new_per_loop": 10
+      "max_new_per_loop": 10,
+      "max_open_positions": 60
     },
     {
       "name": "hotctl1h",
@@ -72,7 +75,8 @@
         "m5_buys": 311,
         "slot_dense_share": 0
       },
-      "max_new_per_loop": 10
+      "max_new_per_loop": 10,
+      "max_open_positions": 60
     }
   ]
 }

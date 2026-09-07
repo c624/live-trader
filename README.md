@@ -182,6 +182,13 @@ closes the bundling line of work.
 
 Paper only. The KILL file is in place and `trading_enabled` is false.
 
+Addendum, 04:15 UTC on 2026-09-07, ninety minutes in: the one-hour control
+was hitting the default cap of twenty open positions and skipping
+candidates its organic partner still took, which would have drawn the
+two arms from different tokens. Every arm's cap is raised to sixty. This
+changes capacity, not selection, and is recorded here because it is a
+change after the first trade.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
