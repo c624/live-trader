@@ -531,9 +531,6 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(f"unknown command {cmd}\n{__doc__}")
 
 
-if __name__ == "__main__":
-    main()
-
 
 # ------------------------------------------------------------------ probe
 PROBE_ENDPOINTS = (
@@ -587,3 +584,6 @@ def probe(mints: list[str], endpoints=PROBE_ENDPOINTS, helius_key: str = "") -> 
                   f"oldest={row['oldest'] or '-':11} newest={row['newest'] or '-'}", flush=True)
             time.sleep(0.5)
     return rows
+
+if __name__ == "__main__":
+    main()
