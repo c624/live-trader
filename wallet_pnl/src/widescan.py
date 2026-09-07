@@ -59,7 +59,15 @@ AFTER_S = 300             # and how long after the bot's own entry. Most of the
                           # of 475 winners.
 MAX_PAGES = 40            # signature pages walked back before giving up
 SAMPLE_TX = 80            # transactions parsed per token, spread over the window
-PAUSE = 0.12              # between calls on a free endpoint
+PAUSE = 0.3               # between calls: the history endpoint allows 40 per 10s
+SCAN_VERSION = 3          # rows read by an earlier version are re-read
+HISTORY_RPC = "https://api.mainnet-beta.solana.com"
+# The only public endpoint that still answered with September 1 history when
+# probed on September 7. publicnode keeps about a day, which is why runs 1
+# and 2 saw nothing on 608 of 771 coins; Helius has it but rate-limits a
+# free key after a couple of calls. The scan uses this endpoint alone, with
+# no fallback: falling back would silently read a truncated history and
+# call the coin measured.
 MIN_WINNERS = 3           # early in this many distinct winners to be graded
 GRADE_MAX = 40            # nominees graded, ranked by winners then selection
 MAX_SIGNATURES = 1000     # a wallet's recent history, one page
@@ -71,7 +79,7 @@ BAR = {"min_tokens": 20, "min_hit_pct": 10.0, "min_hold_min": 5.0, "min_harsh_pc
 GRADE_FIELDS = ["wallet", "wins", "dumps", "selection", "tokens", "hit_pct",
                 "win_rate_pct", "realized_pct", "harsh_pct", "hold_min",
                 "per_day", "median_buy_sol", "observed_days",
-                "harsh_first_half", "harsh_second_half", "swaps", "passes"]
+                "harsh_first_half", "harsh_second_half", "swaps", "passes", "scan"]
 
 
 # ----------------------------------------------------------------- tokens
@@ -168,6 +176,25 @@ def gecko_runners(gecko: Gecko | None = None, pages: int = 5) -> list[dict]:
 
 
 # ---------------------------------------------------------------- collect
+def history_rpc() -> Rpc:
+    rpc = Rpc(api_key="", rpc_url=HISTORY_RPC)
+    rpc._endpoints = [("mainnet-beta", HISTORY_RPC)]
+    return rpc
+
+
+def call(rpc: Rpc, method: str, params: list, tries: int = 4):
+    """One RPC call that waits out a rate limit instead of giving up. The
+    client's own retries cover a few seconds; a public endpoint under load
+    needs longer, and a None answer here would otherwise be mistaken for an
+    empty history."""
+    for attempt in range(tries):
+        result = rpc._call(method, params)
+        if result is not None:
+            return result
+        time.sleep(5.0 * (2 ** attempt))
+    return None
+
+
 def window_signatures(rpc: Rpc, mint: str, lo_ts: int, hi_ts: int,
                       max_pages: int = MAX_PAGES) -> tuple[list, int, bool]:
     """Signatures on the mint inside [lo, hi], walked back from the present.
@@ -182,9 +209,11 @@ def window_signatures(rpc: Rpc, mint: str, lo_ts: int, hi_ts: int,
         params: list = [mint, {"limit": 1000}]
         if before:
             params[1]["before"] = before
-        page = rpc._call("getSignaturesForAddress", params)
+        page = call(rpc, "getSignaturesForAddress", params)
         pages += 1
         time.sleep(PAUSE)
+        if page is None:
+            break                      # the endpoint failed: not read, not reached
         if not isinstance(page, list) or not page:
             reached = True
             break
@@ -217,15 +246,19 @@ def early_buyers(rpc: Rpc, token: dict) -> dict:
     sigs, pages, reached = window_signatures(rpc, token["mint"], entry - WINDOW_S, entry + AFTER_S)
     out = {"label": token["label"], "source": token["source"], "entry_ts": token["entry_ts"],
            "ret": token.get("ret"), "pages": pages, "reached": reached, "after_s": AFTER_S,
-           "in_window": len(sigs), "sampled": 0, "buyers": []}
+           "scan": SCAN_VERSION, "in_window": len(sigs), "sampled": 0, "tx_failed": 0,
+           "buyers": []}
     if not reached:
         return out
     for row in spaced(sigs, SAMPLE_TX):
+        # A null here is usually a pruned or unreadable transaction, so it is
+        # counted and skipped rather than waited out like a signature page.
         tx = rpc._call("getTransaction",
                        [row["signature"], {"encoding": "jsonParsed",
                                            "maxSupportedTransactionVersion": 0}])
         time.sleep(PAUSE)
         if not tx:
+            out["tx_failed"] += 1
             continue
         out["sampled"] += 1
         for buy in buys_in(tx):
@@ -242,12 +275,13 @@ def collect(tokens_path: Path, out_path: Path, shard: int = 0, shards: int = 1,
     done: dict = {}
     if Path(out_path).exists():
         done = json.loads(Path(out_path).read_text())
-    # A row read with a different window is stale, not done.
-    todo = [t for t in mine if done.get(t["mint"], {}).get("after_s") != AFTER_S]
+    # A row read by an earlier version (other window, other endpoint) is
+    # stale, not done.
+    todo = [t for t in mine if done.get(t["mint"], {}).get("scan") != SCAN_VERSION]
     if max_tokens is not None:
         todo = todo[:max_tokens]
     print(f"shard {shard}/{shards}: {len(mine)} tokens, {len(done)} done, {len(todo)} to read", flush=True)
-    rpc = rpc or Rpc(api_key="", rpc_url="")
+    rpc = rpc or history_rpc()
     for i, token in enumerate(todo, 1):
         try:
             result = early_buyers(rpc, token)
@@ -258,7 +292,8 @@ def collect(tokens_path: Path, out_path: Path, shard: int = 0, shards: int = 1,
         Path(out_path).write_text(json.dumps(done))
         print(f"[{i}/{len(todo)}] {token['mint'][:10]} {token['label']:4} "
               f"{result['pages']:2d} pages {'ok ' if result['reached'] else 'SKIP'} "
-              f"{result['in_window']:5d} in window, {len(result['buyers'])} buys", flush=True)
+              f"{result['in_window']:5d} in window, {len(result['buyers'])} buys"
+              f"{', ' + str(result['tx_failed']) + ' tx failed' if result['tx_failed'] else ''}", flush=True)
     return done
 
 
@@ -312,7 +347,7 @@ def wallet_swaps(rpc: Rpc, wallet: str, pages: int = 1) -> list[Swap]:
         params: list = [wallet, {"limit": MAX_SIGNATURES}]
         if before:
             params[1]["before"] = before
-        page = rpc._call("getSignaturesForAddress", params)
+        page = call(rpc, "getSignaturesForAddress", params)
         if not isinstance(page, list) or not page:
             break
         rows.extend(page)
@@ -363,6 +398,7 @@ def grade_wallet(rpc: Rpc, nominee: dict, swaps: list[Swap] | None = None,
             r = build_report(nominee["wallet"], part)
             row[key] = round(r.harsh_pct, 1) if r.sol_deployed else ""
     row["passes"] = "yes" if passes(row) else ""
+    row["scan"] = SCAN_VERSION
     return row
 
 
@@ -376,9 +412,10 @@ def grade(out_dir: Path, out_csv: Path, shard: int = 0, shards: int = 1,
     mine = [n for i, n in enumerate(nominees) if i % shards == shard]
     done: dict[str, dict] = {}
     if Path(out_csv).exists():
-        done = {r["wallet"]: r for r in csv.DictReader(open(out_csv))}
+        done = {r["wallet"]: r for r in csv.DictReader(open(out_csv))
+                if r.get("scan") == str(SCAN_VERSION)}
     print(f"shard {shard}/{shards}: {len(nominees)} nominees, {len(mine)} mine, {len(done)} graded", flush=True)
-    rpc = rpc or Rpc(api_key="", rpc_url="")
+    rpc = rpc or history_rpc()
     for n in mine:
         if n["wallet"] in done:
             continue
