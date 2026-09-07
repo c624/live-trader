@@ -1,0 +1,182 @@
+# The wider wallet scan. Every coin that doubled in the paper record and a
+# sample of the coins that died are walked back to the half hour before the
+# bot's entry on free public RPC; the wallets that bought then are counted
+# across winners and dumps, and the ones early in three or more winners are
+# graded on their own recent history by the honest ledger. Read-only: no
+# key, no trades, no signing. Resumable: rows already on the wallet-scan
+# branch are not read again. Four shards run in parallel; the publish job
+# merges them, writes the report and commits everything to wallet-scan.
+name: wallet-scan
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_tokens:
+        description: "Tokens per shard this run (blank for all)"
+        default: ""
+      grade_max:
+        description: "Nominees to grade"
+        default: "40"
+      gecko:
+        description: "Add today's GeckoTerminal runners (true/false)"
+        default: "true"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wallet-scan
+  cancel-in-progress: false
+
+env:
+  SHARDS: "4"
+
+jobs:
+  tokens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - name: Fetch the ledger
+        run: |
+          git fetch origin live-state:live-state
+          mkdir -p state out
+          git --work-tree=state checkout live-state -- .
+          git reset -q
+      - name: List the winners and the dumps
+        run: |
+          flag=""
+          if [ "${{ inputs.gecko }}" = "true" ]; then flag="--gecko"; fi
+          python -m wallet_pnl.src.widescan tokens state/paper out/tokens.json $flag
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scan-tokens
+          path: out/tokens.json
+
+  collect:
+    needs: tokens
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - uses: actions/download-artifact@v4
+        with:
+          name: scan-tokens
+          path: out
+      - name: Fetch earlier readings
+        run: |
+          if git fetch origin wallet-scan:wallet-scan 2>/dev/null; then
+            git --work-tree=out checkout wallet-scan -- . 2>/dev/null || true
+            git reset -q
+          fi
+          ls -la out || true
+      - name: Read the early buyers
+        env:
+          SCAN_MAX: ${{ inputs.max_tokens }}
+        run: |
+          limit=""
+          if [ -n "$SCAN_MAX" ]; then limit="--max $SCAN_MAX"; fi
+          timeout 19800 python -m wallet_pnl.src.widescan collect out/tokens.json \
+            "out/buyers-${{ matrix.shard }}.json" --shard ${{ matrix.shard }} --shards "$SHARDS" $limit \
+            || echo "stopped at the time limit; rows read so far are kept"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scan-buyers-${{ matrix.shard }}
+          path: out/buyers-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+
+  grade:
+    needs: collect
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - name: Fetch earlier grades
+        run: |
+          mkdir -p out
+          if git fetch origin wallet-scan:wallet-scan 2>/dev/null; then
+            git --work-tree=out checkout wallet-scan -- . 2>/dev/null || true
+            git reset -q
+          fi
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: scan-buyers-*
+          merge-multiple: true
+          path: out
+      - name: Grade the nominees
+        run: |
+          timeout 19800 python -m wallet_pnl.src.widescan grade out \
+            "out/grades-${{ matrix.shard }}.csv" --shard ${{ matrix.shard }} --shards "$SHARDS" \
+            --max "${{ inputs.grade_max }}" \
+            || echo "stopped at the time limit; wallets graded so far are kept"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scan-grades-${{ matrix.shard }}
+          path: out/grades-${{ matrix.shard }}.csv
+          if-no-files-found: ignore
+
+  publish:
+    needs: [tokens, collect, grade]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - name: Fetch earlier results
+        run: |
+          mkdir -p out
+          if git fetch origin wallet-scan:wallet-scan 2>/dev/null; then
+            git --work-tree=out checkout wallet-scan -- . 2>/dev/null || true
+            git reset -q
+          fi
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: scan-*
+          merge-multiple: true
+          path: out
+      - name: Report
+        run: python -m wallet_pnl.src.widescan report out | tee out/REPORT.txt
+      - name: Commit results
+        run: |
+          cd out
+          git init -q -b wallet-scan
+          git config user.name "live-trader-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "wallet scan $(date -u +%FT%TZ)" || exit 0
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" wallet-scan:wallet-scan

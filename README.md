@@ -214,6 +214,36 @@ project had. The loop's schedule and self-chain are removed; nothing runs
 unless dispatched by hand. The KILL file is in place and `trading_enabled`
 is false.
 
+### The wider wallet scan (opened 2026-09-07)
+
+The August wallet study nominated wallets from 64 winners and found
+sprayers with an edge under the cost of copying them. The record now holds
+9,600 coins with a measured outcome, 485 of which doubled from the bot's
+own quoted entry, so the question is asked again over eight times the
+winners, with a control the first pass lacked: 300 coins that lost 80% or
+more, read the same way. A wallet early in winners and not in dumps is
+selecting; a wallet early in both is buying everything.
+
+`wallet_pnl/src/widescan.py`, run by `wallet-scan.yml` on free public RPC,
+no key and no trades. For each coin the signature history is walked back
+from the present to the half hour before the bot's entry (skipped and
+reported if that takes more than 40 pages), 80 transactions spread over
+that window are parsed, and every wallet that spent SOL and received the
+token is recorded. Today's GeckoTerminal runners (up 200%+ on the day) are
+added as a supplement; the free feeds keep no history, so the record is
+the body of the sample. Wallets early in three or more distinct winners
+are graded on their own most recent thousand transactions by the honest
+ledger, open bags written to zero.
+
+**Pre-registered bar, fixed before the first run.** A wallet passes when
+it bought at least 20 distinct tokens in the graded window, at least 10%
+of them are winners from our record, its median hold on closed positions
+is five minutes or longer, and its honest return on SOL deployed is +10%
+or better. One or more passes justifies a forward paper test of following
+that wallet. None closes the copy-trade line on the widest set of winners
+the project can measure. Results land on the `wallet-scan` branch as
+`REPORT.txt`.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
