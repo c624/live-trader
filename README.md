@@ -314,6 +314,19 @@ manipulation, not by seeing it coming. The rest of the top 40 are
 buy-everything bots losing the fee, dust sprayers, and burners that hold
 nothing. Following wallets found from public winners is closed.
 
+**Addendum, 2026-09-08 06:15 UTC: the two wallets below the bar are the
+same operation.** Inspected the same way: EPnbFpE1 (drained to zero) made
+eight round trips on September 4, single buys of 85 to 159 SOL sold in full
+36 seconds to 74 minutes later, plus 0.015 SOL probes on nine other coins.
+BV6Vvzii (drained to zero) made four round trips, single buys of 86.669 to
+131 SOL sold in full 3 to 128 minutes later, two of them for 590 SOL each.
+NMVXLGSV (still funded, 47 SOL) made five round trips on September 8 at
+exactly 86.669 SOL each, four sold within 30 seconds for +3 to +4 SOL and
+one held for the run. Same probe size, same fixed buy sizes, same
+one-buy-one-sell shape, burners rotated: one launch-sniping operation
+seen through four addresses. The coins it touched in our record doubled
+because it bought them. The copy-trade line stays closed.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
