@@ -290,6 +290,30 @@ the fee, and the August sprayers (omegoMAe, BwWK17cb) still at or under
 it. The passing wallet is being inspected on-chain before anything is
 built on it.
 
+**Inspected, 03:21 UTC: the passing wallet is a launch sniper's burner,
+not a trader, and the copy-trade line is closed.** Read on the history
+endpoint with two pages of signatures. The account no longer exists (no
+owner, zero lamports): it was funded, used for six hours and drained.
+In those six hours it made 17 round trips, every one a single buy of
+exactly 158.010 SOL (three of 138.010), every one sold in full between
+36 seconds and 63 minutes later for 160 to 459 SOL, no position ever
+held. Its remaining swaps are 0.017 SOL probes, which is what the scan
+saw on our seven winners: it probes coins for a fraction of a cent and
+then fires ~$30,000 into the ones it picks. A buy that size into a pool
+of that age is the pump; the sale minutes later is into whoever chased
+it. Its 100% win rate and +53.6% honest return are real, and they belong
+to its size and its place in the block, neither of which a follower has.
+A copier entering after its buy pays the post-impact price and is the
+exit it sells into. No swap shared a block time with another, so it is
+not a sandwich bot; it is a sniper with a bankroll.
+
+That is the strongest wallet the widest measurable set of winners can
+produce: 735 coins, 22,772 early wallets, a real dump control, the bar
+fixed in advance. One wallet clears it and it clears it by being the
+manipulation, not by seeing it coming. The rest of the top 40 are
+buy-everything bots losing the fee, dust sprayers, and burners that hold
+nothing. Following wallets found from public winners is closed.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
