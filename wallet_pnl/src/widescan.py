@@ -27,6 +27,7 @@ Steps (each resumable, each shardable for parallel jobs):
   grade    out/ out/grades-K.csv --shard K --shards N [--max M] [--pages P] [--wallets a,b]
   report   out/
   probe    <mint> [<mint> ...]      (which endpoint still has the history)
+  inspect  <wallet> [...] [--pages P] (what a graded wallet actually does)
 """
 
 from __future__ import annotations
@@ -564,9 +565,56 @@ def main(argv: list[str] | None = None) -> None:
     elif cmd == "probe":
         import os
         probe(pos, helius_key=os.environ.get("HELIUS_API_KEY", "").strip())
+    elif cmd == "inspect":
+        for wallet in pos:
+            inspect(wallet, pages=int(_opt(rest, "--pages", 2)))
+            print()
     else:
         raise SystemExit(f"unknown command {cmd}\n{__doc__}")
 
+
+
+# ---------------------------------------------------------------- inspect
+def inspect(wallet: str, pages: int = 2, rpc: Rpc | None = None) -> None:
+    """What one graded wallet actually does, before anyone copies it.
+
+    The grade is a number; this is the shape behind it. A wallet that
+    clears the bar with a 70 SOL median buy and a 100% win rate on a
+    six-hour window is either a whale whose own buy is the pump, a program
+    account the parser mistook for a trader, or a bot whose pairs of legs
+    are not trades a copier could place. The account's owner and size, the
+    per-token legs, the largest legs with their signatures and how many
+    swaps share a block time are enough to tell those apart.
+    """
+    rpc = rpc or history_rpc()
+    info = rpc._call("getAccountInfo", [wallet, {"encoding": "base64"}])
+    v = (info or {}).get("value") or {}
+    data = (v.get("data") or [""])[0]
+    print(f"account {wallet}")
+    print(f"  owner={v.get('owner')} executable={v.get('executable')} "
+          f"lamports={(v.get('lamports') or 0) / LAMPORTS:.3f} SOL data_bytes={len(data or '')}")
+    swaps = wallet_swaps(rpc, wallet, pages)
+    report = build_report(wallet, swaps)
+    print(f"  swaps={len(swaps)} over {report.observed_days:.2f} days, tokens={len(report.tokens)}, "
+          f"scored={len(report.scored)}, closed={len(report.closed)}, honest={report.harsh_pct:+.1f}%, "
+          f"median hold={report.median_hold_minutes:.1f} min, median buy={report.median_buy_sol:.3f} SOL")
+    same_second = sum(1 for s_ in swaps if sum(1 for o in swaps if o.ts == s_.ts) > 1)
+    print(f"  swaps sharing a block time with another of this wallet's swaps: {same_second}/{len(swaps)}")
+    print(f"  {'mint':10} {'buys':>4} {'sells':>5} {'sol_in':>9} {'sol_out':>9} {'realized':>9} {'held%':>6} {'hold_m':>7} {'first':>12}")
+    for t in sorted(report.tokens.values(), key=lambda t: -t.sol_spent)[:20]:
+        held = 100 * t.tokens_held / t.tokens_bought if t.tokens_bought else 0.0
+        hold = (t.last_ts - t.first_ts) / 60
+        print(f"  {t.mint[:10]:10} {t.buys:4d} {t.sells:5d} {t.sol_spent:9.3f} {t.sol_received:9.3f} "
+              f"{t.realized_sol:+9.3f} {held:6.1f} {hold:7.1f} "
+              f"{datetime.fromtimestamp(t.first_ts, timezone.utc).strftime('%m-%d %H:%M'):>12}")
+    print("  largest legs:")
+    for s_ in sorted(swaps, key=lambda x: -abs(x.sol_amount))[:10]:
+        side = "buy " if s_.token_amount > 0 else "sell"
+        print(f"    {datetime.fromtimestamp(s_.ts, timezone.utc).strftime('%m-%d %H:%M:%S')} {side} "
+              f"{s_.mint[:10]} {s_.sol_amount:+10.3f} SOL  {s_.signature}")
+
+
+LAMPORTS = 1_000_000_000
 
 
 # ------------------------------------------------------------------ probe

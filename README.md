@@ -258,6 +258,38 @@ thousand signatures covered under two hours. Run 2 widens the window to
 five minutes after the entry, which is where the August study read its
 early buyers, with the bar unchanged.
 
+**Run 3, 17:52 to 02:22 UTC on the history endpoint: full coverage, one
+wallet clears the bar, and it does not look like a trader.** The Solana
+Foundation endpoint (api.mainnet-beta.solana.com) was the only public one
+that still answered with September 1 history when probed; publicnode
+keeps about a day, which is why runs 1 and 2 saw nothing on 608 coins.
+Read with it alone and no fallback: 735 coins (441 winners, 294 dumps, 66
+busy winners skipped at the page budget), a median of 1,995 signatures in
+each winner's window and 972 in each dump's, 37,582 early buys by 22,772
+wallets, 811 wallets early in three or more winners, the top 40 graded.
+
+| wallet | wins | dumps | tokens | hit | win rate | honest | hold | buy | history |
+|---|---|---|---|---|---|---|---|---|---|
+| B1Ec85Nh | 7 | 0 | 34 | 21% | 100% | **+53.6%** | 7.5 min | 71.5 SOL | 6 h |
+| NMVXLGSV | 10 | 1 | 14 | 71% | 100% | +285% | 118 min | 43.3 SOL | 10 h |
+| EPnbFpE1 | 7 | 0 | 17 | 41% | 100% | +102% | 40 min | 5.0 SOL | 5 h |
+| 64hP97Bw | 20 | 1 | 161 | 12% | 39% | +4.3% | 3.4 min | 0.94 SOL | 4 h |
+| omegoMAe | 15 | 0 | 118 | 13% | 44% | -2.2% | 3.7 min | 0.44 SOL | 2 h |
+| BwWK17cb | 12 | 36 | 18 | 67% | 91% | -40.7% | 1.0 min | 0.03 SOL | 5 min |
+
+B1Ec85Nh passes every clause of the bar. But its early buys on our seven
+winners were all 0.02 SOL probes, placed two to ten minutes before the
+bot's own entry on coins with thousands of transactions in that window,
+while its graded history shows a 71.5 SOL median buy and a 100% win rate
+on 34 coins inside six hours. That is not a person picking coins. It is
+either a whale whose own buy is the pump, a program account the parser
+mistook for a trader, or a bot whose legs are not trades a copier could
+place behind it. The same shape sits on the two rows above it. The rest
+of the table is August again: buy-everything wallets at 1 to 3 SOL losing
+the fee, and the August sprayers (omegoMAe, BwWK17cb) still at or under
+it. The passing wallet is being inspected on-chain before anything is
+built on it.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.

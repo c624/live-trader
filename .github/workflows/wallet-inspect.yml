@@ -1,0 +1,32 @@
+# What a graded wallet actually does: account owner, per-token legs, the
+# largest legs with signatures, and how many swaps share a block time.
+# Read-only, on the public history endpoint. No key, no trades.
+name: wallet-inspect
+
+on:
+  workflow_dispatch:
+    inputs:
+      wallets:
+        description: "Wallets to inspect, space-separated"
+        default: "B1Ec85NhgJsViQV9V6GnYUWvmikNQA8NRyD95No1BARx"
+      pages:
+        description: "Signature pages of history per wallet"
+        default: "2"
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install httpx solders
+      - name: Inspect
+        run: python -m wallet_pnl.src.widescan inspect ${{ inputs.wallets }} --pages "${{ inputs.pages }}"
