@@ -327,6 +327,19 @@ one-buy-one-sell shape, burners rotated: one launch-sniping operation
 seen through four addresses. The coins it touched in our record doubled
 because it bought them. The copy-trade line stays closed.
 
+**Addendum, 2026-09-10: the grading tranche is complete.** The top 40 by
+winner count was a budget cut, so grading was taken down to 160 of the 811
+nominees over two more runs (September 9). Still one pass, the sniper
+burner above. Of the 120 wallets beyond the top 40, none reaches +10%
+honest; 88 sit between -5% and +5%, the fee floor; 19 are at -50% or
+worse, bags and burners; the best is +2.9% on a wallet that holds for 30
+seconds. Twelve clear three clauses and fail only on honest return, and
+they are one shape: about 1 SOL per buy, 20 to 35 coins, holds of 9 to 72
+minutes, -2% to -6%. They are early in our winners because they buy
+nearly everything. The median graded wallet beyond the top 40 buys 1.08
+SOL and holds 4.2 minutes. The scan is complete, not truncated, and the
+copy-trade line stays closed.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
