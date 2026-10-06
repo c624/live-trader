@@ -1,0 +1,62 @@
+# The Polymarket wallet watch: paper-copies the 22 wallets in
+# polymarket_watch/wallets.json forward, every ten minutes, on public
+# endpoints (Polymarket Data API, Gamma, CLOB; Kalshi market data). Read-only:
+# no key, no signing, no orders. New sports copies go to the Telegram bot when
+# its secrets are set. State and the scorecard live on the wallet-watch branch.
+name: wallet-watch
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+# Ticks share one state branch; two at once would clobber each other.
+concurrency:
+  group: wallet-watch
+  cancel-in-progress: false
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Fetch state
+        run: |
+          mkdir -p out
+          if git fetch origin wallet-watch:wallet-watch 2>/dev/null; then
+            git --work-tree=out checkout wallet-watch -- . 2>/dev/null || true
+            git reset -q
+          fi
+
+      - name: Tick
+        env:
+          STATE_DIR: ${{ github.workspace }}/out
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m polymarket_watch.watch
+
+      - name: Commit state
+        if: always()
+        run: |
+          cd out
+          test -f watch.json || exit 0
+          git init -q -b wallet-watch
+          git config user.name "live-trader-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "wallet watch $(date -u +%FT%TZ)" || exit 0
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" wallet-watch:wallet-watch

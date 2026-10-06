@@ -340,6 +340,53 @@ nearly everything. The median graded wallet beyond the top 40 buys 1.08
 SOL and holds 4.2 minutes. The scan is complete, not truncated, and the
 copy-trade line stays closed.
 
+### The Polymarket wallet watch (opened 2026-10-06)
+
+A different market, and the first copy-trade question here that starts
+from a backtest with a positive number. The research repo's backtest
+took the top 50 wallets on Polymarket's month leaderboard (by profit,
+2026-09-06 to 2026-10-06), flagged 28 as market makers or bots, and
+replayed every opening buy of the other 22 as a follower who sees it
+late, at the price then plus half a spread and the taker fee, mirroring
+the wallet's sells and holding to resolution otherwise.
+
+| copies of the 22 | n | mean per copy | 95% interval |
+|---|---|---|---|
+| sports, 60 minutes late | 318 | +17.3% | -0.0% to +34.6% |
+| everything else, 60 minutes late | 83 | -6.0% | -18.9% to +6.8% |
+| all, 5 minutes late | 470 | +13.5% | +1% to +26% |
+| all, 4 hours late | 228 | +0.2% | -22% to +23% |
+
+The wallets were picked for having already won that month, so every
+number above is biased up, and the fade with delay says whatever edge
+there is lives in the first hour. Only a forward test can say whether any
+of it is skill. `polymarket_watch/` is that test, paper only:
+`wallet-watch.yml` ticks every ten minutes on public endpoints (no key,
+no signing, no orders), reads each wallet's new fills, rebuilds its
+positions with the backtest's own rules, and copies each new opening buy
+at the live CLOB ask walked through the book. State and the running
+scorecard are on the `wallet-watch` branch (`summary.md`, `copies.csv`).
+
+**Pre-registered bar, fixed before the first copy.** The population is
+every opening buy of $5 or more, in a sports market, by the 22 wallets in
+`polymarket_watch/wallets.json` (fixed on 2026-10-06, never re-ranked),
+first seen after the watch started; each is copied with $100 at the live
+ask plus the taker fee, skipped if the midpoint has already run more than
+10c past the wallet's fill, sold alongside the wallet at the live bid, and
+otherwise held to resolution. It is judged at 300 settled copies or on
+2026-11-06, whichever comes first: it passes only if the 95% interval of
+the mean return per copy lies entirely above zero. Anything short of that
+closes the line. Two things are recorded beside it and not judged: the
+non-sports copies, and the same bets priced at Kalshi's ask where Kalshi
+lists them, since a US follower cannot use Polymarket's main exchange.
+
+New sports copies are announced on the existing Telegram bot, with the
+Kalshi market that is the same bet when the matcher finds one (its own
+label printed beside Polymarket's, so a wrong pairing shows). An
+announcement is the paper copy, not a trade: nothing in the watch can
+place an order, and the KILL file and `"trading_enabled": false` are
+untouched.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.

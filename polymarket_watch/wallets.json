@@ -1,0 +1,204 @@
+{
+ "chosen": "2026-10-06",
+ "how": "The 22 of the top 50 wallets on Polymarket's month leaderboard (by profit, 2026-09-06 to 2026-10-06) that the backtest did not flag as market makers or bots. Fixed before the first copy; not re-ranked.",
+ "wallets": [
+  {
+   "wallet": "0x51698a47f840a242abc2ca0351371c7ffac41842",
+   "name": "00gringo00",
+   "rank": 1,
+   "backtest_copies": 8,
+   "backtest_roi_60m": 0.2774,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x0f6f76ced62a911bccef92f50faaff143854d977",
+   "name": "totoro3miyazaki",
+   "rank": 7,
+   "backtest_copies": 18,
+   "backtest_roi_60m": 0.0998,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0xcdcccd0f2d86e450d973da415ad2430e5cc7935a",
+   "name": "joseph00677",
+   "rank": 9,
+   "backtest_copies": 1,
+   "backtest_roi_60m": -0.1098,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0xb0e74df9430a089aa102e2207af5fde1967439d2",
+   "name": "",
+   "rank": 14,
+   "backtest_copies": 0,
+   "backtest_roi_60m": null,
+   "both_halves": false,
+   "mix": ""
+  },
+  {
+   "wallet": "0x361b16e3ddfe1d415d41008daac2631d94ab74fe",
+   "name": "",
+   "rank": 15,
+   "backtest_copies": 135,
+   "backtest_roi_60m": 0.0838,
+   "both_halves": true,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0xb7271c112cbd83eb4c1ef1b554ff963604ae2a9d",
+   "name": "Elaran1993",
+   "rank": 16,
+   "backtest_copies": 69,
+   "backtest_roi_60m": 0.1096,
+   "both_halves": true,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0xc2e7800b5af46e6093872b177b7a5e7f0563be51",
+   "name": "beachboy4",
+   "rank": 17,
+   "backtest_copies": 2,
+   "backtest_roi_60m": 1.4716,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x04d5524a0a5af2eca6e39e03defc261d42fe66d8",
+   "name": "WTSA",
+   "rank": 18,
+   "backtest_copies": 5,
+   "backtest_roi_60m": 0.7429,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x111f73e91f85b6fe4de1ddec3de2fe32122e355b",
+   "name": "Papeasy",
+   "rank": 19,
+   "backtest_copies": 0,
+   "backtest_roi_60m": null,
+   "both_halves": false,
+   "mix": ""
+  },
+  {
+   "wallet": "0x1465b79bff7992bc703e1aafb3683b1089647072",
+   "name": "JnStrtPrdctnMrkts",
+   "rank": 22,
+   "backtest_copies": 8,
+   "backtest_roi_60m": 0.076,
+   "both_halves": false,
+   "mix": "crypto 100%"
+  },
+  {
+   "wallet": "0x9ba9dec33838f4ec9f032f7247d7481987e63ce9",
+   "name": "TeamA",
+   "rank": 26,
+   "backtest_copies": 5,
+   "backtest_roi_60m": -0.0401,
+   "both_halves": false,
+   "mix": "politics 80%, geopolitics 20%"
+  },
+  {
+   "wallet": "0x5fdd66ffd0325d4e8d1d86fbec50caa31770a747",
+   "name": "juice-fruit",
+   "rank": 28,
+   "backtest_copies": 11,
+   "backtest_roi_60m": 0.3944,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x2dfa4e79eca44b7c774f40a45535adbc368a6f60",
+   "name": "BillyGating",
+   "rank": 29,
+   "backtest_copies": 5,
+   "backtest_roi_60m": -0.3214,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x1058f156b207cafe61d102e97bf6796931d301c1",
+   "name": "TheyAreTakingTheHobitsToIsengard",
+   "rank": 30,
+   "backtest_copies": 2,
+   "backtest_roi_60m": 0.2933,
+   "both_halves": false,
+   "mix": "politics 50%, economics 50%"
+  },
+  {
+   "wallet": "0xe9b710551dd82a44e79203c2394a2b10163ace7b",
+   "name": "googleplay",
+   "rank": 33,
+   "backtest_copies": 1,
+   "backtest_roi_60m": 0.1878,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x369f46433349a57cd6d08abf2819da737c09873e",
+   "name": "kindar",
+   "rank": 36,
+   "backtest_copies": 5,
+   "backtest_roi_60m": -0.2068,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x2dc13c6bda81b202281e796953a7323de675b33c",
+   "name": "xifutloong3",
+   "rank": 37,
+   "backtest_copies": 22,
+   "backtest_roi_60m": 0.2193,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x03e8a544e97eeff5753bc1e90d46e5ef22af1697",
+   "name": "weflyhigh",
+   "rank": 38,
+   "backtest_copies": 7,
+   "backtest_roi_60m": 0.6445,
+   "both_halves": true,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x44c1dfe43260c94ed4f1d00de2e1f80fb113ebc1",
+   "name": "aenews2",
+   "rank": 39,
+   "backtest_copies": 71,
+   "backtest_roi_60m": -0.0557,
+   "both_halves": false,
+   "mix": "geopolitics 39%, politics 35%"
+  },
+  {
+   "wallet": "0x80d5aebbe7a714879177e4dae0014195beb3987e",
+   "name": "",
+   "rank": 40,
+   "backtest_copies": 5,
+   "backtest_roi_60m": 0.9599,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0x7b6c6d1279098054b0c630a4b871002a7cd46305",
+   "name": "eschaworldchampion2026",
+   "rank": 44,
+   "backtest_copies": 4,
+   "backtest_roi_60m": 0.0631,
+   "both_halves": false,
+   "mix": "sports 100%"
+  },
+  {
+   "wallet": "0xe5b70fd855af9258d9463992e4f1ed7987905ee3",
+   "name": "alwaysfade",
+   "rank": 50,
+   "backtest_copies": 17,
+   "backtest_roi_60m": 0.4203,
+   "both_halves": false,
+   "mix": "sports 94%, crypto 6%"
+  }
+ ]
+}
