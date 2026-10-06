@@ -199,6 +199,7 @@ def test_kalshi_matching_by_bet_type():
 def test_names_and_dates():
     assert kalshi.date_code(dt.date(2026, 10, 6)) == "26OCT06"
     assert kalshi.slug_parts("lal-ala-val-2026-09-15") == ("lal", ["ala", "val"], dt.date(2026, 9, 15))
+    assert kalshi.slug_parts("unl-eng-cze-2026-10-06-more-markets") == ("unl", ["eng", "cze"], dt.date(2026, 10, 6))
     assert kalshi.name_score("Alaves", "Deportivo Alavés") > 0
     assert kalshi.name_score("Man City", "Manchester City FC") > kalshi.name_score("Man City", "Manchester United FC")
     assert kalshi.name_score("Real Madrid", "Real Sociedad de Fútbol") <= 0

@@ -28,10 +28,12 @@ LEAGUES = {
     "den": "DENSUPERLIGA", "nor": "ELITESERIEN", "swe": "ALLSVENSKAN", "aus": "ALEAGUE", "sau": "SAUDIPL",
     "lib": "CONMEBOLLIB", "sud": "CONMEBOLSUD", "ser": "SERIEB", "bun2": "BUNDESLIGA2", "fl2": "LIGUE2",
     "lal2": "LALIGA2", "efl1": "EFLL1", "fri": "INTLFRIENDLY", "wcq": "WC", "atp": "ATP", "wta": "WTA",
+    "efl": "EFLCHAMPIONSHIP", "aut": "AUTBSL", "bra2": "BRASILEIROB", "es2": "LALIGA2", "fif": "INTLFRIENDLY",
+    "cs2": "CS2", "lol": "LOL",
 }
 # Tried in turn for a soccer market whose league prefix is not in LEAGUES.
 SOCCER_FALLBACK = ["EPL", "LALIGA", "SERIEA", "BUNDESLIGA", "LIGUE1", "UCL", "UEL", "EREDIVISIE", "LIGAPORTUGAL",
-                   "LIGAMX", "BRASILEIRO", "MLS", "INTLFRIENDLY", "UEFANL"]
+                   "LIGAMX", "BRASILEIRO", "MLS", "INTLFRIENDLY", "UEFANL", "AFCON", "WC"]
 TENNIS = {"ATP": ["KXATPMATCH", "KXATPCHALLENGERMATCH"], "WTA": ["KXWTAMATCH", "KXWTACHALLENGERMATCH"]}
 STOP = {"fc", "cf", "afc", "sc", "ac", "as", "ss", "us", "cd", "ud", "rc", "rcd", "sd", "sv", "vfb", "vfl", "tsg",
         "fk", "sk", "bk", "if", "club", "de", "del", "la", "the", "calcio", "balompie", "futbol", "cp", "sad", "bv",
@@ -125,8 +127,9 @@ def code_of(m: dict) -> str:
 
 
 def slug_parts(event_slug: str) -> tuple[str, list[str], dt.date | None]:
-    """"lal-ala-val-2026-09-15" -> ("lal", ["ala", "val"], 2026-09-15)."""
-    m = re.match(r"^([a-z0-9]+)-(.+?)-(\d{4})-(\d{2})-(\d{2})$", event_slug or "")
+    """"lal-ala-val-2026-09-15" -> ("lal", ["ala", "val"], 2026-09-15). Side-market events carry a
+    tail ("unl-eng-cze-2026-10-06-more-markets")."""
+    m = re.match(r"^([a-z0-9]+)-(.+?)-(\d{4})-(\d{2})-(\d{2})(?:-[a-z-]+)?$", event_slug or "")
     if not m:
         return (event_slug or "").split("-")[0], [], None
     try:
