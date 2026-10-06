@@ -263,3 +263,21 @@ def test_near_certain_copies_are_recorded_but_not_announced(tmp_path, monkeypatc
     watch.main()
     assert rows(tmp_path / "copies.csv")[0]["status"] == "copied" and sent == []
     assert "1 copies at 95c or more recorded, not announced" in capsys.readouterr().out
+
+
+def test_a_series_is_told_apart_by_the_date():
+    def game(day, team, label):
+        return {"ticker": f"KXMLBGAME-26OCT{day}1800LADATL-{team}", "event_ticker": f"KXMLBGAME-26OCT{day}1800LADATL",
+                "yes_sub_title": label, "yes_bid_dollars": "0.48", "yes_ask_dollars": "0.50"}
+    games = [game(d, t, l) for d in ("06", "07") for t, l in (("LAD", "Los Angeles D"), ("ATL", "Atlanta"))]
+    rfi = [{"ticker": f"KXMLBRFI-26OCT{d}1800LADATL", "event_ticker": f"KXMLBRFI-26OCT{d}1800LADATL",
+            "yes_sub_title": "Yes", "yes_bid_dollars": "0.40", "yes_ask_dollars": "0.42"} for d in ("06", "07")]
+    k = kalshi.Kalshi(FakeHttp(kalshi_series={"KXMLBGAME": games, "KXMLBRFI": rfi}))
+    m = {"category": "sports", "type": "nrfi", "outcomes": ["Yes", "No"], "event_title": "",
+         "question": "Will there be a run scored in the first inning?: Los Angeles Dodgers vs. Atlanta Braves"}
+    got = kalshi.match(k, m, "Yes", "mlb-lad-atl-2026-10-06", "mlb-lad-atl-2026-10-06-nrfi")
+    assert got["ticker"] == "KXMLBRFI-26OCT061800LADATL" and got["side"] == "yes" and got["ask"] == 0.42
+    ml = kalshi.match(k, {"category": "sports", "type": "moneyline", "outcomes": ["Dodgers", "Braves"],
+                          "event_title": "Dodgers vs. Braves", "question": "Dodgers vs. Braves"},
+                      "Braves", "mlb-lad-atl-2026-10-07", "mlb-lad-atl-2026-10-07")
+    assert ml["ticker"] == "KXMLBGAME-26OCT071800LADATL-ATL"

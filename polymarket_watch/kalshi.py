@@ -199,8 +199,10 @@ def fit(m: dict, name: str, code: str) -> float:
     return name_score(label(m), name) if name else 0.0
 
 
-def find_game(markets: list[dict], days: set[str], teams: list[tuple[str, str]]) -> tuple[str, dict] | None:
-    """(event ticker, {team index: market}) of the one game on these days that fits every team given."""
+def find_game(markets: list[dict], days: dict[str, int], teams: list[tuple[str, str]]) -> tuple[str, dict] | None:
+    """(event ticker, {team index: market}) of the one game that fits every team given. `days` maps date codes
+    to their distance from the Polymarket date: the same two teams on consecutive days (a series) are told
+    apart by the date, so the exact day wins and an adjacent one only counts when it is the only fit."""
     by_event = {}
     for m in markets:
         et = str(m.get("event_ticker") or "")
@@ -219,7 +221,7 @@ def find_game(markets: list[dict], days: set[str], teams: list[tuple[str, str]])
             picks[i], total = best, total + fit(best, name, code)
         else:
             if picks:
-                scored.append((total, et, picks, ms))
+                scored.append((total - 0.5 * days[et.split("-", 1)[-1][:7]], et, picks, ms))
     scored.sort(key=lambda s: -s[0])
     if not scored or (len(scored) > 1 and scored[1][0] == scored[0][0]):
         return None
@@ -236,7 +238,7 @@ def match(k: Kalshi, m: dict, outcome: str, event_slug: str, slug: str) -> dict:
         return {"note": "bet type not mapped to Kalshi"}
     if day is None:
         return {"note": "no game date"}
-    days = {date_code(day + dt.timedelta(days=d)) for d in (-1, 0, 1)}
+    days = {date_code(day + dt.timedelta(days=d)): abs(d) for d in (-1, 0, 1)}
     stem = LEAGUES.get(prefix)
     if stem in TENNIS:
         game_series = TENNIS[stem]
