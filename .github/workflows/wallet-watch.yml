@@ -1,8 +1,14 @@
 # The Polymarket wallet watch: paper-copies the 22 wallets in
-# polymarket_watch/wallets.json forward, every ten minutes, on public
-# endpoints (Polymarket Data API, Gamma, CLOB; Kalshi market data). Read-only:
-# no key, no signing, no orders. New sports copies go to the Telegram bot when
-# its secrets are set. State and the scorecard live on the wallet-watch branch.
+# polymarket_watch/wallets.json forward on public endpoints (Polymarket Data
+# API, Gamma, CLOB; Kalshi market data). Read-only: no key, no signing, no
+# orders. New sports copies go to the Telegram bot when its secrets are set.
+# State and the scorecard live on the wallet-watch branch.
+#
+# Scheduled runs on this repo fire late or not at all, so each run ticks every
+# five minutes for about fifty, committing state after every tick, then
+# dispatches the next run. The cron is only a backstop for a broken chain.
+# To stop: add a file named STOP in polymarket_watch/ on main (the loop sees it
+# within five minutes, exits and does not chain), or disable the workflow.
 name: wallet-watch
 
 on:
@@ -12,16 +18,18 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
-# Ticks share one state branch; two at once would clobber each other.
+# Ticks share one state branch; two at once would clobber each other. A run
+# waiting here is replaced by a newer one, so the chain and the cron never stack.
 concurrency:
   group: wallet-watch
   cancel-in-progress: false
 
 jobs:
-  tick:
+  watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,21 +50,40 @@ jobs:
             git reset -q
           fi
 
-      - name: Tick
+      - name: Watch
         env:
           STATE_DIR: ${{ github.workspace }}/out
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python -m polymarket_watch.watch
+        run: |
+          end=$(( $(date +%s) + 50 * 60 ))
+          stopped() {
+            git fetch -q origin main 2>/dev/null
+            git cat-file -e origin/main:polymarket_watch/STOP 2>/dev/null
+          }
+          while :; do
+            if stopped; then echo "STOP file on main"; break; fi
+            python -m polymarket_watch.watch || echo "tick failed; state from the last good tick is kept"
+            if [ -f out/watch.json ]; then
+              (cd out \
+                && git init -q -b wallet-watch \
+                && git config user.name "live-trader-bot" \
+                && git config user.email "actions@users.noreply.github.com" \
+                && git add -A \
+                && { git commit -q -m "wallet watch $(date -u +%FT%TZ)" || true; } \
+                && git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" \
+                   wallet-watch:wallet-watch) || echo "state push failed; retried after the next tick"
+            fi
+            [ "$(date +%s)" -ge "$end" ] && break
+            sleep 300
+          done
 
-      - name: Commit state
+      - name: Chain the next run
         if: always()
         run: |
-          cd out
-          test -f watch.json || exit 0
-          git init -q -b wallet-watch
-          git config user.name "live-trader-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -q -m "wallet watch $(date -u +%FT%TZ)" || exit 0
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" wallet-watch:wallet-watch
+          git fetch -q origin main 2>/dev/null
+          if git cat-file -e origin/main:polymarket_watch/STOP 2>/dev/null; then echo "STOP file on main; not chaining"; exit 0; fi
+          curl -sS -X POST -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/wallet-watch.yml/dispatches" \
+            -d '{"ref":"main"}' -w "dispatch: HTTP %{http_code}\n"

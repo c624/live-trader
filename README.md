@@ -361,8 +361,11 @@ The wallets were picked for having already won that month, so every
 number above is biased up, and the fade with delay says whatever edge
 there is lives in the first hour. Only a forward test can say whether any
 of it is skill. `polymarket_watch/` is that test, paper only:
-`wallet-watch.yml` ticks every ten minutes on public endpoints (no key,
-no signing, no orders), reads each wallet's new fills, rebuilds its
+`wallet-watch.yml` ticks every five minutes on public endpoints (no key,
+no signing, no orders; each run ticks for fifty minutes and dispatches
+the next, with the cron as a backstop, since this repo's scheduled runs
+fire late or not at all; a `STOP` file in `polymarket_watch/` on main
+ends the chain), reads each wallet's new fills, rebuilds its
 positions with the backtest's own rules, and copies each new opening buy
 at the live CLOB ask walked through the book. State and the running
 scorecard are on the `wallet-watch` branch (`summary.md`, `copies.csv`).
