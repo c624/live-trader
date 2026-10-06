@@ -39,6 +39,7 @@ OVERLAP = 3 * 3600     # re-read this much before the last fill seen; the Data A
 KEEP_DAYS = 35         # fills older than this are dropped unless an open copy still needs them
 BAR_COPIES = 300       # settled sports copies at which the forward test is judged
 BAR_DATE = dt.datetime(2026, 11, 6, tzinfo=dt.timezone.utc)
+QUIET_ABOVE = 0.95     # copies this close to certain (paying under ~1.05x) are recorded but not announced
 FILL_FIELDS = ["wallet", "ts", "token", "cond", "side", "price", "size", "tx", "title", "outcome", "slug",
                "event_slug"]
 COPY_FIELDS = ["id", "wallet", "name", "opened", "detected", "delay_min", "title", "outcome", "category",
@@ -433,9 +434,12 @@ def main() -> None:
     print(f"{res['fresh']} new opening buys, {len(res['alerts'])} sports copies to announce, {http.count} requests")
     for n in res["notes"]:
         print("note:", n)
-    if res["alerts"]:
+    worth = [a for a in res["alerts"] if fnum(a.get("ask")) < QUIET_ABOVE]
+    if len(worth) < len(res["alerts"]):
+        print(f"{len(res['alerts']) - len(worth)} copies at {QUIET_ABOVE * 100:.0f}c or more recorded, not announced")
+    if worth:
         from live_trader.src import notify
-        for text in alert_text(res["alerts"], load_copies(state)):
+        for text in alert_text(worth, load_copies(state)):
             print(text)
             if not notify.send(text):
                 print("telegram: not sent (no secrets, or the send failed)")

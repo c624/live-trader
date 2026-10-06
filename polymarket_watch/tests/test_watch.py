@@ -248,3 +248,18 @@ def test_closing_line_is_the_last_price_before_the_start(tmp_path):
     assert abs(float(c["clv_c"]) - (52 - float(c["avg_price"]) * 100)) < 1e-6 and float(c["wallet_clv_c"]) == 8.0
     summary = (tmp_path / "summary.md").read_text()
     assert "**Closing line**" in summary and "the wallets' own fills +8.0c" in summary
+
+
+def test_near_certain_copies_are_recorded_but_not_announced(tmp_path, monkeypatch, capsys):
+    http = FakeHttp([fill(NOW - 600, "BUY", 0.97, 500)], [gamma()], {"T1": book(0.97, 0.98)},
+                    {"KXLALIGAGAME": KALSHI_GAME})
+    sent = []
+    import live_trader.src.notify as notify
+    monkeypatch.setattr(notify, "send", lambda text: sent.append(text) or True)
+    monkeypatch.setattr(watch.poly, "Http", lambda: http)
+    monkeypatch.setattr(watch.time, "time", lambda: NOW)
+    monkeypatch.setattr(watch, "load_wallets", lambda: WALLETS)
+    monkeypatch.setenv("STATE_DIR", str(tmp_path))
+    watch.main()
+    assert rows(tmp_path / "copies.csv")[0]["status"] == "copied" and sent == []
+    assert "1 copies at 95c or more recorded, not announced" in capsys.readouterr().out
