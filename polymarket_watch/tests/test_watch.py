@@ -17,12 +17,13 @@ def fill(ts, side, price, size, token="T1", cond=COND, title="Will Deportivo Ala
             "outcome": outcome, "slug": "lal-ala-val-2026-10-06-ala", "event_slug": "lal-ala-val-2026-10-06"}
 
 
-def gamma(cond=COND, tokens=("T1", "T2"), closed=False, prices=("0.45", "0.55"), question=None, kind="moneyline"):
+def gamma(cond=COND, tokens=("T1", "T2"), closed=False, prices=("0.45", "0.55"), question=None, kind="moneyline",
+          start="2026-10-06 19:00:00+00"):
     return {"conditionId": cond, "question": question or "Will Deportivo Alavés win on 2026-10-06?",
             "slug": "lal-ala-val-2026-10-06-ala", "outcomes": '["Yes", "No"]', "clobTokenIds": json.dumps(list(tokens)),
             "outcomePrices": json.dumps(list(prices)), "closed": closed, "acceptingOrders": not closed,
             "closedTime": "2026-10-06 23:00:00+00" if closed else None, "sportsMarketType": kind,
-            "gameStartTime": "2026-10-06 19:00:00+00", "feesEnabled": True,
+            "gameStartTime": start, "feesEnabled": True,
             "feeSchedule": {"rate": 0.05, "exponent": 1}, "tags": [{"slug": "soccer"}],
             "events": [{"title": "Deportivo Alavés vs. Valencia CF", "slug": "lal-ala-val-2026-10-06"}]}
 
@@ -232,3 +233,18 @@ def test_activity_falls_back_to_v2_when_v1_is_gone(tmp_path):
     watch.tick(tmp_path, http, NOW, WALLETS)
     assert rows(tmp_path / "copies.csv")[0]["status"] == "copied"
     assert json.loads((tmp_path / "watch.json").read_text())["activity_api"] == "v2"
+
+
+def test_closing_line_is_the_last_price_before_the_start(tmp_path):
+    later = "2026-10-06 22:00:00+00"  # two hours after NOW
+    http = FakeHttp([fill(NOW - 600, "BUY", 0.44, 500)], [gamma(start=later)], {"T1": book(0.44, 0.46)})
+    watch.tick(tmp_path, http, NOW, WALLETS)
+    http.markets = [gamma(start=later, prices=("0.52", "0.48"))]          # money came in behind the wallet
+    watch.tick(tmp_path, http, NOW + 3600, WALLETS)
+    http.markets = [gamma(start=later, prices=("0.60", "0.40"))]          # in play: not the closing line
+    watch.tick(tmp_path, http, NOW + 3 * 3600, WALLETS)
+    c = rows(tmp_path / "copies.csv")[0]
+    assert c["close_mid"] == "0.52" and c["close_at"] == watch.iso(NOW + 3600)
+    assert abs(float(c["clv_c"]) - (52 - float(c["avg_price"]) * 100)) < 1e-6 and float(c["wallet_clv_c"]) == 8.0
+    summary = (tmp_path / "summary.md").read_text()
+    assert "**Closing line**" in summary and "the wallets' own fills +8.0c" in summary

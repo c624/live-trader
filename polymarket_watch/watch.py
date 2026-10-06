@@ -44,7 +44,7 @@ FILL_FIELDS = ["wallet", "ts", "token", "cond", "side", "price", "size", "tx", "
 COPY_FIELDS = ["id", "wallet", "name", "opened", "detected", "delay_min", "title", "outcome", "category",
                "market_type", "game_start", "wallet_fill", "wallet_cost", "status", "mid", "ask", "avg_price",
                "fee_rate", "fees", "shares", "spent", "sold_shares", "sale_cash", "sells_mirrored", "mirrored_through", "exit",
-               "settled", "value", "pnl", "roi", "kalshi_ticker", "kalshi_side", "kalshi_label", "kalshi_ask",
+               "settled", "value", "pnl", "roi", "close_mid", "close_at", "clv_c", "wallet_clv_c", "kalshi_ticker", "kalshi_side", "kalshi_label", "kalshi_ask",
                "kalshi_note", "kalshi_result", "kalshi_roi", "token", "cond", "event_slug", "slug"]
 
 
@@ -179,6 +179,20 @@ def finish(c: dict, value: float, how: str, now: float) -> None:
           "exit": exit_}
 
 
+def closing_line(c: dict, m: dict, now: int) -> None:
+    """Keep the market's price for this outcome up to the start: the last one before the game is the
+    closing line. A copy that beats it was ahead of the market, which shows skill in far fewer bets than
+    wins and losses do. Copies made after the start have no closing line."""
+    start = from_iso(c.get("game_start") or "")
+    if m["closed"] or (start and now >= start) or (start and from_iso(c["detected"]) >= start):
+        return
+    mid = m["price"].get(c["token"])
+    if mid is None or not 0 < mid < 1:
+        return
+    c |= {"close_mid": r4(mid), "close_at": iso(now), "clv_c": r4((mid - fnum(c["avg_price"])) * 100),
+          "wallet_clv_c": r4((mid - fnum(c["wallet_fill"])) * 100)}
+
+
 def kalshi_roi(ask: float, result: str) -> float:
     cost = ask + kalshi.taker_fee(ask)
     return ((1.0 if result == "win" else 0.0) - cost) / cost
@@ -253,6 +267,7 @@ def tick(state: pathlib.Path, http: poly.Http, now: int, wallets: list[dict], k:
         m = markets.get(c["cond"])
         if not m:
             continue
+        closing_line(c, m, now)
         opened = from_iso(c["opened"])
         pos = next((p for p in by_token.get((c["wallet"], c["token"]), [])
                     if p["open_ts"] <= opened <= (p["close_ts"] or now)), None)
@@ -340,6 +355,16 @@ def report(copies: dict[str, dict], meta: dict, wallets: list[dict], now: int) -
         f"{sum(r['kalshi_result'] == 'loss' for r in ks)} | {pct(kp['roi'])} | {pct(kp['lo'])} to {pct(kp['hi'])} | "
         f"(Polymarket on the same {poly_on_k['n']}: {pct(poly_on_k['roi'])}) | |", "",
     ]
+    final = [r for r in sports if r.get("clv_c") not in ("", None) and (r["settled"] or (
+        r.get("game_start") and from_iso(r["game_start"]) <= now))]
+    if final:
+        clv = pooled([fnum(r["clv_c"]) for r in final])
+        own = pooled([fnum(r["wallet_clv_c"]) for r in final])
+        toward = sum(fnum(r["clv_c"]) > 0.5 for r in final) / len(final)
+        lines += [f"**Closing line** (price at the last tick before the start, against the entry; {len(final)} sports "
+                  f"copies): ours {clv['roi']:+.1f}c (band {clv['lo']:+.1f}c to {clv['hi']:+.1f}c), the wallets' own fills "
+                  f"{own['roi']:+.1f}c; the price moved our way after {toward:.0%} of copies. Beating the close is the "
+                  "early sign of an edge; it is recorded, not judged.", ""]
     funnel = Counter(r["status"] for r in rows)
     matched = sum(1 for r in sports if r.get("kalshi_ticker"))
     lines += [f"Opening buys seen since the start: {len(rows)} ({', '.join(f'{k} {v}' for k, v in funnel.most_common())}). "
