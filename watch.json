@@ -1,0 +1,98 @@
+{
+ "started": "2026-10-06T18:39:55Z",
+ "started_ts": 1791311995,
+ "ticks": 1190,
+ "wallets": {
+  "0x51698a47f840a242abc2ca0351371c7ffac41842": {
+   "last_ts": 1789485901,
+   "error": ""
+  },
+  "0x0f6f76ced62a911bccef92f50faaff143854d977": {
+   "last_ts": 1791633712,
+   "error": ""
+  },
+  "0xcdcccd0f2d86e450d973da415ad2430e5cc7935a": {
+   "last_ts": 1791398116,
+   "error": ""
+  },
+  "0xb0e74df9430a089aa102e2207af5fde1967439d2": {
+   "last_ts": 1791233836,
+   "error": ""
+  },
+  "0x361b16e3ddfe1d415d41008daac2631d94ab74fe": {
+   "last_ts": 1791651076,
+   "error": ""
+  },
+  "0xb7271c112cbd83eb4c1ef1b554ff963604ae2a9d": {
+   "last_ts": 1791593155,
+   "error": ""
+  },
+  "0xc2e7800b5af46e6093872b177b7a5e7f0563be51": {
+   "last_ts": 1788915288,
+   "error": ""
+  },
+  "0x04d5524a0a5af2eca6e39e03defc261d42fe66d8": {
+   "last_ts": 1788740979,
+   "error": ""
+  },
+  "0x111f73e91f85b6fe4de1ddec3de2fe32122e355b": {
+   "last_ts": 1791647949,
+   "error": ""
+  },
+  "0x1465b79bff7992bc703e1aafb3683b1089647072": {
+   "last_ts": 1791632064,
+   "error": ""
+  },
+  "0x9ba9dec33838f4ec9f032f7247d7481987e63ce9": {
+   "last_ts": 1791105581,
+   "error": ""
+  },
+  "0x5fdd66ffd0325d4e8d1d86fbec50caa31770a747": {
+   "last_ts": 1791646678,
+   "error": ""
+  },
+  "0x2dfa4e79eca44b7c774f40a45535adbc368a6f60": {
+   "last_ts": 1791291648,
+   "error": ""
+  },
+  "0x1058f156b207cafe61d102e97bf6796931d301c1": {
+   "last_ts": 1790779530,
+   "error": ""
+  },
+  "0xe9b710551dd82a44e79203c2394a2b10163ace7b": {
+   "last_ts": 1789655415,
+   "error": ""
+  },
+  "0x369f46433349a57cd6d08abf2819da737c09873e": {
+   "last_ts": 1790357793,
+   "error": ""
+  },
+  "0x2dc13c6bda81b202281e796953a7323de675b33c": {
+   "last_ts": 1790537910,
+   "error": ""
+  },
+  "0x03e8a544e97eeff5753bc1e90d46e5ef22af1697": {
+   "last_ts": 1790473934,
+   "error": ""
+  },
+  "0x44c1dfe43260c94ed4f1d00de2e1f80fb113ebc1": {
+   "last_ts": 1791536731,
+   "error": ""
+  },
+  "0x80d5aebbe7a714879177e4dae0014195beb3987e": {
+   "last_ts": 1790619831,
+   "error": ""
+  },
+  "0x7b6c6d1279098054b0c630a4b871002a7cd46305": {
+   "last_ts": 1791651274,
+   "error": ""
+  },
+  "0xe5b70fd855af9258d9463992e4f1ed7987905ee3": {
+   "last_ts": 1791648766,
+   "error": ""
+  }
+ },
+ "last_tick": "2026-10-10T16:54:36Z",
+ "requests_last_tick": 23,
+ "activity_api": "v1"
+}
