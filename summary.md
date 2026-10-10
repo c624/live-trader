@@ -1,6 +1,6 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-10-10T17:20:11Z, tick 1195. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-10-10T17:25:18Z, tick 1196. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** Running: 32 of 300 settled sports copies (or 2026-11-06), 21 open. No verdict before then.
 
@@ -12,7 +12,7 @@ Started 2026-10-06T18:39:55Z; last tick 2026-10-10T17:20:11Z, tick 1195. Watchin
 
 **Closing line** (price at the last tick before the start, against the entry; 29 sports copies): ours -0.6c (band -0.9c to -0.3c), the wallets' own fills +0.3c; the price moved our way after 3% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 79 (copied 61, too_small 10, priced_out 4, no_book 3, skipped_chase 1). Sports copies with a Kalshi match: 32 of 53.
+Opening buys seen since the start: 81 (copied 61, too_small 12, priced_out 4, no_book 3, skipped_chase 1). Sports copies with a Kalshi match: 32 of 53.
 
 ## By wallet
 
