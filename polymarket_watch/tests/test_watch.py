@@ -151,6 +151,36 @@ def test_chases_small_buys_and_late_fills(tmp_path):
     assert len(rows(tmp / "copies.csv")) == 1
 
 
+def test_kalshi_twin_finds_each_team_through_the_event_title_not_the_outcome_order():
+    # Polymarket listed the Bulls first, the slug lists Memphis first, and Kalshi names cities, not nicknames:
+    # pairing codes by position put Memphis's code on the Bulls, so the Grizzlies +3.5 copy got NO on
+    # "Memphis wins by over 3.5" (10/9). It is NO on "Chicago wins by over 3.5".
+    game = [{"ticker": f"KXNBAGAME-26OCT09MEMCHI-{c}", "event_ticker": "KXNBAGAME-26OCT09MEMCHI", "yes_sub_title": city,
+             "yes_bid_dollars": "0.40", "yes_ask_dollars": "0.41"} for c, city in (("MEM", "Memphis"), ("CHI", "Chicago"))]
+    ladder = [{"ticker": f"KXNBASPREAD-26OCT09MEMCHI-{c}4", "event_ticker": "KXNBASPREAD-26OCT09MEMCHI",
+               "yes_sub_title": f"{city} wins by over 3.5 Points", "floor_strike": 3.5,
+               "yes_bid_dollars": "0.34", "yes_ask_dollars": "0.36"} for c, city in (("MEM", "Memphis"), ("CHI", "Chicago"))]
+    k = kalshi.Kalshi(FakeHttp(kalshi_series={"KXNBAGAME": game, "KXNBASPREAD": ladder}))
+    base = {"category": "sports", "event_title": "Grizzlies vs. Bulls", "outcomes": ["Bulls", "Grizzlies"]}
+    ev = "nba-mem-chi-2026-10-09"
+    dog = kalshi.match(k, base | {"question": "Spread: Bulls (-3.5)", "type": "spreads"}, "Grizzlies", ev, ev)
+    assert dog["ticker"] == "KXNBASPREAD-26OCT09MEMCHI-CHI4" and dog["side"] == "no" and dog["ask"] == 0.66
+    fav = kalshi.match(k, base | {"question": "Spread: Bulls (-3.5)", "type": "spreads"}, "Bulls", ev, ev)
+    assert fav["ticker"] == "KXNBASPREAD-26OCT09MEMCHI-CHI4" and fav["side"] == "yes"
+    ml = kalshi.match(k, base | {"question": "Grizzlies vs. Bulls", "type": "moneyline"}, "Grizzlies", ev, ev)
+    assert ml["ticker"] == "KXNBAGAME-26OCT09MEMCHI-MEM" and ml["side"] == "yes"
+
+
+def test_a_twin_found_wrong_later_is_cleared_once():
+    cid, bad = next(iter(watch.WRONG_TWINS.items()))
+    copies = {cid: {"kalshi_ticker": bad, "kalshi_side": "no", "kalshi_ask": "0.65", "kalshi_result": "loss",
+                    "kalshi_roi": "-1.0"},
+              "other": {"kalshi_ticker": "KXNBASPREAD-26OCT09MEMCHI-CHI4", "kalshi_result": "win"}}
+    watch.clear_wrong_twins(copies)
+    assert copies[cid]["kalshi_ticker"] == "" and copies[cid]["kalshi_result"] == "" and bad in copies[cid]["kalshi_note"]
+    assert copies["other"]["kalshi_result"] == "win"
+
+
 def test_kalshi_matching_by_bet_type():
     spread_events = [
         {"ticker": "KXNFLGAME-26OCT12DETNYJ-DET", "event_ticker": "KXNFLGAME-26OCT12DETNYJ",

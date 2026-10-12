@@ -148,6 +148,16 @@ def split_teams(text: str) -> list[str]:
     return [p.strip(" ?") for p in parts] if len(parts) == 2 else []
 
 
+def code_for(name: str, teams: list[str], codes: list[str]) -> str:
+    """The event slug's code for a team. The slug lists its codes in the order the event title names the teams
+    ("nba-mem-chi" is "Grizzlies vs. Bulls"), which isn't always the order of a market's outcomes, so the code is
+    found through the title; "" when the title doesn't settle it (the team is then matched by name alone)."""
+    if len(codes) != 2 or len(teams) != 2:
+        return ""
+    scores = [name_score(t, name) for t in teams]
+    return codes[scores.index(max(scores))] if max(scores) > 0 and scores[0] != scores[1] else ""
+
+
 def what(m: dict, outcome: str, codes: list[str], slug: str) -> dict | None:
     """The bet in plain terms: kind (winner/draw/spread/total/rfi), the team it is about and its
     opponent (name and slug code), the line, and whether it is the YES side of that question."""
@@ -172,7 +182,7 @@ def what(m: dict, outcome: str, codes: list[str], slug: str) -> dict | None:
         fav, line = sm[1], abs(float(sm[2]))
         fav_i = max(range(2), key=lambda i: name_score(outs[i], fav))
         return {"kind": "spread", "team": outs[fav_i], "opp": outs[1 - fav_i],
-                "code": codes[fav_i] if len(codes) == 2 else "", "opp_code": codes[1 - fav_i] if len(codes) == 2 else "",
+                "code": code_for(outs[fav_i], teams, codes), "opp_code": code_for(outs[1 - fav_i], teams, codes),
                 "line": line, "yes": outcome == outs[fav_i]}
     if "draw" in q.lower() and outcome.lower() in ("yes", "no"):
         return {"kind": "draw", "teams": teams, "codes": codes, "yes": outcome.lower() == "yes"}
@@ -187,8 +197,7 @@ def what(m: dict, outcome: str, codes: list[str], slug: str) -> dict | None:
     if len(outs) == 2 and outcome in outs:
         i = outs.index(outcome)
         return {"kind": "winner", "team": outs[i], "opp": outs[1 - i],
-                "code": codes[i] if len(codes) == 2 else "", "opp_code": codes[1 - i] if len(codes) == 2 else "",
-                "yes": True}
+                "code": code_for(outs[i], teams, codes), "opp_code": code_for(outs[1 - i], teams, codes), "yes": True}
     return None
 
 

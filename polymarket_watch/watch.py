@@ -96,6 +96,25 @@ def load_copies(state: pathlib.Path) -> dict[str, dict]:
         return {r["id"]: r for r in csv.DictReader(f)}
 
 
+# Kalshi twins found wrong after the fact, cleared on the next tick: {copy id: the wrong ticker}. The 10/9
+# Grizzlies +3.5 copy was paired with Memphis's spread ladder because the slug's team codes were matched to the
+# outcomes by position (fixed in kalshi.code_for). Its right twin, NO on "Chicago wins by over 3.5", had no price
+# recorded at the time, so the copy leaves the Kalshi arm instead of counting a loss it didn't have.
+WRONG_TWINS = {
+    "0xb7271c112cbd83eb4c1ef1b554ff963604ae2a9d:"
+    "12353353307273335949242325603886010652485236612172945171214583998578547304779:1791580613":
+        "KXNBASPREAD-26OCT09MEMCHI-MEM4",
+}
+
+
+def clear_wrong_twins(copies: dict[str, dict]) -> None:
+    for cid, ticker in WRONG_TWINS.items():
+        c = copies.get(cid)
+        if c and c.get("kalshi_ticker") == ticker:
+            c |= {"kalshi_ticker": "", "kalshi_side": "", "kalshi_label": "", "kalshi_ask": "", "kalshi_result": "",
+                  "kalshi_roi": "", "kalshi_note": f"twin cleared: {ticker} was the other team's market"}
+
+
 def save_copies(state: pathlib.Path, copies: dict[str, dict]) -> None:
     with open(state / "copies.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=COPY_FIELDS, extrasaction="ignore")
@@ -207,6 +226,7 @@ def tick(state: pathlib.Path, http: poly.Http, now: int, wallets: list[dict], k:
     meta = json.loads(meta_path.read_text()) if meta_path.exists() else {
         "started": iso(now - first_lookback), "started_ts": now - first_lookback, "ticks": 0, "wallets": {}}
     log, copies = load_fills(state), load_copies(state)
+    clear_wrong_twins(copies)
     activity, notes = poly.Activity(http), []
     k = k or kalshi.Kalshi(http)
 
