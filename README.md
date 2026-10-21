@@ -390,6 +390,30 @@ announcement is the paper copy, not a trade: nothing in the watch can
 place an order, and the KILL file and `"trading_enabled": false` are
 untouched.
 
+### Storm Chaser: weather long shots (opened 2026-10-21)
+
+The research repo's weather backtest replicated a published Kalshi rule: at
+17:00 Eastern, buy NO on every daily-high temperature bracket whose YES bid is
+1-4c, and hold. It made +1.19c per contract (90% CI +0.37c to +1.90c) over 282
+trades with 2 losses. The first half of its window had no trades, and two
+losses can't pin down a loss rate, which decides the edge: one loss costs about
+50 wins. `weather_watch/` is the forward test, paper only (no key, no orders).
+It runs inside the wallet-watch loop and keeps its state in `weather/` on the
+`wallet-watch` branch.
+
+**Pre-registered bar, fixed before the first trade.**
+- **Scan:** once a day, on the first tick from 17:00 to 17:30 ET. A day the
+  loop misses is logged, never made up.
+- **What it trades:** every open bracket settling that day, across every daily
+  `KXHIGH*` series, whose YES bid is 1-4c with a YES ask on the book and a
+  spread of 5c or less.
+- **How:** 100 NO contracts at the NO ask, plus the taker fee (7% x P x (1-P),
+  rounded up per order), held to settlement.
+- **Judgment:** at 1,000 settled trades or on 2027-01-31, whichever comes
+  first. It passes only if the 95% interval of the mean P&L per contract,
+  clustered by city-day, lies entirely above zero. Anything short of that
+  closes the line.
+
 ## How a trade happens
 
 1. Every ~4 minutes the loop pulls GeckoTerminal's newest Solana pools.
