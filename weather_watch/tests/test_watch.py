@@ -112,3 +112,21 @@ def test_verdict_waits_for_the_bar():
     assert W.verdict(s, dt.date(2026, 11, 1)).startswith("Running")
     assert "Passed" in W.verdict(s | {"n": 1000}, dt.date(2026, 11, 1))
     assert "Failed" in W.verdict(s | {"lo": -0.2}, dt.date(2027, 2, 1))
+
+
+def test_city_names_are_cleaned_so_one_city_clusters_once():
+    assert W.clean_city("Daily High Temperature Houston") == "Houston"
+    assert W.clean_city("Houston") == "Houston"
+    assert W.clean_city("Oklahoma City Maximum High Temperature") == "Oklahoma City"
+    assert W.clean_city("HIGHEST Temperature SATX") == "San Antonio"
+    assert W.clean_city("Highest temperature in NYC today?") == "New York"
+    assert W.clean_city("Daly high temp Sao Paulo") == "Sao Paulo"
+    assert W.clean_city("Newark, NJ (EWR)") == "Newark, NJ (EWR)"
+
+
+def test_old_trades_are_regrouped_by_clean_city(tmp_path):
+    W.save(tmp_path, {"A": {"ticker": "A", "series": "KXHIGHOU", "city": "Houston", "day": "2026-10-22", "status": "open"},
+                      "B": {"ticker": "B", "series": "KXHIGHTHOU", "city": "Daily High Temperature Houston",
+                            "day": "2026-10-22", "status": "open"}}, {})
+    trades, _ = W.load(tmp_path)
+    assert {t["city"] for t in trades.values()} == {"Houston"}

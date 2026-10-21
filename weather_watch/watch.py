@@ -60,11 +60,21 @@ def order_fee(price: float, contracts: int = CONTRACTS) -> float:
     return math.ceil(round(0.07 * contracts * price * (1 - price) * 100, 6)) / 100
 
 
+# Words Kalshi's series titles wrap around a city's name ("Oklahoma City Maximum High Temperature", "Daily high
+# temp Tokyo"), and the cities some series name by an abbreviation. Several series cover one city (Houston has
+# three), so trades are grouped by this cleaned name: the bar clusters by city-day, and two series' brackets in one
+# city on one day move together.
+FILLER = re.compile(r"\b(?:highest|daily|daly|high|max|maximum|temp|temperature|today|in)\b|[?]", re.I)
+ALIASES = {"nyc": "New York", "satx": "San Antonio", "new york city": "New York"}
+
+
+def clean_city(name: str) -> str:
+    words = " ".join(FILLER.sub(" ", name).split())
+    return ALIASES.get(words.lower(), words) or name
+
+
 def city_of(series: dict) -> str:
-    title = str(series.get("title") or "")
-    hit = re.match(r"(?:Highest temperature in |High temp(?:erature)? in )?(.+?)(?: Daily Max Temp| daily| today|\?|$)",
-                   title, re.I)
-    return (hit.group(1).strip() if hit and hit.group(1).strip() else series.get("ticker", ""))
+    return clean_city(str(series.get("title") or "")) or str(series.get("ticker", ""))
 
 
 def discover(http: poly.Http) -> dict[str, str]:
@@ -99,7 +109,7 @@ def load(state: pathlib.Path) -> tuple[dict[str, dict], dict]:
     trades = {}
     if (state / "trades.csv").exists():
         with (state / "trades.csv").open(newline="") as f:
-            trades = {t["ticker"]: t for t in csv.DictReader(f)}
+            trades = {t["ticker"]: t | {"city": clean_city(t["city"])} for t in csv.DictReader(f)}
     meta = json.loads((state / "meta.json").read_text()) if (state / "meta.json").exists() else {}
     return trades, meta
 
@@ -121,6 +131,8 @@ def tick(state: pathlib.Path, http: poly.Http, now: int) -> dict:
     et = dt.datetime.fromtimestamp(now, UTC).astimezone(ET)
     today = et.date()
 
+    if meta.get("series"):
+        meta["series"] = {t: clean_city(c) for t, c in meta["series"].items()}
     if now - meta.get("series_at", 0) > SERIES_REFRESH or not meta.get("series"):
         try:
             found = discover(http)
