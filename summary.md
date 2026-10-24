@@ -1,18 +1,18 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-10-24T15:52:57Z, tick 5443. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-10-24T15:58:13Z, tick 5444. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 493 copies the 95% interval (-20.2% to +8.7%) does not lie above zero.
 
 | Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |
 |---|---|---|---|---|---|---|
 | Sports (judged) | 493 | 277-216 | -5.7% | -20.2% to +8.7% | $-2,807 | 13 |
-| Not sports (recorded, not judged) | 375 | 97-278 | -33.9% | -55.1% to -12.6% | $-12,705 | 22 |
+| Not sports (recorded, not judged) | 375 | 97-278 | -33.9% | -55.1% to -12.6% | $-12,705 | 23 |
 | Same bets on Kalshi | 308 | 174-134 | -9.1% | -19.5% to +1.2% | (Polymarket on the same 308: -9.3%) | |
 
 **Closing line** (price at the last tick before the start, against the entry; 319 sports copies): ours -0.8c (band -1.2c to -0.3c), the wallets' own fills -0.1c; the price moved our way after 12% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 4680 (too_small 3418, copied 903, no_book 171, skipped_chase 147, priced_out 24, closed_before_entry 15, exited_before_entry 1, no_market 1). Sports copies with a Kalshi match: 318 of 506.
+Opening buys seen since the start: 4682 (too_small 3418, copied 904, no_book 172, skipped_chase 147, priced_out 24, closed_before_entry 15, exited_before_entry 1, no_market 1). Sports copies with a Kalshi match: 318 of 506.
 
 ## By wallet
 
@@ -22,7 +22,7 @@ Opening buys seen since the start: 4680 (too_small 3418, copied 903, no_book 171
 | joseph00677 | 19 | 18 | 8-10 | -20.7% | -11.0% |
 | 0x361b16e3 | 291 | 288 | 180-108 | -0.3% | +8.4% |
 | Elaran1993 | 54 | 50 | 26-24 | -0.7% | +11.0% |
-| Papeasy | 358 | 358 | 88-270 | -34.6% | n/a |
+| Papeasy | 359 | 358 | 88-270 | -34.6% | n/a |
 | JnStrtPrdctnMrkts | 1 | 1 | 0-1 | -2.9% | +7.6% |
 | juice-fruit | 41 | 41 | 25-16 | -3.1% | +39.4% |
 | BillyGating | 3 | 3 | 0-3 | -100.0% | -32.1% |
@@ -36,6 +36,7 @@ Opening buys seen since the start: 4680 (too_small 3418, copied 903, no_book 171
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
+| 10-24T15:58 | Papeasy | Bitcoin Up or Down - October 24, 11:55AM-12:00PM ET: Down | 1c |  | open |
 | 10-24T15:47 | Papeasy | Bitcoin Up or Down - October 24, 11:45AM-11:50AM ET: Up | 96c |  | +3.9% (resolved) |
 | 10-24T15:36 | Papeasy | Bitcoin Up or Down - October 24, 11:35AM-11:40AM ET: Up | 32c |  | -100.0% (resolved) |
 | 10-24T15:31 | Papeasy | Bitcoin Up or Down - October 24, 11:30AM-11:35AM ET: Down | 25c |  | -100.0% (resolved) |
@@ -60,4 +61,3 @@ Opening buys seen since the start: 4680 (too_small 3418, copied 903, no_book 171
 | 10-24T13:47 | Papeasy | Bitcoin Up or Down - October 24, 9:45AM-9:50AM ET: Up | 18c |  | -100.0% (resolved) |
 | 10-24T13:41 | Papeasy | Bitcoin Up or Down - October 24, 9:40AM-9:45AM ET: Down | 55c |  | -100.0% (resolved) |
 | 10-24T13:26 | totoro3miyazaki | Will Arsenal FC win on 2026-10-24?: Yes | 71c | YES Arsenal 71c | open |
-| 10-24T13:26 | Papeasy | Bitcoin Up or Down - October 24, 9:25AM-9:30AM ET: Up | 63c |  | +50.9% (resolved) |
