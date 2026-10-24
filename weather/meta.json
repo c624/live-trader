@@ -1,0 +1,68 @@
+{
+ "scanned": {
+  "2026-10-21": {
+   "at": "2026-10-21T17:04:13-04:00",
+   "trades": 11
+  },
+  "2026-10-22": {
+   "at": "2026-10-22T17:03:49-04:00",
+   "trades": 7
+  },
+  "2026-10-23": {
+   "at": "2026-10-23T17:04:26-04:00",
+   "trades": 8
+  }
+ },
+ "series": {
+  "KXHIGHAUS": "Austin",
+  "KXHIGHCHI": "Chicago",
+  "KXHIGHDEN": "Denver",
+  "KXHIGHHOU": "Houston",
+  "KXHIGHLAX": "Los Angeles",
+  "KXHIGHMIA": "Miami",
+  "KXHIGHNY": "New York",
+  "KXHIGHOU": "Houston",
+  "KXHIGHPHIL": "Philadelphia",
+  "KXHIGHTATL": "Atlanta",
+  "KXHIGHTBOS": "Boston",
+  "KXHIGHTCYYZ": "Toronto",
+  "KXHIGHTDAL": "Dallas",
+  "KXHIGHTDC": "Washington DC",
+  "KXHIGHTEBBR": "Brussels",
+  "KXHIGHTEDDB": "Berlin",
+  "KXHIGHTEDDF": "Frankfurt",
+  "KXHIGHTEGLL": "London",
+  "KXHIGHTEHAM": "Amsterdam",
+  "KXHIGHTEWR": "Newark, NJ (EWR)",
+  "KXHIGHTHOU": "Houston",
+  "KXHIGHTKSAN": "San Diego",
+  "KXHIGHTLFPG": "Paris",
+  "KXHIGHTLSGG": "Geneva",
+  "KXHIGHTLTFM": "Istanbul",
+  "KXHIGHTLV": "Las Vegas",
+  "KXHIGHTMIN": "Minneapolis",
+  "KXHIGHTMMMX": "Mexico City",
+  "KXHIGHTNOLA": "New Orleans",
+  "KXHIGHTOKC": "Oklahoma City",
+  "KXHIGHTOMDB": "Dubai",
+  "KXHIGHTPHX": "Phoenix",
+  "KXHIGHTRJTT": "Tokyo",
+  "KXHIGHTRKSI": "Seoul",
+  "KXHIGHTSAN": "San Diego",
+  "KXHIGHTSATX": "San Antonio",
+  "KXHIGHTSBGR": "Sao Paulo",
+  "KXHIGHTSDF": "San Antonio",
+  "KXHIGHTSEA": "Seattle",
+  "KXHIGHTSFO": "San Francisco",
+  "KXHIGHTTTN": "Trenton, NJ",
+  "KXHIGHTVABB": "Mumbai",
+  "KXHIGHTVHHH": "Hong Kong",
+  "KXHIGHTWSSS": "Singapore",
+  "KXHIGHTYSSY": "Sydney",
+  "KXHIGHTZBAA": "Beijing",
+  "KXHIGHTZSPD": "Shanghai",
+  "KXHIGHUS": "United States"
+ },
+ "series_at": 1792856538,
+ "started": "2026-10-21T15:33:46+00:00"
+}
