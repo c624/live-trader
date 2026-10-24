@@ -1,7 +1,7 @@
 {
  "started": "2026-10-06T18:39:55Z",
  "started_ts": 1791311995,
- "ticks": 5445,
+ "ticks": 5446,
  "wallets": {
   "0x51698a47f840a242abc2ca0351371c7ffac41842": {
    "last_ts": 1789485901,
@@ -20,7 +20,7 @@
    "error": ""
   },
   "0x361b16e3ddfe1d415d41008daac2631d94ab74fe": {
-   "last_ts": 1792855023,
+   "last_ts": 1792858076,
    "error": ""
   },
   "0xb7271c112cbd83eb4c1ef1b554ff963604ae2a9d": {
@@ -36,7 +36,7 @@
    "error": ""
   },
   "0x111f73e91f85b6fe4de1ddec3de2fe32122e355b": {
-   "last_ts": 1792857615,
+   "last_ts": 1792857944,
    "error": ""
   },
   "0x1465b79bff7992bc703e1aafb3683b1089647072": {
@@ -88,11 +88,11 @@
    "error": ""
   },
   "0xe5b70fd855af9258d9463992e4f1ed7987905ee3": {
-   "last_ts": 1792857351,
+   "last_ts": 1792858100,
    "error": ""
   }
  },
- "last_tick": "2026-10-24T16:03:25Z",
- "requests_last_tick": 25,
+ "last_tick": "2026-10-24T16:08:38Z",
+ "requests_last_tick": 30,
  "activity_api": "v1"
 }
