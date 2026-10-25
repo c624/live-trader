@@ -66,7 +66,22 @@ def fnum(v) -> float:
 
 
 def load_wallets(path: pathlib.Path = ROOT / "wallets.json") -> list[dict]:
-    return json.loads(path.read_text())["wallets"]
+    """The 22 judged wallets, then any added later. An added wallet carries "since" (copies only openings from
+    then) and "only" (event-slug prefixes it is followed on), and is reported apart from the 22."""
+    d = json.loads(path.read_text())
+    return d["wallets"] + [w | {"added": True} for w in d.get("added", {}).get("wallets", [])]
+
+
+def judged(wallets: list[dict]) -> set[str]:
+    return {w["wallet"] for w in wallets if not w.get("added")}
+
+
+def follows(w: dict, p: dict) -> bool:
+    """Whether a position of an added wallet falls in what it is followed on."""
+    if w.get("since") and p["open_ts"] < from_iso(w["since"]):
+        return False
+    slug = p.get("event_slug") or p.get("slug") or ""
+    return not w.get("only") or any(slug.startswith(o) for o in w["only"])
 
 
 def load_fills(state: pathlib.Path) -> dict[str, list[dict]]:
@@ -252,11 +267,11 @@ def tick(state: pathlib.Path, http: poly.Http, now: int, wallets: list[dict], k:
     for c in copies.values():
         if c["status"] != "no_market":  # a failed market lookup is tried again next tick
             copied_at.setdefault((c["wallet"], c["token"]), []).append(from_iso(c["opened"]))
-    fresh = []
+    fresh, by_addr = [], {w["wallet"]: w for w in wallets}
     for (addr, token), ps in by_token.items():
         for p in ps:
             mine = [t for t in copied_at.get((addr, token), []) if p["open_ts"] <= t <= (p["close_ts"] or now)]
-            if p["open_ts"] >= meta["started_ts"] and not mine:
+            if p["open_ts"] >= meta["started_ts"] and not mine and follows(by_addr[addr], p):
                 fresh.append((f"{addr}:{token}:{p['open_ts']}", addr, p))
     live = [c for c in copies.values() if c["status"] == "copied" and not c["settled"]]
     markets = poly.markets_for(http, sorted({p["cond"] for _, _, p in fresh} | {c["cond"] for c in live}))
@@ -349,7 +364,8 @@ def verdict(s: dict, n_open: int, now: int) -> str:
 
 
 def report(copies: dict[str, dict], meta: dict, wallets: list[dict], now: int) -> str:
-    rows = list(copies.values())
+    keep = judged(wallets)
+    rows = [r for r in copies.values() if r["wallet"] in keep]
     made = [r for r in rows if r["status"] == "copied"]
     sports = [r for r in made if r["category"] == "sports"]
     done = [r for r in sports if r["settled"]]
@@ -362,7 +378,7 @@ def report(copies: dict[str, dict], meta: dict, wallets: list[dict], now: int) -
     lines = [
         "# Polymarket wallet watch (paper)", "",
         f"Started {meta['started']}; last tick {meta.get('last_tick', '')}, tick {meta['ticks']}. "
-        f"Watching {len(wallets)} wallets fixed on 2026-10-06. ${STAKE:.0f} paper per copy at the live ask plus the "
+        f"Watching {len(keep)} wallets fixed on 2026-10-06. ${STAKE:.0f} paper per copy at the live ask plus the "
         f"taker fee; chases over {CHASE * 100:.0f}c past the wallet's fill are skipped.", "",
         f"**Verdict:** {verdict(s, len(sports) - len(done), now)}", "",
         "| Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |",
@@ -392,15 +408,17 @@ def report(copies: dict[str, dict], meta: dict, wallets: list[dict], now: int) -
               f"Sports copies with a Kalshi match: {matched} of {len(sports)}.", "",
               "## By wallet", "", "| Wallet | Copies | Settled | W-L | Mean ROI | Backtest ROI (60 min) |",
               "|---|---|---|---|---|---|"]
-    for w in wallets:
+    for w in [w for w in wallets if w["wallet"] in keep]:
         mine = [r for r in made if r["wallet"] == w["wallet"]]
         if not mine:
             continue
         settled = [r for r in mine if r["settled"]]
         lines.append(f"| {w['name'] or w['wallet'][:10]} | {len(mine)} | {len(settled)} | {record(settled)} | "
                      f"{pct(pooled([fnum(r['roi']) for r in settled])['roi'])} | {pct(w.get('backtest_roi_60m'))} |")
+    lines += added_report(copies, wallets, now)
     lines += ["", "## Latest copies", "", "| Detected | Wallet | Bet | Ask | Kalshi | Result |", "|---|---|---|---|---|---|"]
-    for r in sorted(made, key=lambda r: r["detected"], reverse=True)[:25]:
+    latest = [r for r in copies.values() if r["status"] == "copied"]
+    for r in sorted(latest, key=lambda r: r["detected"], reverse=True)[:25]:
         kal = (f"{r['kalshi_side'].upper()} {r['kalshi_label']} {fnum(r['kalshi_ask']) * 100:.0f}c"
                if r.get("kalshi_ticker") else r.get("kalshi_note") or "")
         res = f"{pct(r['roi'])} ({r['exit']})" if r["settled"] else r["exit"]
@@ -409,10 +427,35 @@ def report(copies: dict[str, dict], meta: dict, wallets: list[dict], now: int) -
     return "\n".join(lines) + "\n"
 
 
+def added_report(copies: dict[str, dict], wallets: list[dict], now: int) -> list[str]:
+    """One line per added wallet, judged on its own bar: the 95% interval above zero at bar_copies settled
+    copies or bar_date, whichever comes first."""
+    added = [w for w in wallets if w.get("added")]
+    if not added:
+        return []
+    lines = ["", "## Added wallets (each judged on its own)", "",
+             "| Wallet | Followed on | Since | Settled | W-L | Mean ROI | 95% interval | P&L | Open | Verdict |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
+    for w in added:
+        made = [r for r in copies.values() if r["wallet"] == w["wallet"] and r["status"] == "copied"]
+        done = [r for r in made if r["settled"]]
+        s = pooled([fnum(r["roi"]) for r in done])
+        bar_n, bar_date = w.get("bar_copies", BAR_COPIES), w.get("bar_date", "")
+        due = s["n"] >= bar_n or (bar_date and now >= from_iso(bar_date + "T00:00:00Z"))
+        v = (f"running to {bar_n} or {bar_date}" if not due else
+             "passed" if s["n"] and s["lo"] > 0 else "failed")
+        lines.append(f"| {w['name'] or w['wallet'][:10]} | {', '.join(o.rstrip('-').upper() for o in w.get('only', [])) or 'all'} | "
+                     f"{w.get('since', '')[:10]} | {s['n']} | {record(done)} | {pct(s['roi'])} | {pct(s['lo'])} to "
+                     f"{pct(s['hi'])} | ${sum(fnum(r['pnl']) for r in done):+,.0f} | {len(made) - len(done)} | {v} |")
+    return lines
+
+
 def alert_text(alerts: list[dict], copies: dict[str, dict]) -> list[str]:
     """Telegram messages, at most ~3,500 characters each. Bets with a Kalshi twin get the detail a
     follower needs; the rest are one line each, since they can only be followed on Polymarket."""
-    done = [c for c in copies.values() if c["status"] == "copied" and c["category"] == "sports" and c["settled"]]
+    keep = judged(load_wallets())
+    done = [c for c in copies.values() if c["status"] == "copied" and c["category"] == "sports" and c["settled"]
+            and c["wallet"] in keep]
     tally = (f"Paper record so far: {record(done)}, {pct(pooled([fnum(c['roi']) for c in done])['roi'])} per copy "
              f"over {len(done)} settled.")
     blocks, others = [], []

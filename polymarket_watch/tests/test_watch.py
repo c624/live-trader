@@ -311,3 +311,41 @@ def test_a_series_is_told_apart_by_the_date():
                           "event_title": "Dodgers vs. Braves", "question": "Dodgers vs. Braves"},
                       "Braves", "mlb-lad-atl-2026-10-07", "mlb-lad-atl-2026-10-07")
     assert ml["ticker"] == "KXMLBGAME-26OCT071800LADATL-ATL"
+
+
+def test_an_added_wallet_is_followed_from_its_start_on_its_sports_only_and_reported_apart(tmp_path):
+    B = "0xbbbb000000000000000000000000000000000002"
+    since = watch.iso(NOW - 30 * 60)
+    added = {"wallet": B, "name": "nfl-guy", "since": since, "only": ["nfl-"], "bar_copies": 50,
+             "bar_date": "2027-01-11", "added": True}
+
+    def nfl(ts, token="N1", cond=COND2):
+        f = fill(ts, "BUY", 0.40, 500, token=token, cond=cond, title="Seahawks vs. Broncos", outcome="Seahawks")
+        return f | {"proxy_wallet": B, "slug": "nfl-sea-den-2026-10-06", "event_slug": "nfl-sea-den-2026-10-06"}
+
+    fills = [fill(NOW - 20 * 60, "BUY", 0.44, 500),                                   # judged wallet: copied
+             nfl(NOW - 50 * 60, token="EARLY"),                                        # before his start: not copied
+             nfl(NOW - 10 * 60),                                                       # NFL after his start: copied
+             fill(NOW - 10 * 60, "BUY", 0.44, 500, token="T2") | {"proxy_wallet": B}]  # his La Liga buy: not copied
+    nfl_market = gamma(COND2, ("N1", "N2"), question="Seahawks vs. Broncos") | {
+        "slug": "nfl-sea-den-2026-10-06", "events": [{"title": "Seahawks vs. Broncos", "slug": "nfl-sea-den-2026-10-06"}]}
+    http = FakeHttp(fills, [gamma(), nfl_market, gamma(cond="0x" + "c3" * 32, tokens=("EARLY", "E2"))],
+                    {"T1": book(0.44, 0.46), "N1": book(0.40, 0.42)}, {"KXLALIGAGAME": KALSHI_GAME})
+    http.get_orig = http.get
+
+    def get(url, params=None):  # each wallet sees only its own fills
+        if url.endswith("/activity"):
+            mine = [f for f in http.fills if f["proxy_wallet"] == params["user"]]
+            saved, http.fills = http.fills, mine
+            try:
+                return http.get_orig(url, params)
+            finally:
+                http.fills = saved
+        return http.get_orig(url, params)
+    http.get = get
+    watch.tick(tmp_path, http, NOW, WALLETS + [added])
+    copies = rows(tmp_path / "copies.csv")
+    assert sorted((c["name"], c["token"]) for c in copies) == [("Elaran1993", "T1"), ("nfl-guy", "N1")]
+    summary = (tmp_path / "summary.md").read_text()
+    assert "Watching 1 wallets" in summary and "| Sports (judged) | 0 |" in summary
+    assert "| nfl-guy | NFL | " in summary and "running to 50 or 2027-01-11" in summary
