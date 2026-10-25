@@ -89,10 +89,10 @@ def trades_since(http: poly.Http, ticker: str, since: int, until: int) -> list[d
         price = num(t.get("yes_price_dollars"))
         if price is None and num(t.get("yes_price")) is not None:
             price = num(t.get("yes_price")) / 100
-        qty = num(t.get("count_fp")) or num(t.get("count")) or 0
+        qty = int(num(t.get("count_fp")) or num(t.get("count")) or 0)  # whole contracts; a fractional 0.5 fills none
         when = poly.parse_time(str(t.get("created_time"))).timestamp() if t.get("created_time") else since
         if price is not None and qty > 0:
-            rows.append({"price": price, "qty": int(qty), "taker": str(t.get("taker_side") or ""), "ts": int(when),
+            rows.append({"price": price, "qty": qty, "taker": str(t.get("taker_side") or ""), "ts": int(when),
                          "id": str(t.get("trade_id") or "")})
     return sorted(rows, key=lambda r: (r["ts"], r["id"]))
 

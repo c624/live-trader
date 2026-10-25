@@ -33,7 +33,7 @@ class FakeHttp(poly.Http):
 
 
 def trade(ts, price, qty, taker, i):
-    return {"trade_id": f"t{i}", "yes_price_dollars": f"{price:.4f}", "count_fp": f"{qty}.00", "taker_side": taker,
+    return {"trade_id": f"t{i}", "yes_price_dollars": f"{price:.4f}", "count_fp": f"{qty:.2f}", "taker_side": taker,
             "created_time": dt.datetime.fromtimestamp(ts, UTC).isoformat()}
 
 
@@ -54,7 +54,8 @@ def test_a_round_trip_fills_both_sides_marks_out_and_settles(tmp_path):
     tk = "KXHIGHNY-26OCT22-B1"
     http.trades[tk] = [trade(T0 + 60, 0.40, 25, "no", 1),           # seller hits the bid: we buy 10 at 41
                        trade(T0 + 120, 0.46, 4, "yes", 2),          # buyer lifts the ask: we sell 4 at 45
-                       trade(T0 + 130, 0.43, 50, "yes", 3)]         # under our ask: no fill
+                       trade(T0 + 130, 0.43, 50, "yes", 3),         # under our ask: no fill
+                       trade(T0 + 140, 0.46, 0.5, "yes", 4)]        # half a contract: no whole fill
     res = sim.tick(tmp_path, http, T0 + 300)
     assert res["fills"] == 2
     _, fills, pos, _ = sim.load(tmp_path)
