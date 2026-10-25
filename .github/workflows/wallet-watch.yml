@@ -3,7 +3,8 @@
 # API, Gamma, CLOB; Kalshi market data). Read-only: no key, no signing, no
 # orders. New sports copies go to the Telegram bot when its secrets are set.
 # Each tick also runs the Storm Chaser weather paper test (weather_watch/), whose
-# state is in weather/ on the same branch.
+# state is in weather/ on the same branch, and the Slow Maker paper market maker
+# (maker_sim/), whose state is in maker/.
 # State and the scorecard live on the wallet-watch branch.
 #
 # Scheduled runs on this repo fire late or not at all, so each run ticks every
@@ -67,6 +68,7 @@ jobs:
             if stopped; then echo "STOP file on main"; break; fi
             python -m polymarket_watch.watch || echo "tick failed; state from the last good tick is kept"
             python -m weather_watch.watch || echo "weather tick failed; state from the last good tick is kept"
+            python -m maker_sim.sim || echo "maker tick failed; state from the last good tick is kept"
             if [ -f out/watch.json ]; then
               (cd out \
                 && git init -q -b wallet-watch \
