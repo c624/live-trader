@@ -200,5 +200,21 @@
    "both_halves": false,
    "mix": "sports 94%, crypto 6%"
   }
- ]
+ ],
+ "added": {
+  "how": "Wallets added after the start, each followed only from its own 'since' and only on the event slugs listed in 'only'. Judged on their own, never pooled into the 22.",
+  "wallets": [
+   {
+    "wallet": "0xf0318c32136c2db7fec88b84869aee6a1106c80c",
+    "name": "0xf031 NFL",
+    "since": "2026-10-26T00:00:00Z",
+    "only": [
+     "nfl-"
+    ],
+    "bar_copies": 50,
+    "bar_date": "2027-01-11",
+    "why": "Graded 2026-10-25 from his full history: NFL 47-28 over 75 games, +34.8% ROI, both halves about +35%. All markets together +6.8%, band -3.6% to +16.7%; club soccer and NBA losing or flat, so only NFL is followed."
+   }
+  ]
+ }
 }
