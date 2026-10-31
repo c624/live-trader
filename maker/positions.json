@@ -1,0 +1,5208 @@
+{
+ "KXHIGHAUS-26NOV01-B81.5": {
+  "cash": -3.78,
+  "city": "Austin",
+  "contracts": 16,
+  "day": "2026-11-01",
+  "inv": 16
+ },
+ "KXHIGHAUS-26NOV01-B83.5": {
+  "cash": 0.42,
+  "city": "Austin",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHAUS-26OCT26-B81.5": {
+  "cash": 7.82,
+  "city": "Austin",
+  "contracts": 396,
+  "day": "2026-10-26",
+  "held": -8,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHAUS-26OCT26-B83.5": {
+  "cash": 13.67,
+  "city": "Austin",
+  "contracts": 296,
+  "day": "2026-10-26",
+  "held": 6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:03:59+00:00"
+ },
+ "KXHIGHAUS-26OCT26-T81": {
+  "cash": -30.74,
+  "city": "Austin",
+  "contracts": 142,
+  "day": "2026-10-26",
+  "held": -40,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHAUS-26OCT27-B80.5": {
+  "cash": 19.33,
+  "city": "Austin",
+  "contracts": 529,
+  "day": "2026-10-27",
+  "held": -29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHAUS-26OCT27-B82.5": {
+  "cash": -17.17,
+  "city": "Austin",
+  "contracts": 470,
+  "day": "2026-10-27",
+  "held": -16,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHAUS-26OCT27-B84.5": {
+  "cash": -3.79,
+  "city": "Austin",
+  "contracts": 265,
+  "day": "2026-10-27",
+  "held": 43,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHAUS-26OCT27-B86.5": {
+  "cash": -0.41,
+  "city": "Austin",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHAUS-26OCT27-T80": {
+  "cash": 5.19,
+  "city": "Austin",
+  "contracts": 365,
+  "day": "2026-10-27",
+  "held": -21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHAUS-26OCT28-B82.5": {
+  "cash": 5.64,
+  "city": "Austin",
+  "contracts": 650,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:15:52+00:00"
+ },
+ "KXHIGHAUS-26OCT28-B84.5": {
+  "cash": 4.98,
+  "city": "Austin",
+  "contracts": 344,
+  "day": "2026-10-28",
+  "held": 14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:15:52+00:00"
+ },
+ "KXHIGHAUS-26OCT28-B86.5": {
+  "cash": 6.14,
+  "city": "Austin",
+  "contracts": 275,
+  "day": "2026-10-28",
+  "held": -25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:15:52+00:00"
+ },
+ "KXHIGHAUS-26OCT28-T82": {
+  "cash": -41.05,
+  "city": "Austin",
+  "contracts": 267,
+  "day": "2026-10-28",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:15:52+00:00"
+ },
+ "KXHIGHAUS-26OCT28-T89": {
+  "cash": -0.41,
+  "city": "Austin",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:15:52+00:00"
+ },
+ "KXHIGHAUS-26OCT29-B77.5": {
+  "cash": -11.8,
+  "city": "Austin",
+  "contracts": 348,
+  "day": "2026-10-29",
+  "held": 42,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHAUS-26OCT29-B79.5": {
+  "cash": -1.07,
+  "city": "Austin",
+  "contracts": 37,
+  "day": "2026-10-29",
+  "held": 17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHAUS-26OCT29-T77": {
+  "cash": -14.06,
+  "city": "Austin",
+  "contracts": 675,
+  "day": "2026-10-29",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHAUS-26OCT30-B73.5": {
+  "cash": 1.75,
+  "city": "Austin",
+  "contracts": 166,
+  "day": "2026-10-30",
+  "held": -36,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHAUS-26OCT30-B77.5": {
+  "cash": 0.7,
+  "city": "Austin",
+  "contracts": 15,
+  "day": "2026-10-30",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHAUS-26OCT30-T73": {
+  "cash": -9.03,
+  "city": "Austin",
+  "contracts": 367,
+  "day": "2026-10-30",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHAUS-26OCT31-B77.5": {
+  "cash": 9.11,
+  "city": "Austin",
+  "contracts": 34,
+  "day": "2026-10-31",
+  "inv": -32
+ },
+ "KXHIGHAUS-26OCT31-B79.5": {
+  "cash": 1.23,
+  "city": "Austin",
+  "contracts": 19,
+  "day": "2026-10-31",
+  "inv": -1
+ },
+ "KXHIGHAUS-26OCT31-B81.5": {
+  "cash": 1.49,
+  "city": "Austin",
+  "contracts": 63,
+  "day": "2026-10-31",
+  "inv": -7
+ },
+ "KXHIGHAUS-26OCT31-T77": {
+  "cash": 11.35,
+  "city": "Austin",
+  "contracts": 136,
+  "day": "2026-10-31",
+  "inv": -28
+ },
+ "KXHIGHCHI-26NOV01-B64.5": {
+  "cash": 3.06,
+  "city": "Chicago",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHCHI-26NOV01-B68.5": {
+  "cash": -0.59,
+  "city": "Chicago",
+  "contracts": 3,
+  "day": "2026-11-01",
+  "inv": 3
+ },
+ "KXHIGHCHI-26NOV01-T64": {
+  "cash": -1.43,
+  "city": "Chicago",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHCHI-26OCT26-B62.5": {
+  "cash": 5.85,
+  "city": "Chicago",
+  "contracts": 357,
+  "day": "2026-10-26",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:03:59+00:00"
+ },
+ "KXHIGHCHI-26OCT26-B64.5": {
+  "cash": -20.08,
+  "city": "Chicago",
+  "contracts": 273,
+  "day": "2026-10-26",
+  "held": -49,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:03:59+00:00"
+ },
+ "KXHIGHCHI-26OCT26-B66.5": {
+  "cash": -0.94,
+  "city": "Chicago",
+  "contracts": 85,
+  "day": "2026-10-26",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:03:59+00:00"
+ },
+ "KXHIGHCHI-26OCT26-T62": {
+  "cash": -0.24,
+  "city": "Chicago",
+  "contracts": 17,
+  "day": "2026-10-26",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:03:59+00:00"
+ },
+ "KXHIGHCHI-26OCT27-B66.5": {
+  "cash": 1.08,
+  "city": "Chicago",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": -10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHCHI-26OCT27-B68.5": {
+  "cash": -7.25,
+  "city": "Chicago",
+  "contracts": 543,
+  "day": "2026-10-27",
+  "held": -13,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHCHI-26OCT27-B70.5": {
+  "cash": -19.7,
+  "city": "Chicago",
+  "contracts": 569,
+  "day": "2026-10-27",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHCHI-26OCT28-B72.5": {
+  "cash": -0.71,
+  "city": "Chicago",
+  "contracts": 11,
+  "day": "2026-10-28",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:03:45+00:00"
+ },
+ "KXHIGHCHI-26OCT28-B74.5": {
+  "cash": 18.52,
+  "city": "Chicago",
+  "contracts": 112,
+  "day": "2026-10-28",
+  "held": -38,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:03:45+00:00"
+ },
+ "KXHIGHCHI-26OCT28-B76.5": {
+  "cash": -26.76,
+  "city": "Chicago",
+  "contracts": 237,
+  "day": "2026-10-28",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:03:45+00:00"
+ },
+ "KXHIGHCHI-26OCT28-B78.5": {
+  "cash": -0.51,
+  "city": "Chicago",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:03:45+00:00"
+ },
+ "KXHIGHCHI-26OCT29-B68.5": {
+  "cash": -21.5,
+  "city": "Chicago",
+  "contracts": 787,
+  "day": "2026-10-29",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHCHI-26OCT29-B70.5": {
+  "cash": 5.86,
+  "city": "Chicago",
+  "contracts": 530,
+  "day": "2026-10-29",
+  "held": -36,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHCHI-26OCT29-B72.5": {
+  "cash": 3.22,
+  "city": "Chicago",
+  "contracts": 25,
+  "day": "2026-10-29",
+  "held": -25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHCHI-26OCT29-T68": {
+  "cash": -2.18,
+  "city": "Chicago",
+  "contracts": 30,
+  "day": "2026-10-29",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHCHI-26OCT30-B60.5": {
+  "cash": 8.77,
+  "city": "Chicago",
+  "contracts": 243,
+  "day": "2026-10-30",
+  "held": -29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHCHI-26OCT30-B62.5": {
+  "cash": -0.33,
+  "city": "Chicago",
+  "contracts": 4,
+  "day": "2026-10-30",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHCHI-26OCT30-B64.5": {
+  "cash": -0.21,
+  "city": "Chicago",
+  "contracts": 2,
+  "day": "2026-10-30",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHCHI-26OCT30-B66.5": {
+  "cash": -0.54,
+  "city": "Chicago",
+  "contracts": 10,
+  "day": "2026-10-30",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHCHI-26OCT30-T60": {
+  "cash": -12.96,
+  "city": "Chicago",
+  "contracts": 148,
+  "day": "2026-10-30",
+  "held": -32,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHCHI-26OCT31-B60.5": {
+  "cash": 5.69,
+  "city": "Chicago",
+  "contracts": 57,
+  "day": "2026-10-31",
+  "inv": -17
+ },
+ "KXHIGHCHI-26OCT31-B62.5": {
+  "cash": 14.69,
+  "city": "Chicago",
+  "contracts": 138,
+  "day": "2026-10-31",
+  "inv": -38
+ },
+ "KXHIGHCHI-26OCT31-T60": {
+  "cash": -6.99,
+  "city": "Chicago",
+  "contracts": 61,
+  "day": "2026-10-31",
+  "inv": 37
+ },
+ "KXHIGHDEN-26NOV01-B60.5": {
+  "cash": 1.14,
+  "city": "Denver",
+  "contracts": 9,
+  "day": "2026-11-01",
+  "inv": -9
+ },
+ "KXHIGHDEN-26NOV01-B64.5": {
+  "cash": 2.96,
+  "city": "Denver",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHDEN-26OCT26-B59.5": {
+  "cash": 0.75,
+  "city": "Denver",
+  "contracts": 64,
+  "day": "2026-10-26",
+  "held": -4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T13:03:10+00:00"
+ },
+ "KXHIGHDEN-26OCT26-T59": {
+  "cash": -5.85,
+  "city": "Denver",
+  "contracts": 81,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T13:03:10+00:00"
+ },
+ "KXHIGHDEN-26OCT27-B65.5": {
+  "cash": -15.9,
+  "city": "Denver",
+  "contracts": 456,
+  "day": "2026-10-27",
+  "held": 46,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T13:04:33+00:00"
+ },
+ "KXHIGHDEN-26OCT27-B67.5": {
+  "cash": 9.31,
+  "city": "Denver",
+  "contracts": 65,
+  "day": "2026-10-27",
+  "held": -23,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T13:04:33+00:00"
+ },
+ "KXHIGHDEN-26OCT27-B69.5": {
+  "cash": 0.68,
+  "city": "Denver",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": -10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T13:04:33+00:00"
+ },
+ "KXHIGHDEN-26OCT27-T65": {
+  "cash": -11.06,
+  "city": "Denver",
+  "contracts": 550,
+  "day": "2026-10-27",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T13:04:33+00:00"
+ },
+ "KXHIGHDEN-26OCT28-B65.5": {
+  "cash": -22.27,
+  "city": "Denver",
+  "contracts": 314,
+  "day": "2026-10-28",
+  "held": -42,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T13:06:00+00:00"
+ },
+ "KXHIGHDEN-26OCT28-B67.5": {
+  "cash": -2.93,
+  "city": "Denver",
+  "contracts": 529,
+  "day": "2026-10-28",
+  "held": 7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T13:06:00+00:00"
+ },
+ "KXHIGHDEN-26OCT28-B69.5": {
+  "cash": 0.5,
+  "city": "Denver",
+  "contracts": 3,
+  "day": "2026-10-28",
+  "held": -3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T13:06:00+00:00"
+ },
+ "KXHIGHDEN-26OCT28-T65": {
+  "cash": -5.72,
+  "city": "Denver",
+  "contracts": 107,
+  "day": "2026-10-28",
+  "held": 35,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T13:06:00+00:00"
+ },
+ "KXHIGHDEN-26OCT29-B63.5": {
+  "cash": 5.1,
+  "city": "Denver",
+  "contracts": 279,
+  "day": "2026-10-29",
+  "held": -21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T13:08:21+00:00"
+ },
+ "KXHIGHDEN-26OCT29-B65.5": {
+  "cash": -23.77,
+  "city": "Denver",
+  "contracts": 233,
+  "day": "2026-10-29",
+  "held": -49,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T13:08:21+00:00"
+ },
+ "KXHIGHDEN-26OCT29-B67.5": {
+  "cash": -4.75,
+  "city": "Denver",
+  "contracts": 335,
+  "day": "2026-10-29",
+  "held": 29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T13:08:21+00:00"
+ },
+ "KXHIGHDEN-26OCT30-B61.5": {
+  "cash": -2.54,
+  "city": "Denver",
+  "contracts": 169,
+  "day": "2026-10-30",
+  "held": 45,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T13:05:51+00:00"
+ },
+ "KXHIGHDEN-26OCT30-B63.5": {
+  "cash": -27.21,
+  "city": "Denver",
+  "contracts": 488,
+  "day": "2026-10-30",
+  "held": -34,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T13:05:51+00:00"
+ },
+ "KXHIGHDEN-26OCT30-B65.5": {
+  "cash": 1.01,
+  "city": "Denver",
+  "contracts": 445,
+  "day": "2026-10-30",
+  "held": 37,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T13:05:51+00:00"
+ },
+ "KXHIGHDEN-26OCT30-T61": {
+  "cash": -0.73,
+  "city": "Denver",
+  "contracts": 135,
+  "day": "2026-10-30",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T13:05:51+00:00"
+ },
+ "KXHIGHDEN-26OCT31-B60.5": {
+  "cash": 4.39,
+  "city": "Denver",
+  "contracts": 55,
+  "day": "2026-10-31",
+  "inv": -13
+ },
+ "KXHIGHDEN-26OCT31-B62.5": {
+  "cash": 9.86,
+  "city": "Denver",
+  "contracts": 98,
+  "day": "2026-10-31",
+  "inv": -38
+ },
+ "KXHIGHDEN-26OCT31-B64.5": {
+  "cash": -3.71,
+  "city": "Denver",
+  "contracts": 22,
+  "day": "2026-10-31",
+  "inv": 22
+ },
+ "KXHIGHLAX-26NOV01-B67.5": {
+  "cash": 0.59,
+  "city": "Los Angeles",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHLAX-26NOV01-B69.5": {
+  "cash": 4.44,
+  "city": "Los Angeles",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHLAX-26OCT26-B75.5": {
+  "cash": 0.02,
+  "city": "Los Angeles",
+  "contracts": 60,
+  "day": "2026-10-26",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHLAX-26OCT26-B77.5": {
+  "cash": -15.21,
+  "city": "Los Angeles",
+  "contracts": 109,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHLAX-26OCT26-T78": {
+  "cash": 10.11,
+  "city": "Los Angeles",
+  "contracts": 60,
+  "day": "2026-10-26",
+  "held": -42,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHLAX-26OCT27-B74.5": {
+  "cash": -6.79,
+  "city": "Los Angeles",
+  "contracts": 150,
+  "day": "2026-10-27",
+  "held": -30,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHLAX-26OCT27-B76.5": {
+  "cash": 20.21,
+  "city": "Los Angeles",
+  "contracts": 274,
+  "day": "2026-10-27",
+  "held": -24,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHLAX-26OCT27-T77": {
+  "cash": -0.45,
+  "city": "Los Angeles",
+  "contracts": 20,
+  "day": "2026-10-27",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHLAX-26OCT28-B73.5": {
+  "cash": 10.79,
+  "city": "Los Angeles",
+  "contracts": 382,
+  "day": "2026-10-28",
+  "held": -26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHLAX-26OCT28-B75.5": {
+  "cash": -9.43,
+  "city": "Los Angeles",
+  "contracts": 439,
+  "day": "2026-10-28",
+  "held": -21,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHLAX-26OCT28-T76": {
+  "cash": -0.57,
+  "city": "Los Angeles",
+  "contracts": 6,
+  "day": "2026-10-28",
+  "held": 6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHLAX-26OCT29-B70.5": {
+  "cash": -3.13,
+  "city": "Los Angeles",
+  "contracts": 229,
+  "day": "2026-10-29",
+  "held": 31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHLAX-26OCT29-B72.5": {
+  "cash": -21.49,
+  "city": "Los Angeles",
+  "contracts": 481,
+  "day": "2026-10-29",
+  "held": -49,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHLAX-26OCT29-B74.5": {
+  "cash": -5.33,
+  "city": "Los Angeles",
+  "contracts": 297,
+  "day": "2026-10-29",
+  "held": 25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHLAX-26OCT29-T75": {
+  "cash": -0.62,
+  "city": "Los Angeles",
+  "contracts": 10,
+  "day": "2026-10-29",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHLAX-26OCT30-B69.5": {
+  "cash": -5.38,
+  "city": "Los Angeles",
+  "contracts": 277,
+  "day": "2026-10-30",
+  "held": 7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHLAX-26OCT30-B71.5": {
+  "cash": -9.42,
+  "city": "Los Angeles",
+  "contracts": 578,
+  "day": "2026-10-30",
+  "held": -22,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHLAX-26OCT30-B73.5": {
+  "cash": -0.59,
+  "city": "Los Angeles",
+  "contracts": 286,
+  "day": "2026-10-30",
+  "held": 16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHLAX-26OCT31-B67.5": {
+  "cash": 0.47,
+  "city": "Los Angeles",
+  "contracts": 10,
+  "day": "2026-10-31",
+  "inv": -10
+ },
+ "KXHIGHLAX-26OCT31-B69.5": {
+  "cash": 13.51,
+  "city": "Los Angeles",
+  "contracts": 70,
+  "day": "2026-10-31",
+  "inv": -50
+ },
+ "KXHIGHLAX-26OCT31-T70": {
+  "cash": -2.57,
+  "city": "Los Angeles",
+  "contracts": 54,
+  "day": "2026-10-31",
+  "inv": 2
+ },
+ "KXHIGHMIA-26NOV01-B79.5": {
+  "cash": 1.29,
+  "city": "Miami",
+  "contracts": 6,
+  "day": "2026-11-01",
+  "inv": -6
+ },
+ "KXHIGHMIA-26OCT26-B81.5": {
+  "cash": 2.15,
+  "city": "Miami",
+  "contracts": 254,
+  "day": "2026-10-26",
+  "held": -12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHMIA-26OCT26-B83.5": {
+  "cash": 0.4,
+  "city": "Miami",
+  "contracts": 301,
+  "day": "2026-10-26",
+  "held": -21,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHMIA-26OCT26-B85.5": {
+  "cash": 0.45,
+  "city": "Miami",
+  "contracts": 42,
+  "day": "2026-10-26",
+  "held": -2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHMIA-26OCT27-B81.5": {
+  "cash": 0.62,
+  "city": "Miami",
+  "contracts": 56,
+  "day": "2026-10-27",
+  "held": -4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHMIA-26OCT27-B83.5": {
+  "cash": -16.29,
+  "city": "Miami",
+  "contracts": 178,
+  "day": "2026-10-27",
+  "held": -14,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHMIA-26OCT27-B85.5": {
+  "cash": -4.03,
+  "city": "Miami",
+  "contracts": 88,
+  "day": "2026-10-27",
+  "held": 32,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHMIA-26OCT28-B82.5": {
+  "cash": -0.83,
+  "city": "Miami",
+  "contracts": 20,
+  "day": "2026-10-28",
+  "held": 20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHMIA-26OCT28-B84.5": {
+  "cash": 7.04,
+  "city": "Miami",
+  "contracts": 342,
+  "day": "2026-10-28",
+  "held": -28,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHMIA-26OCT28-B86.5": {
+  "cash": 15.85,
+  "city": "Miami",
+  "contracts": 707,
+  "day": "2026-10-28",
+  "held": -33,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHMIA-26OCT28-B88.5": {
+  "cash": -15.69,
+  "city": "Miami",
+  "contracts": 375,
+  "day": "2026-10-28",
+  "held": -33,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHMIA-26OCT29-B83.5": {
+  "cash": -0.06,
+  "city": "Miami",
+  "contracts": 1,
+  "day": "2026-10-29",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHMIA-26OCT29-B85.5": {
+  "cash": 7.32,
+  "city": "Miami",
+  "contracts": 216,
+  "day": "2026-10-29",
+  "held": -8,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHMIA-26OCT29-B87.5": {
+  "cash": -9.3,
+  "city": "Miami",
+  "contracts": 426,
+  "day": "2026-10-29",
+  "held": -30,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHMIA-26OCT29-B89.5": {
+  "cash": -1.33,
+  "city": "Miami",
+  "contracts": 109,
+  "day": "2026-10-29",
+  "held": 31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHMIA-26OCT30-B84.5": {
+  "cash": 3.47,
+  "city": "Miami",
+  "contracts": 313,
+  "day": "2026-10-30",
+  "held": -39,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHMIA-26OCT30-B86.5": {
+  "cash": -21.82,
+  "city": "Miami",
+  "contracts": 436,
+  "day": "2026-10-30",
+  "held": -42,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHMIA-26OCT30-B88.5": {
+  "cash": -6.81,
+  "city": "Miami",
+  "contracts": 503,
+  "day": "2026-10-30",
+  "held": 25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHMIA-26OCT31-B83.5": {
+  "cash": 10.02,
+  "city": "Miami",
+  "contracts": 169,
+  "day": "2026-10-31",
+  "inv": -43
+ },
+ "KXHIGHMIA-26OCT31-B85.5": {
+  "cash": 20.24,
+  "city": "Miami",
+  "contracts": 200,
+  "day": "2026-10-31",
+  "inv": -36
+ },
+ "KXHIGHMIA-26OCT31-B87.5": {
+  "cash": -1.05,
+  "city": "Miami",
+  "contracts": 108,
+  "day": "2026-10-31",
+  "inv": 12
+ },
+ "KXHIGHNY-26NOV01-B62.5": {
+  "cash": -0.09,
+  "city": "New York",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": 1
+ },
+ "KXHIGHNY-26OCT26-B68.5": {
+  "cash": -17.11,
+  "city": "New York",
+  "contracts": 257,
+  "day": "2026-10-26",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHNY-26OCT26-B70.5": {
+  "cash": -1.37,
+  "city": "New York",
+  "contracts": 439,
+  "day": "2026-10-26",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHNY-26OCT26-T68": {
+  "cash": 0.86,
+  "city": "New York",
+  "contracts": 40,
+  "day": "2026-10-26",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHNY-26OCT27-B60.5": {
+  "cash": -7.97,
+  "city": "New York",
+  "contracts": 252,
+  "day": "2026-10-27",
+  "held": -36,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHNY-26OCT27-B62.5": {
+  "cash": 7.78,
+  "city": "New York",
+  "contracts": 357,
+  "day": "2026-10-27",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHNY-26OCT27-T60": {
+  "cash": -5.44,
+  "city": "New York",
+  "contracts": 81,
+  "day": "2026-10-27",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHNY-26OCT28-B60.5": {
+  "cash": -28.08,
+  "city": "New York",
+  "contracts": 361,
+  "day": "2026-10-28",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:13:29+00:00"
+ },
+ "KXHIGHNY-26OCT28-B62.5": {
+  "cash": 4.24,
+  "city": "New York",
+  "contracts": 378,
+  "day": "2026-10-28",
+  "held": -16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:13:29+00:00"
+ },
+ "KXHIGHNY-26OCT28-T60": {
+  "cash": 3.49,
+  "city": "New York",
+  "contracts": 163,
+  "day": "2026-10-28",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:13:29+00:00"
+ },
+ "KXHIGHNY-26OCT29-B67.5": {
+  "cash": 21.85,
+  "city": "New York",
+  "contracts": 604,
+  "day": "2026-10-29",
+  "held": -40,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHNY-26OCT29-B69.5": {
+  "cash": 5.19,
+  "city": "New York",
+  "contracts": 66,
+  "day": "2026-10-29",
+  "held": -34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHNY-26OCT29-T67": {
+  "cash": -9.9,
+  "city": "New York",
+  "contracts": 473,
+  "day": "2026-10-29",
+  "held": -31,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHNY-26OCT30-B69.5": {
+  "cash": -24.55,
+  "city": "New York",
+  "contracts": 261,
+  "day": "2026-10-30",
+  "held": -35,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:03:45+00:00"
+ },
+ "KXHIGHNY-26OCT30-B71.5": {
+  "cash": -3.75,
+  "city": "New York",
+  "contracts": 132,
+  "day": "2026-10-30",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:03:45+00:00"
+ },
+ "KXHIGHNY-26OCT30-T69": {
+  "cash": 18.77,
+  "city": "New York",
+  "contracts": 161,
+  "day": "2026-10-30",
+  "held": -33,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:03:45+00:00"
+ },
+ "KXHIGHNY-26OCT31-B59.5": {
+  "cash": 10.55,
+  "city": "New York",
+  "contracts": 135,
+  "day": "2026-10-31",
+  "inv": -41
+ },
+ "KXHIGHNY-26OCT31-T59": {
+  "cash": 12.1,
+  "city": "New York",
+  "contracts": 36,
+  "day": "2026-10-31",
+  "inv": -16
+ },
+ "KXHIGHPHIL-26NOV01-B64.5": {
+  "cash": -3.95,
+  "city": "Philadelphia",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHPHIL-26OCT26-B68.5": {
+  "cash": -1.2,
+  "city": "Philadelphia",
+  "contracts": 122,
+  "day": "2026-10-26",
+  "held": 16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHPHIL-26OCT26-B70.5": {
+  "cash": -10.25,
+  "city": "Philadelphia",
+  "contracts": 325,
+  "day": "2026-10-26",
+  "held": -49,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHPHIL-26OCT26-B72.5": {
+  "cash": 2.49,
+  "city": "Philadelphia",
+  "contracts": 327,
+  "day": "2026-10-26",
+  "held": 13,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHPHIL-26OCT27-B64.5": {
+  "cash": 5.82,
+  "city": "Philadelphia",
+  "contracts": 113,
+  "day": "2026-10-27",
+  "held": -45,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHPHIL-26OCT27-B66.5": {
+  "cash": -13.66,
+  "city": "Philadelphia",
+  "contracts": 343,
+  "day": "2026-10-27",
+  "held": -19,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHPHIL-26OCT27-B68.5": {
+  "cash": 8.54,
+  "city": "Philadelphia",
+  "contracts": 230,
+  "day": "2026-10-27",
+  "held": -20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHPHIL-26OCT27-B70.5": {
+  "cash": -0.52,
+  "city": "Philadelphia",
+  "contracts": 32,
+  "day": "2026-10-27",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHPHIL-26OCT28-B65.5": {
+  "cash": 4.64,
+  "city": "Philadelphia",
+  "contracts": 180,
+  "day": "2026-10-28",
+  "held": -14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHPHIL-26OCT28-B67.5": {
+  "cash": -9.29,
+  "city": "Philadelphia",
+  "contracts": 348,
+  "day": "2026-10-28",
+  "held": -44,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHPHIL-26OCT28-B69.5": {
+  "cash": -0.06,
+  "city": "Philadelphia",
+  "contracts": 20,
+  "day": "2026-10-28",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHPHIL-26OCT28-T65": {
+  "cash": -0.41,
+  "city": "Philadelphia",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHPHIL-26OCT29-B69.5": {
+  "cash": -20.03,
+  "city": "Philadelphia",
+  "contracts": 447,
+  "day": "2026-10-29",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHPHIL-26OCT29-B71.5": {
+  "cash": -10.04,
+  "city": "Philadelphia",
+  "contracts": 488,
+  "day": "2026-10-29",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHPHIL-26OCT29-B73.5": {
+  "cash": 1.32,
+  "city": "Philadelphia",
+  "contracts": 21,
+  "day": "2026-10-29",
+  "held": -21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHPHIL-26OCT29-T69": {
+  "cash": -1.32,
+  "city": "Philadelphia",
+  "contracts": 31,
+  "day": "2026-10-29",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHPHIL-26OCT30-B71.5": {
+  "cash": -1.11,
+  "city": "Philadelphia",
+  "contracts": 67,
+  "day": "2026-10-30",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHPHIL-26OCT30-B73.5": {
+  "cash": -8.42,
+  "city": "Philadelphia",
+  "contracts": 311,
+  "day": "2026-10-30",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHPHIL-26OCT30-B75.5": {
+  "cash": -4.69,
+  "city": "Philadelphia",
+  "contracts": 206,
+  "day": "2026-10-30",
+  "held": 6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHPHIL-26OCT30-T71": {
+  "cash": -0.41,
+  "city": "Philadelphia",
+  "contracts": 10,
+  "day": "2026-10-30",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHPHIL-26OCT31-B61.5": {
+  "cash": 15.72,
+  "city": "Philadelphia",
+  "contracts": 125,
+  "day": "2026-10-31",
+  "inv": -25
+ },
+ "KXHIGHPHIL-26OCT31-B63.5": {
+  "cash": -1.66,
+  "city": "Philadelphia",
+  "contracts": 55,
+  "day": "2026-10-31",
+  "inv": 15
+ },
+ "KXHIGHPHIL-26OCT31-T61": {
+  "cash": -0.12,
+  "city": "Philadelphia",
+  "contracts": 47,
+  "day": "2026-10-31",
+  "inv": -9
+ },
+ "KXHIGHTATL-26NOV01-T64": {
+  "cash": 0.3,
+  "city": "Atlanta",
+  "contracts": 20,
+  "day": "2026-11-01",
+  "inv": 0
+ },
+ "KXHIGHTATL-26OCT26-B69.5": {
+  "cash": 3.44,
+  "city": "Atlanta",
+  "contracts": 129,
+  "day": "2026-10-26",
+  "held": -25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTATL-26OCT26-B71.5": {
+  "cash": -3.56,
+  "city": "Atlanta",
+  "contracts": 265,
+  "day": "2026-10-26",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTATL-26OCT26-B73.5": {
+  "cash": -6.07,
+  "city": "Atlanta",
+  "contracts": 145,
+  "day": "2026-10-26",
+  "held": 25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTATL-26OCT27-B72.5": {
+  "cash": 4.13,
+  "city": "Atlanta",
+  "contracts": 336,
+  "day": "2026-10-27",
+  "held": -38,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTATL-26OCT27-B74.5": {
+  "cash": 7.93,
+  "city": "Atlanta",
+  "contracts": 173,
+  "day": "2026-10-27",
+  "held": 31,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTATL-26OCT28-B70.5": {
+  "cash": 0.17,
+  "city": "Atlanta",
+  "contracts": 20,
+  "day": "2026-10-28",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTATL-26OCT28-B72.5": {
+  "cash": -7.87,
+  "city": "Atlanta",
+  "contracts": 443,
+  "day": "2026-10-28",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTATL-26OCT28-B74.5": {
+  "cash": -27.0,
+  "city": "Atlanta",
+  "contracts": 348,
+  "day": "2026-10-28",
+  "held": -42,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTATL-26OCT28-B76.5": {
+  "cash": 0.5,
+  "city": "Atlanta",
+  "contracts": 141,
+  "day": "2026-10-28",
+  "held": 9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTATL-26OCT29-B74.5": {
+  "cash": 8.88,
+  "city": "Atlanta",
+  "contracts": 312,
+  "day": "2026-10-29",
+  "held": -22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTATL-26OCT29-B76.5": {
+  "cash": -19.45,
+  "city": "Atlanta",
+  "contracts": 249,
+  "day": "2026-10-29",
+  "held": -27,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTATL-26OCT29-B78.5": {
+  "cash": 0.41,
+  "city": "Atlanta",
+  "contracts": 16,
+  "day": "2026-10-29",
+  "held": -4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTATL-26OCT30-B76.5": {
+  "cash": 0.28,
+  "city": "Atlanta",
+  "contracts": 15,
+  "day": "2026-10-30",
+  "held": -5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTATL-26OCT30-B78.5": {
+  "cash": 16.95,
+  "city": "Atlanta",
+  "contracts": 122,
+  "day": "2026-10-30",
+  "held": -38,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTATL-26OCT30-B80.5": {
+  "cash": -23.16,
+  "city": "Atlanta",
+  "contracts": 310,
+  "day": "2026-10-30",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTATL-26OCT30-B82.5": {
+  "cash": -0.91,
+  "city": "Atlanta",
+  "contracts": 17,
+  "day": "2026-10-30",
+  "held": 17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTATL-26OCT31-B71.5": {
+  "cash": 1.08,
+  "city": "Atlanta",
+  "contracts": 111,
+  "day": "2026-10-31",
+  "inv": -3
+ },
+ "KXHIGHTATL-26OCT31-B73.5": {
+  "cash": 10.84,
+  "city": "Atlanta",
+  "contracts": 124,
+  "day": "2026-10-31",
+  "inv": -48
+ },
+ "KXHIGHTATL-26OCT31-T71": {
+  "cash": 4.85,
+  "city": "Atlanta",
+  "contracts": 63,
+  "day": "2026-10-31",
+  "inv": -41
+ },
+ "KXHIGHTBOS-26NOV01-B58.5": {
+  "cash": 2.56,
+  "city": "Boston",
+  "contracts": 7,
+  "day": "2026-11-01",
+  "inv": -7
+ },
+ "KXHIGHTBOS-26NOV01-B60.5": {
+  "cash": -5.05,
+  "city": "Boston",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHTBOS-26NOV01-T63": {
+  "cash": -0.41,
+  "city": "Boston",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHTBOS-26OCT26-B68.5": {
+  "cash": 2.66,
+  "city": "Boston",
+  "contracts": 93,
+  "day": "2026-10-26",
+  "held": -21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTBOS-26OCT26-B70.5": {
+  "cash": -7.06,
+  "city": "Boston",
+  "contracts": 219,
+  "day": "2026-10-26",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTBOS-26OCT26-T71": {
+  "cash": -13.7,
+  "city": "Boston",
+  "contracts": 311,
+  "day": "2026-10-26",
+  "held": -7,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTBOS-26OCT27-B51.5": {
+  "cash": -0.41,
+  "city": "Boston",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTBOS-26OCT27-B55.5": {
+  "cash": 2.27,
+  "city": "Boston",
+  "contracts": 103,
+  "day": "2026-10-27",
+  "held": -9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTBOS-26OCT27-B57.5": {
+  "cash": -23.31,
+  "city": "Boston",
+  "contracts": 142,
+  "day": "2026-10-27",
+  "held": -16,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTBOS-26OCT27-T51": {
+  "cash": -0.42,
+  "city": "Boston",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTBOS-26OCT27-T58": {
+  "cash": 4.44,
+  "city": "Boston",
+  "contracts": 183,
+  "day": "2026-10-27",
+  "held": -47,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTBOS-26OCT28-B54.5": {
+  "cash": -7.78,
+  "city": "Boston",
+  "contracts": 192,
+  "day": "2026-10-28",
+  "held": 42,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTBOS-26OCT28-B56.5": {
+  "cash": -7.74,
+  "city": "Boston",
+  "contracts": 77,
+  "day": "2026-10-28",
+  "held": 33,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTBOS-26OCT28-B58.5": {
+  "cash": -0.68,
+  "city": "Boston",
+  "contracts": 6,
+  "day": "2026-10-28",
+  "held": 6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTBOS-26OCT28-T54": {
+  "cash": -22.64,
+  "city": "Boston",
+  "contracts": 212,
+  "day": "2026-10-28",
+  "held": -38,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTBOS-26OCT29-B65.5": {
+  "cash": 0.43,
+  "city": "Boston",
+  "contracts": 24,
+  "day": "2026-10-29",
+  "held": -4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTBOS-26OCT29-B67.5": {
+  "cash": 4.97,
+  "city": "Boston",
+  "contracts": 245,
+  "day": "2026-10-29",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTBOS-26OCT29-B69.5": {
+  "cash": -13.11,
+  "city": "Boston",
+  "contracts": 255,
+  "day": "2026-10-29",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTBOS-26OCT29-T70": {
+  "cash": 2.15,
+  "city": "Boston",
+  "contracts": 18,
+  "day": "2026-10-29",
+  "held": -12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTBOS-26OCT30-B67.5": {
+  "cash": 1.56,
+  "city": "Boston",
+  "contracts": 21,
+  "day": "2026-10-30",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTBOS-26OCT30-B69.5": {
+  "cash": -10.92,
+  "city": "Boston",
+  "contracts": 152,
+  "day": "2026-10-30",
+  "held": 26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTBOS-26OCT30-B71.5": {
+  "cash": -3.31,
+  "city": "Boston",
+  "contracts": 108,
+  "day": "2026-10-30",
+  "held": -4,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTBOS-26OCT30-T72": {
+  "cash": 2.82,
+  "city": "Boston",
+  "contracts": 88,
+  "day": "2026-10-30",
+  "held": -28,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTBOS-26OCT31-B52.5": {
+  "cash": 13.24,
+  "city": "Boston",
+  "contracts": 96,
+  "day": "2026-10-31",
+  "inv": -46
+ },
+ "KXHIGHTBOS-26OCT31-B54.5": {
+  "cash": 9.12,
+  "city": "Boston",
+  "contracts": 80,
+  "day": "2026-10-31",
+  "inv": -22
+ },
+ "KXHIGHTBOS-26OCT31-B56.5": {
+  "cash": 0.07,
+  "city": "Boston",
+  "contracts": 20,
+  "day": "2026-10-31",
+  "inv": 0
+ },
+ "KXHIGHTBOS-26OCT31-T52": {
+  "cash": -0.51,
+  "city": "Boston",
+  "contracts": 10,
+  "day": "2026-10-31",
+  "inv": 10
+ },
+ "KXHIGHTDAL-26NOV01-B83.5": {
+  "cash": 0.16,
+  "city": "Dallas",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHTDAL-26NOV01-B85.5": {
+  "cash": 0.05,
+  "city": "Dallas",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHTDAL-26OCT26-B78.5": {
+  "cash": 11.33,
+  "city": "Dallas",
+  "contracts": 133,
+  "day": "2026-10-26",
+  "held": -19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTDAL-26OCT26-B80.5": {
+  "cash": -5.34,
+  "city": "Dallas",
+  "contracts": 187,
+  "day": "2026-10-26",
+  "held": -5,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTDAL-26OCT26-B82.5": {
+  "cash": 1.73,
+  "city": "Dallas",
+  "contracts": 32,
+  "day": "2026-10-26",
+  "held": -28,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTDAL-26OCT27-B80.5": {
+  "cash": -0.35,
+  "city": "Dallas",
+  "contracts": 31,
+  "day": "2026-10-27",
+  "held": -9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTDAL-26OCT27-B82.5": {
+  "cash": -23.9,
+  "city": "Dallas",
+  "contracts": 431,
+  "day": "2026-10-27",
+  "held": -33,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTDAL-26OCT27-B84.5": {
+  "cash": -45.34,
+  "city": "Dallas",
+  "contracts": 393,
+  "day": "2026-10-27",
+  "held": 37,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTDAL-26OCT27-T80": {
+  "cash": -0.72,
+  "city": "Dallas",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTDAL-26OCT28-B82.5": {
+  "cash": -15.29,
+  "city": "Dallas",
+  "contracts": 323,
+  "day": "2026-10-28",
+  "held": -35,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTDAL-26OCT28-B84.5": {
+  "cash": 6.9,
+  "city": "Dallas",
+  "contracts": 208,
+  "day": "2026-10-28",
+  "held": -26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTDAL-26OCT28-B86.5": {
+  "cash": -0.41,
+  "city": "Dallas",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTDAL-26OCT28-T82": {
+  "cash": 7.1,
+  "city": "Dallas",
+  "contracts": 213,
+  "day": "2026-10-28",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTDAL-26OCT29-B81.5": {
+  "cash": -1.9,
+  "city": "Dallas",
+  "contracts": 262,
+  "day": "2026-10-29",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTDAL-26OCT29-B83.5": {
+  "cash": -0.99,
+  "city": "Dallas",
+  "contracts": 22,
+  "day": "2026-10-29",
+  "held": 22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTDAL-26OCT29-B85.5": {
+  "cash": -0.1,
+  "city": "Dallas",
+  "contracts": 2,
+  "day": "2026-10-29",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTDAL-26OCT29-B87.5": {
+  "cash": -0.1,
+  "city": "Dallas",
+  "contracts": 2,
+  "day": "2026-10-29",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTDAL-26OCT29-T81": {
+  "cash": -10.03,
+  "city": "Dallas",
+  "contracts": 386,
+  "day": "2026-10-29",
+  "held": -32,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTDAL-26OCT30-B73.5": {
+  "cash": -12.72,
+  "city": "Dallas",
+  "contracts": 352,
+  "day": "2026-10-30",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTDAL-26OCT30-B75.5": {
+  "cash": -20.29,
+  "city": "Dallas",
+  "contracts": 581,
+  "day": "2026-10-30",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTDAL-26OCT30-B77.5": {
+  "cash": 2.79,
+  "city": "Dallas",
+  "contracts": 175,
+  "day": "2026-10-30",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTDAL-26OCT30-T73": {
+  "cash": -13.95,
+  "city": "Dallas",
+  "contracts": 280,
+  "day": "2026-10-30",
+  "held": 34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTDAL-26OCT31-B73.5": {
+  "cash": 8.02,
+  "city": "Dallas",
+  "contracts": 117,
+  "day": "2026-10-31",
+  "inv": -25
+ },
+ "KXHIGHTDAL-26OCT31-B75.5": {
+  "cash": 8.64,
+  "city": "Dallas",
+  "contracts": 134,
+  "day": "2026-10-31",
+  "inv": -30
+ },
+ "KXHIGHTDAL-26OCT31-B77.5": {
+  "cash": -0.57,
+  "city": "Dallas",
+  "contracts": 11,
+  "day": "2026-10-31",
+  "inv": 11
+ },
+ "KXHIGHTDAL-26OCT31-T73": {
+  "cash": 9.19,
+  "city": "Dallas",
+  "contracts": 100,
+  "day": "2026-10-31",
+  "inv": -16
+ },
+ "KXHIGHTDC-26NOV01-B63.5": {
+  "cash": -1.39,
+  "city": "Washington DC",
+  "contracts": 8,
+  "day": "2026-11-01",
+  "inv": 8
+ },
+ "KXHIGHTDC-26NOV01-B65.5": {
+  "cash": 5.45,
+  "city": "Washington DC",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHTDC-26NOV01-B67.5": {
+  "cash": -1.03,
+  "city": "Washington DC",
+  "contracts": 4,
+  "day": "2026-11-01",
+  "inv": 4
+ },
+ "KXHIGHTDC-26NOV01-T63": {
+  "cash": -0.37,
+  "city": "Washington DC",
+  "contracts": 7,
+  "day": "2026-11-01",
+  "inv": 7
+ },
+ "KXHIGHTDC-26OCT26-B70.5": {
+  "cash": -6.81,
+  "city": "Washington DC",
+  "contracts": 155,
+  "day": "2026-10-26",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTDC-26OCT26-B72.5": {
+  "cash": -18.84,
+  "city": "Washington DC",
+  "contracts": 121,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTDC-26OCT27-B68.5": {
+  "cash": 0.08,
+  "city": "Washington DC",
+  "contracts": 21,
+  "day": "2026-10-27",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTDC-26OCT27-B70.5": {
+  "cash": 17.55,
+  "city": "Washington DC",
+  "contracts": 443,
+  "day": "2026-10-27",
+  "held": -23,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTDC-26OCT27-B72.5": {
+  "cash": -26.67,
+  "city": "Washington DC",
+  "contracts": 378,
+  "day": "2026-10-27",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTDC-26OCT27-T68": {
+  "cash": -0.42,
+  "city": "Washington DC",
+  "contracts": 12,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTDC-26OCT28-B66.5": {
+  "cash": 3.49,
+  "city": "Washington DC",
+  "contracts": 67,
+  "day": "2026-10-28",
+  "held": -5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTDC-26OCT28-B68.5": {
+  "cash": -11.48,
+  "city": "Washington DC",
+  "contracts": 123,
+  "day": "2026-10-28",
+  "held": -35,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTDC-26OCT28-B70.5": {
+  "cash": -3.7,
+  "city": "Washington DC",
+  "contracts": 209,
+  "day": "2026-10-28",
+  "held": -33,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:18:58+00:00"
+ },
+ "KXHIGHTDC-26OCT29-B70.5": {
+  "cash": -15.5,
+  "city": "Washington DC",
+  "contracts": 361,
+  "day": "2026-10-29",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTDC-26OCT29-B72.5": {
+  "cash": -4.2,
+  "city": "Washington DC",
+  "contracts": 295,
+  "day": "2026-10-29",
+  "held": 21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTDC-26OCT29-B74.5": {
+  "cash": 6.04,
+  "city": "Washington DC",
+  "contracts": 103,
+  "day": "2026-10-29",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTDC-26OCT30-B73.5": {
+  "cash": 0.08,
+  "city": "Washington DC",
+  "contracts": 3,
+  "day": "2026-10-30",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTDC-26OCT30-B75.5": {
+  "cash": 12.01,
+  "city": "Washington DC",
+  "contracts": 211,
+  "day": "2026-10-30",
+  "held": -17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTDC-26OCT30-B77.5": {
+  "cash": -16.99,
+  "city": "Washington DC",
+  "contracts": 137,
+  "day": "2026-10-30",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTDC-26OCT31-B61.5": {
+  "cash": 5.05,
+  "city": "Washington DC",
+  "contracts": 45,
+  "day": "2026-10-31",
+  "inv": -43
+ },
+ "KXHIGHTDC-26OCT31-B63.5": {
+  "cash": 1.54,
+  "city": "Washington DC",
+  "contracts": 73,
+  "day": "2026-10-31",
+  "inv": -1
+ },
+ "KXHIGHTDC-26OCT31-B65.5": {
+  "cash": -0.78,
+  "city": "Washington DC",
+  "contracts": 47,
+  "day": "2026-10-31",
+  "inv": 5
+ },
+ "KXHIGHTDC-26OCT31-B67.5": {
+  "cash": -0.27,
+  "city": "Washington DC",
+  "contracts": 6,
+  "day": "2026-10-31",
+  "inv": 6
+ },
+ "KXHIGHTEWR-26NOV01-B63.5": {
+  "cash": -1.07,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 2,
+  "day": "2026-11-01",
+  "inv": 2
+ },
+ "KXHIGHTEWR-26NOV01-T61": {
+  "cash": 0.73,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -8
+ },
+ "KXHIGHTEWR-26OCT26-B70.5": {
+  "cash": -0.39,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 69,
+  "day": "2026-10-26",
+  "held": 5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTEWR-26OCT26-B72.5": {
+  "cash": -4.7,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 109,
+  "day": "2026-10-26",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTEWR-26OCT26-B74.5": {
+  "cash": 0.48,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 69,
+  "day": "2026-10-26",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTEWR-26OCT27-B60.5": {
+  "cash": -0.55,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 22,
+  "day": "2026-10-27",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTEWR-26OCT27-B62.5": {
+  "cash": 25.54,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 54,
+  "day": "2026-10-27",
+  "held": -34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTEWR-26OCT27-B64.5": {
+  "cash": -32.42,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 98,
+  "day": "2026-10-27",
+  "held": -44,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTEWR-26OCT27-T60": {
+  "cash": -0.06,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 1,
+  "day": "2026-10-27",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTEWR-26OCT28-B61.5": {
+  "cash": 14.53,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 89,
+  "day": "2026-10-28",
+  "held": -35,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTEWR-26OCT28-B63.5": {
+  "cash": 6.18,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 94,
+  "day": "2026-10-28",
+  "held": 0,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTEWR-26OCT28-B65.5": {
+  "cash": -3.65,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 24,
+  "day": "2026-10-28",
+  "held": 22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTEWR-26OCT28-T61": {
+  "cash": 0.71,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 31,
+  "day": "2026-10-28",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTEWR-26OCT29-B69.5": {
+  "cash": -21.81,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 89,
+  "day": "2026-10-29",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTEWR-26OCT29-B71.5": {
+  "cash": 5.46,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 90,
+  "day": "2026-10-29",
+  "held": -26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTEWR-26OCT29-B75.5": {
+  "cash": -0.49,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 11,
+  "day": "2026-10-29",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTEWR-26OCT29-T69": {
+  "cash": -2.8,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 14,
+  "day": "2026-10-29",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTEWR-26OCT30-B69.5": {
+  "cash": 1.69,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 32,
+  "day": "2026-10-30",
+  "held": -14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTEWR-26OCT30-B71.5": {
+  "cash": -20.19,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 81,
+  "day": "2026-10-30",
+  "held": 39,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTEWR-26OCT30-B73.5": {
+  "cash": -17.36,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 175,
+  "day": "2026-10-30",
+  "held": -31,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTEWR-26OCT30-B75.5": {
+  "cash": 3.49,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 57,
+  "day": "2026-10-30",
+  "held": -17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTEWR-26OCT30-T69": {
+  "cash": -0.13,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 2,
+  "day": "2026-10-30",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTEWR-26OCT31-B60.5": {
+  "cash": -5.68,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 57,
+  "day": "2026-10-31",
+  "inv": 7
+ },
+ "KXHIGHTEWR-26OCT31-B62.5": {
+  "cash": 8.5,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 42,
+  "day": "2026-10-31",
+  "inv": -22
+ },
+ "KXHIGHTEWR-26OCT31-T60": {
+  "cash": 8.17,
+  "city": "Newark, NJ (EWR)",
+  "contracts": 45,
+  "day": "2026-10-31",
+  "inv": -45
+ },
+ "KXHIGHTHOU-26NOV01-B83.5": {
+  "cash": -4.95,
+  "city": "Houston",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHTHOU-26NOV01-B85.5": {
+  "cash": -0.87,
+  "city": "Houston",
+  "contracts": 2,
+  "day": "2026-11-01",
+  "inv": 2
+ },
+ "KXHIGHTHOU-26OCT26-B81.5": {
+  "cash": -19.88,
+  "city": "Houston",
+  "contracts": 137,
+  "day": "2026-10-26",
+  "held": -37,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTHOU-26OCT26-B83.5": {
+  "cash": -6.37,
+  "city": "Houston",
+  "contracts": 185,
+  "day": "2026-10-26",
+  "held": 39,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTHOU-26OCT27-B80.5": {
+  "cash": 12.27,
+  "city": "Houston",
+  "contracts": 57,
+  "day": "2026-10-27",
+  "held": -33,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTHOU-26OCT27-B82.5": {
+  "cash": 0.62,
+  "city": "Houston",
+  "contracts": 25,
+  "day": "2026-10-27",
+  "held": -9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTHOU-26OCT27-B84.5": {
+  "cash": -0.61,
+  "city": "Houston",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTHOU-26OCT27-T80": {
+  "cash": -11.61,
+  "city": "Houston",
+  "contracts": 95,
+  "day": "2026-10-27",
+  "held": -27,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTHOU-26OCT28-B81.5": {
+  "cash": -29.82,
+  "city": "Houston",
+  "contracts": 335,
+  "day": "2026-10-28",
+  "held": -33,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTHOU-26OCT28-B83.5": {
+  "cash": -12.98,
+  "city": "Houston",
+  "contracts": 435,
+  "day": "2026-10-28",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTHOU-26OCT28-B85.5": {
+  "cash": -0.21,
+  "city": "Houston",
+  "contracts": 4,
+  "day": "2026-10-28",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTHOU-26OCT28-T81": {
+  "cash": 3.77,
+  "city": "Houston",
+  "contracts": 311,
+  "day": "2026-10-28",
+  "held": 7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTHOU-26OCT29-B80.5": {
+  "cash": 11.86,
+  "city": "Houston",
+  "contracts": 89,
+  "day": "2026-10-29",
+  "held": -17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTHOU-26OCT29-B82.5": {
+  "cash": -7.0,
+  "city": "Houston",
+  "contracts": 213,
+  "day": "2026-10-29",
+  "held": -45,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTHOU-26OCT29-B84.5": {
+  "cash": 8.86,
+  "city": "Houston",
+  "contracts": 230,
+  "day": "2026-10-29",
+  "held": -26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTHOU-26OCT30-B78.5": {
+  "cash": -27.1,
+  "city": "Houston",
+  "contracts": 402,
+  "day": "2026-10-30",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTHOU-26OCT30-B80.5": {
+  "cash": -11.3,
+  "city": "Houston",
+  "contracts": 362,
+  "day": "2026-10-30",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTHOU-26OCT30-T78": {
+  "cash": -2.02,
+  "city": "Houston",
+  "contracts": 122,
+  "day": "2026-10-30",
+  "held": 14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTHOU-26OCT31-B79.5": {
+  "cash": 0.77,
+  "city": "Houston",
+  "contracts": 12,
+  "day": "2026-10-31",
+  "inv": -8
+ },
+ "KXHIGHTHOU-26OCT31-B81.5": {
+  "cash": 12.88,
+  "city": "Houston",
+  "contracts": 113,
+  "day": "2026-10-31",
+  "inv": -31
+ },
+ "KXHIGHTHOU-26OCT31-B83.5": {
+  "cash": -0.91,
+  "city": "Houston",
+  "contracts": 65,
+  "day": "2026-10-31",
+  "inv": 3
+ },
+ "KXHIGHTHOU-26OCT31-B85.5": {
+  "cash": 1.0,
+  "city": "Houston",
+  "contracts": 11,
+  "day": "2026-10-31",
+  "inv": -11
+ },
+ "KXHIGHTHOU-26OCT31-T79": {
+  "cash": -0.06,
+  "city": "Houston",
+  "contracts": 1,
+  "day": "2026-10-31",
+  "inv": 1
+ },
+ "KXHIGHTLV-26NOV01-T67": {
+  "cash": 8.74,
+  "city": "Las Vegas",
+  "contracts": 21,
+  "day": "2026-11-01",
+  "inv": -21
+ },
+ "KXHIGHTLV-26OCT26-B76.5": {
+  "cash": 18.69,
+  "city": "Las Vegas",
+  "contracts": 161,
+  "day": "2026-10-26",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTLV-26OCT26-B78.5": {
+  "cash": 15.67,
+  "city": "Las Vegas",
+  "contracts": 307,
+  "day": "2026-10-26",
+  "held": 7,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTLV-26OCT27-B77.5": {
+  "cash": -0.55,
+  "city": "Las Vegas",
+  "contracts": 13,
+  "day": "2026-10-27",
+  "held": 5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTLV-26OCT27-B79.5": {
+  "cash": 11.73,
+  "city": "Las Vegas",
+  "contracts": 108,
+  "day": "2026-10-27",
+  "held": -22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTLV-26OCT27-B81.5": {
+  "cash": -17.79,
+  "city": "Las Vegas",
+  "contracts": 148,
+  "day": "2026-10-27",
+  "held": -44,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTLV-26OCT27-T82": {
+  "cash": 1.63,
+  "city": "Las Vegas",
+  "contracts": 75,
+  "day": "2026-10-27",
+  "held": -25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTLV-26OCT28-B76.5": {
+  "cash": -1.14,
+  "city": "Las Vegas",
+  "contracts": 7,
+  "day": "2026-10-28",
+  "held": 7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTLV-26OCT28-B78.5": {
+  "cash": 16.44,
+  "city": "Las Vegas",
+  "contracts": 298,
+  "day": "2026-10-28",
+  "held": -50,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTLV-26OCT28-B80.5": {
+  "cash": -17.67,
+  "city": "Las Vegas",
+  "contracts": 178,
+  "day": "2026-10-28",
+  "held": -34,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTLV-26OCT28-T81": {
+  "cash": -1.01,
+  "city": "Las Vegas",
+  "contracts": 31,
+  "day": "2026-10-28",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTLV-26OCT29-B74.5": {
+  "cash": 3.14,
+  "city": "Las Vegas",
+  "contracts": 191,
+  "day": "2026-10-29",
+  "held": -29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTLV-26OCT29-B76.5": {
+  "cash": -9.87,
+  "city": "Las Vegas",
+  "contracts": 304,
+  "day": "2026-10-29",
+  "held": -26,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTLV-26OCT29-B78.5": {
+  "cash": -1.92,
+  "city": "Las Vegas",
+  "contracts": 91,
+  "day": "2026-10-29",
+  "held": -7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTLV-26OCT30-B71.5": {
+  "cash": -21.23,
+  "city": "Las Vegas",
+  "contracts": 300,
+  "day": "2026-10-30",
+  "held": -34,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTLV-26OCT30-B73.5": {
+  "cash": -14.63,
+  "city": "Las Vegas",
+  "contracts": 272,
+  "day": "2026-10-30",
+  "held": 34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTLV-26OCT30-B75.5": {
+  "cash": 0.92,
+  "city": "Las Vegas",
+  "contracts": 61,
+  "day": "2026-10-30",
+  "held": -11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTLV-26OCT30-T71": {
+  "cash": -26.06,
+  "city": "Las Vegas",
+  "contracts": 202,
+  "day": "2026-10-30",
+  "held": 14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTLV-26OCT31-B69.5": {
+  "cash": -10.63,
+  "city": "Las Vegas",
+  "contracts": 69,
+  "day": "2026-10-31",
+  "inv": 35
+ },
+ "KXHIGHTLV-26OCT31-B71.5": {
+  "cash": -2.04,
+  "city": "Las Vegas",
+  "contracts": 21,
+  "day": "2026-10-31",
+  "inv": 21
+ },
+ "KXHIGHTLV-26OCT31-B73.5": {
+  "cash": -0.57,
+  "city": "Las Vegas",
+  "contracts": 9,
+  "day": "2026-10-31",
+  "inv": 9
+ },
+ "KXHIGHTLV-26OCT31-B75.5": {
+  "cash": -0.28,
+  "city": "Las Vegas",
+  "contracts": 5,
+  "day": "2026-10-31",
+  "inv": 5
+ },
+ "KXHIGHTLV-26OCT31-T69": {
+  "cash": 15.34,
+  "city": "Las Vegas",
+  "contracts": 105,
+  "day": "2026-10-31",
+  "inv": -43
+ },
+ "KXHIGHTMIN-26NOV01-B68.5": {
+  "cash": 0.41,
+  "city": "Minneapolis",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHTMIN-26NOV01-B70.5": {
+  "cash": -3.97,
+  "city": "Minneapolis",
+  "contracts": 20,
+  "day": "2026-11-01",
+  "inv": 20
+ },
+ "KXHIGHTMIN-26NOV01-T71": {
+  "cash": -0.53,
+  "city": "Minneapolis",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHTMIN-26OCT26-B48.5": {
+  "cash": -11.15,
+  "city": "Minneapolis",
+  "contracts": 210,
+  "day": "2026-10-26",
+  "held": -50,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTMIN-26OCT26-B50.5": {
+  "cash": 0.06,
+  "city": "Minneapolis",
+  "contracts": 58,
+  "day": "2026-10-26",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTMIN-26OCT26-T48": {
+  "cash": 14.61,
+  "city": "Minneapolis",
+  "contracts": 71,
+  "day": "2026-10-26",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTMIN-26OCT27-B59.5": {
+  "cash": -1.17,
+  "city": "Minneapolis",
+  "contracts": 59,
+  "day": "2026-10-27",
+  "inv": 7
+ },
+ "KXHIGHTMIN-26OCT27-B61.5": {
+  "cash": -3.16,
+  "city": "Minneapolis",
+  "contracts": 70,
+  "day": "2026-10-27",
+  "inv": 30
+ },
+ "KXHIGHTMIN-26OCT27-B63.5": {
+  "cash": -0.51,
+  "city": "Minneapolis",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "inv": 10
+ },
+ "KXHIGHTMIN-26OCT27-T59": {
+  "cash": 33.97,
+  "city": "Minneapolis",
+  "contracts": 393,
+  "day": "2026-10-27",
+  "inv": -41
+ },
+ "KXHIGHTMIN-26OCT27-T66": {
+  "cash": -0.42,
+  "city": "Minneapolis",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "inv": 10
+ },
+ "KXHIGHTMIN-26OCT28-B66.5": {
+  "cash": -4.61,
+  "city": "Minneapolis",
+  "contracts": 154,
+  "day": "2026-10-28",
+  "held": 42,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTMIN-26OCT28-B68.5": {
+  "cash": 6.9,
+  "city": "Minneapolis",
+  "contracts": 263,
+  "day": "2026-10-28",
+  "held": -3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTMIN-26OCT28-B70.5": {
+  "cash": -0.52,
+  "city": "Minneapolis",
+  "contracts": 401,
+  "day": "2026-10-28",
+  "held": -21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTMIN-26OCT28-B72.5": {
+  "cash": -11.92,
+  "city": "Minneapolis",
+  "contracts": 444,
+  "day": "2026-10-28",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTMIN-26OCT28-T66": {
+  "cash": 2.31,
+  "city": "Minneapolis",
+  "contracts": 15,
+  "day": "2026-10-28",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTMIN-26OCT29-B56.5": {
+  "cash": 22.62,
+  "city": "Minneapolis",
+  "contracts": 206,
+  "day": "2026-10-29",
+  "held": -34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTMIN-26OCT29-B58.5": {
+  "cash": -35.4,
+  "city": "Minneapolis",
+  "contracts": 203,
+  "day": "2026-10-29",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTMIN-26OCT29-B60.5": {
+  "cash": -0.94,
+  "city": "Minneapolis",
+  "contracts": 15,
+  "day": "2026-10-29",
+  "held": 15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTMIN-26OCT29-T56": {
+  "cash": -5.36,
+  "city": "Minneapolis",
+  "contracts": 250,
+  "day": "2026-10-29",
+  "held": 24,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTMIN-26OCT30-B53.5": {
+  "cash": -0.93,
+  "city": "Minneapolis",
+  "contracts": 61,
+  "day": "2026-10-30",
+  "held": 21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTMIN-26OCT30-B55.5": {
+  "cash": 4.88,
+  "city": "Minneapolis",
+  "contracts": 234,
+  "day": "2026-10-30",
+  "held": -34,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTMIN-26OCT30-B57.5": {
+  "cash": -23.33,
+  "city": "Minneapolis",
+  "contracts": 179,
+  "day": "2026-10-30",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTMIN-26OCT30-B59.5": {
+  "cash": -3.0,
+  "city": "Minneapolis",
+  "contracts": 142,
+  "day": "2026-10-30",
+  "held": 30,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTMIN-26OCT31-B54.5": {
+  "cash": 0.68,
+  "city": "Minneapolis",
+  "contracts": 10,
+  "day": "2026-10-31",
+  "inv": -10
+ },
+ "KXHIGHTMIN-26OCT31-B56.5": {
+  "cash": 5.57,
+  "city": "Minneapolis",
+  "contracts": 100,
+  "day": "2026-10-31",
+  "inv": -26
+ },
+ "KXHIGHTMIN-26OCT31-B58.5": {
+  "cash": -1.79,
+  "city": "Minneapolis",
+  "contracts": 127,
+  "day": "2026-10-31",
+  "inv": 5
+ },
+ "KXHIGHTMIN-26OCT31-B60.5": {
+  "cash": -1.63,
+  "city": "Minneapolis",
+  "contracts": 17,
+  "day": "2026-10-31",
+  "inv": 7
+ },
+ "KXHIGHTNOLA-26NOV01-B81.5": {
+  "cash": 4.05,
+  "city": "New Orleans",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHTNOLA-26NOV01-B83.5": {
+  "cash": -1.22,
+  "city": "New Orleans",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": 10
+ },
+ "KXHIGHTNOLA-26OCT26-B75.5": {
+  "cash": 2.95,
+  "city": "New Orleans",
+  "contracts": 45,
+  "day": "2026-10-26",
+  "held": -15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTNOLA-26OCT26-B77.5": {
+  "cash": -1.42,
+  "city": "New Orleans",
+  "contracts": 71,
+  "day": "2026-10-26",
+  "held": -1,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTNOLA-26OCT26-B79.5": {
+  "cash": 0.29,
+  "city": "New Orleans",
+  "contracts": 43,
+  "day": "2026-10-26",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTNOLA-26OCT27-B77.5": {
+  "cash": 0.36,
+  "city": "New Orleans",
+  "contracts": 115,
+  "day": "2026-10-27",
+  "held": 7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTNOLA-26OCT27-B79.5": {
+  "cash": -9.97,
+  "city": "New Orleans",
+  "contracts": 133,
+  "day": "2026-10-27",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTNOLA-26OCT27-B81.5": {
+  "cash": -1.77,
+  "city": "New Orleans",
+  "contracts": 56,
+  "day": "2026-10-27",
+  "held": 16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTNOLA-26OCT28-B78.5": {
+  "cash": -14.45,
+  "city": "New Orleans",
+  "contracts": 233,
+  "day": "2026-10-28",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTNOLA-26OCT28-B80.5": {
+  "cash": -3.35,
+  "city": "New Orleans",
+  "contracts": 319,
+  "day": "2026-10-28",
+  "held": 13,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTNOLA-26OCT28-T78": {
+  "cash": -0.06,
+  "city": "New Orleans",
+  "contracts": 1,
+  "day": "2026-10-28",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTNOLA-26OCT29-B78.5": {
+  "cash": 14.2,
+  "city": "New Orleans",
+  "contracts": 125,
+  "day": "2026-10-29",
+  "held": -35,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTNOLA-26OCT29-B80.5": {
+  "cash": -27.03,
+  "city": "New Orleans",
+  "contracts": 249,
+  "day": "2026-10-29",
+  "held": -45,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTNOLA-26OCT29-B84.5": {
+  "cash": -0.41,
+  "city": "New Orleans",
+  "contracts": 10,
+  "day": "2026-10-29",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTNOLA-26OCT30-B78.5": {
+  "cash": -4.95,
+  "city": "New Orleans",
+  "contracts": 241,
+  "day": "2026-10-30",
+  "held": -5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHTNOLA-26OCT30-B80.5": {
+  "cash": 11.04,
+  "city": "New Orleans",
+  "contracts": 192,
+  "day": "2026-10-30",
+  "held": 12,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHTNOLA-26OCT30-B84.5": {
+  "cash": -0.05,
+  "city": "New Orleans",
+  "contracts": 1,
+  "day": "2026-10-30",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHTNOLA-26OCT30-T78": {
+  "cash": -0.6,
+  "city": "New Orleans",
+  "contracts": 21,
+  "day": "2026-10-30",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:05:10+00:00"
+ },
+ "KXHIGHTNOLA-26OCT31-B79.5": {
+  "cash": 12.39,
+  "city": "New Orleans",
+  "contracts": 132,
+  "day": "2026-10-31",
+  "inv": -38
+ },
+ "KXHIGHTNOLA-26OCT31-B81.5": {
+  "cash": 1.91,
+  "city": "New Orleans",
+  "contracts": 70,
+  "day": "2026-10-31",
+  "inv": -4
+ },
+ "KXHIGHTNOLA-26OCT31-B83.5": {
+  "cash": 4.54,
+  "city": "New Orleans",
+  "contracts": 71,
+  "day": "2026-10-31",
+  "inv": -39
+ },
+ "KXHIGHTNOLA-26OCT31-T79": {
+  "cash": -0.79,
+  "city": "New Orleans",
+  "contracts": 11,
+  "day": "2026-10-31",
+  "inv": 11
+ },
+ "KXHIGHTOKC-26NOV01-T72": {
+  "cash": 0.76,
+  "city": "Oklahoma City",
+  "contracts": 3,
+  "day": "2026-11-01",
+  "inv": -3
+ },
+ "KXHIGHTOKC-26OCT26-B74.5": {
+  "cash": -19.87,
+  "city": "Oklahoma City",
+  "contracts": 173,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTOKC-26OCT26-B76.5": {
+  "cash": 2.27,
+  "city": "Oklahoma City",
+  "contracts": 307,
+  "day": "2026-10-26",
+  "held": 13,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTOKC-26OCT26-B78.5": {
+  "cash": -0.83,
+  "city": "Oklahoma City",
+  "contracts": 10,
+  "day": "2026-10-26",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTOKC-26OCT27-B73.5": {
+  "cash": -3.77,
+  "city": "Oklahoma City",
+  "contracts": 15,
+  "day": "2026-10-27",
+  "held": 15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTOKC-26OCT27-B75.5": {
+  "cash": 0.08,
+  "city": "Oklahoma City",
+  "contracts": 41,
+  "day": "2026-10-27",
+  "held": -5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTOKC-26OCT27-B77.5": {
+  "cash": -30.17,
+  "city": "Oklahoma City",
+  "contracts": 358,
+  "day": "2026-10-27",
+  "held": -46,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTOKC-26OCT27-T71": {
+  "cash": -1.26,
+  "city": "Oklahoma City",
+  "contracts": 21,
+  "day": "2026-10-27",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTOKC-26OCT27-T78": {
+  "cash": 2.75,
+  "city": "Oklahoma City",
+  "contracts": 338,
+  "day": "2026-10-27",
+  "held": -2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTOKC-26OCT28-B78.5": {
+  "cash": 2.75,
+  "city": "Oklahoma City",
+  "contracts": 16,
+  "day": "2026-10-28",
+  "held": -16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTOKC-26OCT28-B80.5": {
+  "cash": -17.4,
+  "city": "Oklahoma City",
+  "contracts": 184,
+  "day": "2026-10-28",
+  "held": -44,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTOKC-26OCT28-B82.5": {
+  "cash": 1.85,
+  "city": "Oklahoma City",
+  "contracts": 255,
+  "day": "2026-10-28",
+  "held": 9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTOKC-26OCT29-B80.5": {
+  "cash": -29.58,
+  "city": "Oklahoma City",
+  "contracts": 260,
+  "day": "2026-10-29",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTOKC-26OCT29-B82.5": {
+  "cash": 15.61,
+  "city": "Oklahoma City",
+  "contracts": 234,
+  "day": "2026-10-29",
+  "held": -12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTOKC-26OCT30-B67.5": {
+  "cash": -11.95,
+  "city": "Oklahoma City",
+  "contracts": 244,
+  "day": "2026-10-30",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTOKC-26OCT30-B69.5": {
+  "cash": 1.9,
+  "city": "Oklahoma City",
+  "contracts": 147,
+  "day": "2026-10-30",
+  "held": -29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTOKC-26OCT30-T67": {
+  "cash": -0.62,
+  "city": "Oklahoma City",
+  "contracts": 297,
+  "day": "2026-10-30",
+  "held": -17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTOKC-26OCT31-B67.5": {
+  "cash": -5.31,
+  "city": "Oklahoma City",
+  "contracts": 18,
+  "day": "2026-10-31",
+  "inv": 18
+ },
+ "KXHIGHTOKC-26OCT31-B69.5": {
+  "cash": -1.84,
+  "city": "Oklahoma City",
+  "contracts": 15,
+  "day": "2026-10-31",
+  "inv": 15
+ },
+ "KXHIGHTOKC-26OCT31-T67": {
+  "cash": 20.69,
+  "city": "Oklahoma City",
+  "contracts": 54,
+  "day": "2026-10-31",
+  "inv": -34
+ },
+ "KXHIGHTPHX-26NOV01-B70.5": {
+  "cash": 10.7,
+  "city": "Phoenix",
+  "contracts": 20,
+  "day": "2026-11-01",
+  "inv": -20
+ },
+ "KXHIGHTPHX-26NOV01-B72.5": {
+  "cash": -0.92,
+  "city": "Phoenix",
+  "contracts": 5,
+  "day": "2026-11-01",
+  "inv": 5
+ },
+ "KXHIGHTPHX-26NOV01-T68": {
+  "cash": -0.44,
+  "city": "Phoenix",
+  "contracts": 7,
+  "day": "2026-11-01",
+  "inv": 7
+ },
+ "KXHIGHTPHX-26OCT26-B83.5": {
+  "cash": 2.02,
+  "city": "Phoenix",
+  "contracts": 393,
+  "day": "2026-10-26",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTPHX-26OCT26-B85.5": {
+  "cash": -13.53,
+  "city": "Phoenix",
+  "contracts": 172,
+  "day": "2026-10-26",
+  "held": -42,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTPHX-26OCT27-B83.5": {
+  "cash": -1.09,
+  "city": "Phoenix",
+  "contracts": 54,
+  "day": "2026-10-27",
+  "held": 20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTPHX-26OCT27-B85.5": {
+  "cash": 13.84,
+  "city": "Phoenix",
+  "contracts": 226,
+  "day": "2026-10-27",
+  "held": -36,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTPHX-26OCT27-B87.5": {
+  "cash": -16.33,
+  "city": "Phoenix",
+  "contracts": 265,
+  "day": "2026-10-27",
+  "held": -33,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTPHX-26OCT27-B89.5": {
+  "cash": -0.82,
+  "city": "Phoenix",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTPHX-26OCT28-B84.5": {
+  "cash": -29.54,
+  "city": "Phoenix",
+  "contracts": 297,
+  "day": "2026-10-28",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTPHX-26OCT28-B86.5": {
+  "cash": -9.33,
+  "city": "Phoenix",
+  "contracts": 571,
+  "day": "2026-10-28",
+  "held": 39,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTPHX-26OCT28-B88.5": {
+  "cash": 4.49,
+  "city": "Phoenix",
+  "contracts": 196,
+  "day": "2026-10-28",
+  "held": -28,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTPHX-26OCT28-B90.5": {
+  "cash": -1.28,
+  "city": "Phoenix",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTPHX-26OCT28-T84": {
+  "cash": -0.66,
+  "city": "Phoenix",
+  "contracts": 66,
+  "day": "2026-10-28",
+  "held": 14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTPHX-26OCT29-B84.5": {
+  "cash": -38.07,
+  "city": "Phoenix",
+  "contracts": 317,
+  "day": "2026-10-29",
+  "held": -31,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTPHX-26OCT29-B86.5": {
+  "cash": -2.42,
+  "city": "Phoenix",
+  "contracts": 444,
+  "day": "2026-10-29",
+  "held": 22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTPHX-26OCT29-B88.5": {
+  "cash": -13.56,
+  "city": "Phoenix",
+  "contracts": 54,
+  "day": "2026-10-29",
+  "held": 26,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTPHX-26OCT29-T84": {
+  "cash": 2.49,
+  "city": "Phoenix",
+  "contracts": 111,
+  "day": "2026-10-29",
+  "held": -29,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTPHX-26OCT30-B74.5": {
+  "cash": -27.68,
+  "city": "Phoenix",
+  "contracts": 260,
+  "day": "2026-10-30",
+  "held": -50,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTPHX-26OCT30-B76.5": {
+  "cash": 3.44,
+  "city": "Phoenix",
+  "contracts": 169,
+  "day": "2026-10-30",
+  "held": -5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTPHX-26OCT30-T74": {
+  "cash": 9.13,
+  "city": "Phoenix",
+  "contracts": 211,
+  "day": "2026-10-30",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTPHX-26OCT31-B76.5": {
+  "cash": 5.93,
+  "city": "Phoenix",
+  "contracts": 125,
+  "day": "2026-10-31",
+  "inv": -37
+ },
+ "KXHIGHTPHX-26OCT31-B78.5": {
+  "cash": 14.21,
+  "city": "Phoenix",
+  "contracts": 37,
+  "day": "2026-10-31",
+  "inv": -31
+ },
+ "KXHIGHTPHX-26OCT31-B80.5": {
+  "cash": 3.98,
+  "city": "Phoenix",
+  "contracts": 52,
+  "day": "2026-10-31",
+  "inv": -14
+ },
+ "KXHIGHTPHX-26OCT31-T76": {
+  "cash": 1.65,
+  "city": "Phoenix",
+  "contracts": 36,
+  "day": "2026-10-31",
+  "inv": -26
+ },
+ "KXHIGHTSAN-26NOV01-B69.5": {
+  "cash": 0.54,
+  "city": "San Diego",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHTSAN-26OCT26-B76.5": {
+  "cash": -1.12,
+  "city": "San Diego",
+  "contracts": 10,
+  "day": "2026-10-26",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSAN-26OCT26-B78.5": {
+  "cash": -16.2,
+  "city": "San Diego",
+  "contracts": 45,
+  "day": "2026-10-26",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSAN-26OCT26-B80.5": {
+  "cash": 1.53,
+  "city": "San Diego",
+  "contracts": 75,
+  "day": "2026-10-26",
+  "held": -7,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSAN-26OCT27-B73.5": {
+  "cash": 7.03,
+  "city": "San Diego",
+  "contracts": 66,
+  "day": "2026-10-27",
+  "held": -22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSAN-26OCT27-B75.5": {
+  "cash": -17.09,
+  "city": "San Diego",
+  "contracts": 55,
+  "day": "2026-10-27",
+  "held": -45,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSAN-26OCT27-B77.5": {
+  "cash": -1.23,
+  "city": "San Diego",
+  "contracts": 20,
+  "day": "2026-10-27",
+  "held": 20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSAN-26OCT27-T73": {
+  "cash": 0.1,
+  "city": "San Diego",
+  "contracts": 1,
+  "day": "2026-10-27",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSAN-26OCT28-B71.5": {
+  "cash": -0.25,
+  "city": "San Diego",
+  "contracts": 4,
+  "day": "2026-10-28",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:12:04+00:00"
+ },
+ "KXHIGHTSAN-26OCT28-B73.5": {
+  "cash": -5.11,
+  "city": "San Diego",
+  "contracts": 239,
+  "day": "2026-10-28",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:12:04+00:00"
+ },
+ "KXHIGHTSAN-26OCT28-B75.5": {
+  "cash": 24.4,
+  "city": "San Diego",
+  "contracts": 252,
+  "day": "2026-10-28",
+  "held": -12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:12:04+00:00"
+ },
+ "KXHIGHTSAN-26OCT29-B70.5": {
+  "cash": 1.71,
+  "city": "San Diego",
+  "contracts": 79,
+  "day": "2026-10-29",
+  "inv": 11
+ },
+ "KXHIGHTSAN-26OCT29-B72.5": {
+  "cash": 33.79,
+  "city": "San Diego",
+  "contracts": 60,
+  "day": "2026-10-29",
+  "inv": -46
+ },
+ "KXHIGHTSAN-26OCT29-B74.5": {
+  "cash": 11.97,
+  "city": "San Diego",
+  "contracts": 101,
+  "day": "2026-10-29",
+  "inv": -17
+ },
+ "KXHIGHTSAN-26OCT30-B69.5": {
+  "cash": -0.69,
+  "city": "San Diego",
+  "contracts": 49,
+  "day": "2026-10-30",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSAN-26OCT30-B71.5": {
+  "cash": 17.89,
+  "city": "San Diego",
+  "contracts": 101,
+  "day": "2026-10-30",
+  "held": -27,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSAN-26OCT30-B73.5": {
+  "cash": -7.46,
+  "city": "San Diego",
+  "contracts": 212,
+  "day": "2026-10-30",
+  "held": -30,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSAN-26OCT30-B75.5": {
+  "cash": -0.75,
+  "city": "San Diego",
+  "contracts": 15,
+  "day": "2026-10-30",
+  "held": 15,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSAN-26OCT31-B71.5": {
+  "cash": -4.03,
+  "city": "San Diego",
+  "contracts": 24,
+  "day": "2026-10-31",
+  "inv": 8
+ },
+ "KXHIGHTSAN-26OCT31-B73.5": {
+  "cash": 1.01,
+  "city": "San Diego",
+  "contracts": 16,
+  "day": "2026-10-31",
+  "inv": -6
+ },
+ "KXHIGHTSAN-26OCT31-T71": {
+  "cash": -0.1,
+  "city": "San Diego",
+  "contracts": 1,
+  "day": "2026-10-31",
+  "inv": 1
+ },
+ "KXHIGHTSATX-26NOV01-B80.5": {
+  "cash": 4.89,
+  "city": "San Antonio",
+  "contracts": 11,
+  "day": "2026-11-01",
+  "inv": -11
+ },
+ "KXHIGHTSATX-26NOV01-B82.5": {
+  "cash": -1.22,
+  "city": "San Antonio",
+  "contracts": 6,
+  "day": "2026-11-01",
+  "inv": 6
+ },
+ "KXHIGHTSATX-26NOV01-B84.5": {
+  "cash": -0.49,
+  "city": "San Antonio",
+  "contracts": 6,
+  "day": "2026-11-01",
+  "inv": 6
+ },
+ "KXHIGHTSATX-26NOV01-T80": {
+  "cash": -1.94,
+  "city": "San Antonio",
+  "contracts": 9,
+  "day": "2026-11-01",
+  "inv": 9
+ },
+ "KXHIGHTSATX-26OCT26-B80.5": {
+  "cash": -8.25,
+  "city": "San Antonio",
+  "contracts": 167,
+  "day": "2026-10-26",
+  "held": -15,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTSATX-26OCT26-B82.5": {
+  "cash": -20.06,
+  "city": "San Antonio",
+  "contracts": 64,
+  "day": "2026-10-26",
+  "held": 42,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTSATX-26OCT26-T80": {
+  "cash": 0.12,
+  "city": "San Antonio",
+  "contracts": 145,
+  "day": "2026-10-26",
+  "held": -23,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T12:09:19+00:00"
+ },
+ "KXHIGHTSATX-26OCT27-B79.5": {
+  "cash": 7.04,
+  "city": "San Antonio",
+  "contracts": 189,
+  "day": "2026-10-27",
+  "held": -13,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTSATX-26OCT27-B81.5": {
+  "cash": -38.94,
+  "city": "San Antonio",
+  "contracts": 159,
+  "day": "2026-10-27",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTSATX-26OCT27-B83.5": {
+  "cash": -10.7,
+  "city": "San Antonio",
+  "contracts": 72,
+  "day": "2026-10-27",
+  "held": 38,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTSATX-26OCT27-T79": {
+  "cash": 9.94,
+  "city": "San Antonio",
+  "contracts": 280,
+  "day": "2026-10-27",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T12:06:41+00:00"
+ },
+ "KXHIGHTSATX-26OCT28-B81.5": {
+  "cash": -37.21,
+  "city": "San Antonio",
+  "contracts": 308,
+  "day": "2026-10-28",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTSATX-26OCT28-B83.5": {
+  "cash": 19.43,
+  "city": "San Antonio",
+  "contracts": 195,
+  "day": "2026-10-28",
+  "held": -35,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTSATX-26OCT28-B85.5": {
+  "cash": 7.07,
+  "city": "San Antonio",
+  "contracts": 105,
+  "day": "2026-10-28",
+  "held": -19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTSATX-26OCT28-T81": {
+  "cash": -3.3,
+  "city": "San Antonio",
+  "contracts": 48,
+  "day": "2026-10-28",
+  "held": 24,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T12:09:17+00:00"
+ },
+ "KXHIGHTSATX-26OCT29-B76.5": {
+  "cash": 7.59,
+  "city": "San Antonio",
+  "contracts": 147,
+  "day": "2026-10-29",
+  "held": -27,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTSATX-26OCT29-B78.5": {
+  "cash": -1.16,
+  "city": "San Antonio",
+  "contracts": 169,
+  "day": "2026-10-29",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTSATX-26OCT29-B80.5": {
+  "cash": -0.15,
+  "city": "San Antonio",
+  "contracts": 2,
+  "day": "2026-10-29",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTSATX-26OCT29-T76": {
+  "cash": -8.31,
+  "city": "San Antonio",
+  "contracts": 350,
+  "day": "2026-10-29",
+  "held": -12,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T12:08:09+00:00"
+ },
+ "KXHIGHTSATX-26OCT30-B72.5": {
+  "cash": 0.15,
+  "city": "San Antonio",
+  "contracts": 47,
+  "day": "2026-10-30",
+  "held": 17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTSATX-26OCT30-B74.5": {
+  "cash": -2.87,
+  "city": "San Antonio",
+  "contracts": 45,
+  "day": "2026-10-30",
+  "held": 25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTSATX-26OCT30-B76.5": {
+  "cash": -0.33,
+  "city": "San Antonio",
+  "contracts": 4,
+  "day": "2026-10-30",
+  "held": 4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTSATX-26OCT30-T72": {
+  "cash": -11.65,
+  "city": "San Antonio",
+  "contracts": 69,
+  "day": "2026-10-30",
+  "held": -27,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T12:10:39+00:00"
+ },
+ "KXHIGHTSATX-26OCT31-B78.5": {
+  "cash": 11.76,
+  "city": "San Antonio",
+  "contracts": 40,
+  "day": "2026-10-31",
+  "inv": -36
+ },
+ "KXHIGHTSATX-26OCT31-T78": {
+  "cash": 17.13,
+  "city": "San Antonio",
+  "contracts": 55,
+  "day": "2026-10-31",
+  "inv": -33
+ },
+ "KXHIGHTSDF-26NOV01-B67.5": {
+  "cash": 0.48,
+  "city": "San Antonio",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": -1
+ },
+ "KXHIGHTSDF-26OCT26-B74.5": {
+  "cash": -5.9,
+  "city": "San Antonio",
+  "contracts": 85,
+  "day": "2026-10-26",
+  "held": 45,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTSDF-26OCT26-B76.5": {
+  "cash": -12.33,
+  "city": "San Antonio",
+  "contracts": 41,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTSDF-26OCT26-B78.5": {
+  "cash": 0.4,
+  "city": "San Antonio",
+  "contracts": 34,
+  "day": "2026-10-26",
+  "held": 6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTSDF-26OCT27-B74.5": {
+  "cash": 0.34,
+  "city": "San Antonio",
+  "contracts": 54,
+  "day": "2026-10-27",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTSDF-26OCT27-B76.5": {
+  "cash": -14.8,
+  "city": "San Antonio",
+  "contracts": 56,
+  "day": "2026-10-27",
+  "held": -48,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTSDF-26OCT27-B78.5": {
+  "cash": 0.65,
+  "city": "San Antonio",
+  "contracts": 20,
+  "day": "2026-10-27",
+  "held": -2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTSDF-26OCT27-B80.5": {
+  "cash": -0.51,
+  "city": "San Antonio",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTSDF-26OCT28-B75.5": {
+  "cash": -1.22,
+  "city": "San Antonio",
+  "contracts": 11,
+  "day": "2026-10-28",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTSDF-26OCT28-B77.5": {
+  "cash": -16.05,
+  "city": "San Antonio",
+  "contracts": 45,
+  "day": "2026-10-28",
+  "held": -45,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTSDF-26OCT28-B79.5": {
+  "cash": -3.15,
+  "city": "San Antonio",
+  "contracts": 75,
+  "day": "2026-10-28",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTSDF-26OCT28-T75": {
+  "cash": -0.61,
+  "city": "San Antonio",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTSDF-26OCT29-B77.5": {
+  "cash": -33.97,
+  "city": "San Antonio",
+  "contracts": 99,
+  "day": "2026-10-29",
+  "held": -39,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTSDF-26OCT29-B79.5": {
+  "cash": 23.48,
+  "city": "San Antonio",
+  "contracts": 72,
+  "day": "2026-10-29",
+  "held": -28,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTSDF-26OCT29-T77": {
+  "cash": -1.23,
+  "city": "San Antonio",
+  "contracts": 21,
+  "day": "2026-10-29",
+  "held": 21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTSDF-26OCT30-B75.5": {
+  "cash": -31.96,
+  "city": "San Antonio",
+  "contracts": 54,
+  "day": "2026-10-30",
+  "held": -44,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTSDF-26OCT30-B77.5": {
+  "cash": 14.21,
+  "city": "San Antonio",
+  "contracts": 60,
+  "day": "2026-10-30",
+  "held": -20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTSDF-26OCT30-B79.5": {
+  "cash": -1.52,
+  "city": "San Antonio",
+  "contracts": 16,
+  "day": "2026-10-30",
+  "held": 12,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTSDF-26OCT30-T75": {
+  "cash": -1.42,
+  "city": "San Antonio",
+  "contracts": 21,
+  "day": "2026-10-30",
+  "held": 21,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTSDF-26OCT31-B70.5": {
+  "cash": 5.24,
+  "city": "San Antonio",
+  "contracts": 33,
+  "day": "2026-10-31",
+  "inv": -31
+ },
+ "KXHIGHTSDF-26OCT31-B72.5": {
+  "cash": 3.26,
+  "city": "San Antonio",
+  "contracts": 10,
+  "day": "2026-10-31",
+  "inv": -8
+ },
+ "KXHIGHTSDF-26OCT31-B74.5": {
+  "cash": 0.54,
+  "city": "San Antonio",
+  "contracts": 4,
+  "day": "2026-10-31",
+  "inv": -2
+ },
+ "KXHIGHTSDF-26OCT31-T70": {
+  "cash": -2.43,
+  "city": "San Antonio",
+  "contracts": 28,
+  "day": "2026-10-31",
+  "inv": 28
+ },
+ "KXHIGHTSEA-26NOV01-B54.5": {
+  "cash": 5.71,
+  "city": "Seattle",
+  "contracts": 16,
+  "day": "2026-11-01",
+  "inv": -16
+ },
+ "KXHIGHTSEA-26NOV01-T52": {
+  "cash": 1.55,
+  "city": "Seattle",
+  "contracts": 10,
+  "day": "2026-11-01",
+  "inv": -10
+ },
+ "KXHIGHTSEA-26OCT25-B56.5": {
+  "cash": 4.77,
+  "city": "Seattle",
+  "contracts": 77,
+  "day": "2026-10-25",
+  "held": -3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-26T14:08:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT25-B58.5": {
+  "cash": -14.37,
+  "city": "Seattle",
+  "contracts": 59,
+  "day": "2026-10-25",
+  "held": -19,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-26T14:08:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT26-B55.5": {
+  "cash": -12.38,
+  "city": "Seattle",
+  "contracts": 272,
+  "day": "2026-10-26",
+  "held": 40,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSEA-26OCT26-B57.5": {
+  "cash": -17.26,
+  "city": "Seattle",
+  "contracts": 221,
+  "day": "2026-10-26",
+  "held": -31,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSEA-26OCT26-B59.5": {
+  "cash": -3.56,
+  "city": "Seattle",
+  "contracts": 203,
+  "day": "2026-10-26",
+  "held": 13,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSEA-26OCT27-B54.5": {
+  "cash": 7.71,
+  "city": "Seattle",
+  "contracts": 163,
+  "day": "2026-10-27",
+  "held": -17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSEA-26OCT27-B56.5": {
+  "cash": -27.02,
+  "city": "Seattle",
+  "contracts": 154,
+  "day": "2026-10-27",
+  "held": -40,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSEA-26OCT27-B58.5": {
+  "cash": -9.6,
+  "city": "Seattle",
+  "contracts": 69,
+  "day": "2026-10-27",
+  "held": 49,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSEA-26OCT27-T54": {
+  "cash": -0.13,
+  "city": "Seattle",
+  "contracts": 69,
+  "day": "2026-10-27",
+  "held": 9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSEA-26OCT28-B51.5": {
+  "cash": 4.75,
+  "city": "Seattle",
+  "contracts": 107,
+  "day": "2026-10-28",
+  "held": -3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT28-B53.5": {
+  "cash": -18.57,
+  "city": "Seattle",
+  "contracts": 284,
+  "day": "2026-10-28",
+  "held": -40,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT28-B55.5": {
+  "cash": -7.04,
+  "city": "Seattle",
+  "contracts": 320,
+  "day": "2026-10-28",
+  "held": 16,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT28-B57.5": {
+  "cash": -0.52,
+  "city": "Seattle",
+  "contracts": 10,
+  "day": "2026-10-28",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSEA-26OCT29-B52.5": {
+  "cash": 2.99,
+  "city": "Seattle",
+  "contracts": 221,
+  "day": "2026-10-29",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSEA-26OCT29-B54.5": {
+  "cash": -23.99,
+  "city": "Seattle",
+  "contracts": 363,
+  "day": "2026-10-29",
+  "held": -43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSEA-26OCT29-B56.5": {
+  "cash": 4.32,
+  "city": "Seattle",
+  "contracts": 382,
+  "day": "2026-10-29",
+  "held": -6,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSEA-26OCT29-T52": {
+  "cash": 1.04,
+  "city": "Seattle",
+  "contracts": 42,
+  "day": "2026-10-29",
+  "held": -14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSEA-26OCT30-B51.5": {
+  "cash": -0.32,
+  "city": "Seattle",
+  "contracts": 107,
+  "day": "2026-10-30",
+  "held": 37,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSEA-26OCT30-B53.5": {
+  "cash": -0.33,
+  "city": "Seattle",
+  "contracts": 2,
+  "day": "2026-10-30",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSEA-26OCT30-T51": {
+  "cash": -21.78,
+  "city": "Seattle",
+  "contracts": 189,
+  "day": "2026-10-30",
+  "held": -25,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSEA-26OCT31-B52.5": {
+  "cash": 10.95,
+  "city": "Seattle",
+  "contracts": 46,
+  "day": "2026-10-31",
+  "inv": -44
+ },
+ "KXHIGHTSEA-26OCT31-B54.5": {
+  "cash": 16.62,
+  "city": "Seattle",
+  "contracts": 40,
+  "day": "2026-10-31",
+  "inv": -32
+ },
+ "KXHIGHTSEA-26OCT31-B56.5": {
+  "cash": -7.07,
+  "city": "Seattle",
+  "contracts": 41,
+  "day": "2026-10-31",
+  "inv": 39
+ },
+ "KXHIGHTSEA-26OCT31-T52": {
+  "cash": 0.08,
+  "city": "Seattle",
+  "contracts": 2,
+  "day": "2026-10-31",
+  "inv": -2
+ },
+ "KXHIGHTSFO-26NOV01-B64.5": {
+  "cash": 9.79,
+  "city": "San Francisco",
+  "contracts": 21,
+  "day": "2026-11-01",
+  "inv": -19
+ },
+ "KXHIGHTSFO-26OCT26-B64.5": {
+  "cash": 0.7,
+  "city": "San Francisco",
+  "contracts": 9,
+  "day": "2026-10-26",
+  "held": -9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSFO-26OCT26-B66.5": {
+  "cash": 21.7,
+  "city": "San Francisco",
+  "contracts": 121,
+  "day": "2026-10-26",
+  "held": -39,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSFO-26OCT26-B68.5": {
+  "cash": -16.48,
+  "city": "San Francisco",
+  "contracts": 77,
+  "day": "2026-10-26",
+  "held": -33,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T14:07:42+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-B60.5": {
+  "cash": -0.58,
+  "city": "San Francisco",
+  "contracts": 11,
+  "day": "2026-10-27",
+  "held": 11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-B62.5": {
+  "cash": 6.47,
+  "city": "San Francisco",
+  "contracts": 34,
+  "day": "2026-10-27",
+  "held": -22,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-B64.5": {
+  "cash": 14.42,
+  "city": "San Francisco",
+  "contracts": 79,
+  "day": "2026-10-27",
+  "held": -31,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-B66.5": {
+  "cash": -12.75,
+  "city": "San Francisco",
+  "contracts": 114,
+  "day": "2026-10-27",
+  "held": -26,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-T60": {
+  "cash": -0.41,
+  "city": "San Francisco",
+  "contracts": 10,
+  "day": "2026-10-27",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT27-T67": {
+  "cash": -0.15,
+  "city": "San Francisco",
+  "contracts": 3,
+  "day": "2026-10-27",
+  "held": 3,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T14:06:38+00:00"
+ },
+ "KXHIGHTSFO-26OCT28-B67.5": {
+  "cash": 8.79,
+  "city": "San Francisco",
+  "contracts": 236,
+  "day": "2026-10-28",
+  "held": -18,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSFO-26OCT28-B69.5": {
+  "cash": -9.29,
+  "city": "San Francisco",
+  "contracts": 165,
+  "day": "2026-10-28",
+  "held": -17,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSFO-26OCT28-T63": {
+  "cash": 0.08,
+  "city": "San Francisco",
+  "contracts": 1,
+  "day": "2026-10-28",
+  "held": -1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSFO-26OCT28-T70": {
+  "cash": -0.74,
+  "city": "San Francisco",
+  "contracts": 145,
+  "day": "2026-10-28",
+  "held": 19,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T14:06:26+00:00"
+ },
+ "KXHIGHTSFO-26OCT29-B63.5": {
+  "cash": -5.53,
+  "city": "San Francisco",
+  "contracts": 184,
+  "day": "2026-10-29",
+  "held": 14,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSFO-26OCT29-B65.5": {
+  "cash": -23.82,
+  "city": "San Francisco",
+  "contracts": 987,
+  "day": "2026-10-29",
+  "held": -19,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSFO-26OCT29-B67.5": {
+  "cash": 18.51,
+  "city": "San Francisco",
+  "contracts": 1137,
+  "day": "2026-10-29",
+  "held": -27,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSFO-26OCT29-B69.5": {
+  "cash": -6.19,
+  "city": "San Francisco",
+  "contracts": 214,
+  "day": "2026-10-29",
+  "held": 50,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSFO-26OCT29-T70": {
+  "cash": -0.61,
+  "city": "San Francisco",
+  "contracts": 10,
+  "day": "2026-10-29",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T14:08:37+00:00"
+ },
+ "KXHIGHTSFO-26OCT30-B64.5": {
+  "cash": 0.82,
+  "city": "San Francisco",
+  "contracts": 73,
+  "day": "2026-10-30",
+  "held": -11,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSFO-26OCT30-B66.5": {
+  "cash": 10.46,
+  "city": "San Francisco",
+  "contracts": 268,
+  "day": "2026-10-30",
+  "held": -10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSFO-26OCT30-B68.5": {
+  "cash": -26.73,
+  "city": "San Francisco",
+  "contracts": 188,
+  "day": "2026-10-30",
+  "held": -50,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSFO-26OCT30-T69": {
+  "cash": -2.84,
+  "city": "San Francisco",
+  "contracts": 61,
+  "day": "2026-10-30",
+  "held": 25,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T14:06:35+00:00"
+ },
+ "KXHIGHTSFO-26OCT31-B62.5": {
+  "cash": -0.42,
+  "city": "San Francisco",
+  "contracts": 21,
+  "day": "2026-10-31",
+  "inv": 1
+ },
+ "KXHIGHTSFO-26OCT31-B64.5": {
+  "cash": 23.27,
+  "city": "San Francisco",
+  "contracts": 55,
+  "day": "2026-10-31",
+  "inv": -41
+ },
+ "KXHIGHTSFO-26OCT31-B66.5": {
+  "cash": 7.84,
+  "city": "San Francisco",
+  "contracts": 55,
+  "day": "2026-10-31",
+  "inv": -45
+ },
+ "KXHIGHTTTN-26NOV01-B62.5": {
+  "cash": -0.52,
+  "city": "Trenton, NJ",
+  "contracts": 1,
+  "day": "2026-11-01",
+  "inv": 1
+ },
+ "KXHIGHTTTN-26NOV01-T60": {
+  "cash": 0.79,
+  "city": "Trenton, NJ",
+  "contracts": 9,
+  "day": "2026-11-01",
+  "inv": -9
+ },
+ "KXHIGHTTTN-26OCT26-B67.5": {
+  "cash": -1.14,
+  "city": "Trenton, NJ",
+  "contracts": 20,
+  "day": "2026-10-26",
+  "held": 20,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTTTN-26OCT26-B69.5": {
+  "cash": 31.86,
+  "city": "Trenton, NJ",
+  "contracts": 41,
+  "day": "2026-10-26",
+  "held": -41,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTTTN-26OCT26-B71.5": {
+  "cash": 31.22,
+  "city": "Trenton, NJ",
+  "contracts": 57,
+  "day": "2026-10-26",
+  "held": 43,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-27T11:09:35+00:00"
+ },
+ "KXHIGHTTTN-26OCT27-B62.5": {
+  "cash": 1.51,
+  "city": "Trenton, NJ",
+  "contracts": 62,
+  "day": "2026-10-27",
+  "held": 2,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTTTN-26OCT27-B64.5": {
+  "cash": -16.8,
+  "city": "Trenton, NJ",
+  "contracts": 67,
+  "day": "2026-10-27",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTTTN-26OCT27-B66.5": {
+  "cash": -0.73,
+  "city": "Trenton, NJ",
+  "contracts": 17,
+  "day": "2026-10-27",
+  "held": 17,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTTTN-26OCT27-T62": {
+  "cash": -3.68,
+  "city": "Trenton, NJ",
+  "contracts": 35,
+  "day": "2026-10-27",
+  "held": 35,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-28T11:08:50+00:00"
+ },
+ "KXHIGHTTTN-26OCT28-B63.5": {
+  "cash": -30.87,
+  "city": "Trenton, NJ",
+  "contracts": 56,
+  "day": "2026-10-28",
+  "held": -42,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTTTN-26OCT28-B65.5": {
+  "cash": -0.26,
+  "city": "Trenton, NJ",
+  "contracts": 1,
+  "day": "2026-10-28",
+  "held": 1,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTTTN-26OCT28-B67.5": {
+  "cash": -1.15,
+  "city": "Trenton, NJ",
+  "contracts": 20,
+  "day": "2026-10-28",
+  "held": 0,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-29T11:07:57+00:00"
+ },
+ "KXHIGHTTTN-26OCT29-B68.5": {
+  "cash": -20.0,
+  "city": "Trenton, NJ",
+  "contracts": 69,
+  "day": "2026-10-29",
+  "held": -47,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTTTN-26OCT29-B70.5": {
+  "cash": 5.65,
+  "city": "Trenton, NJ",
+  "contracts": 84,
+  "day": "2026-10-29",
+  "held": -4,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTTTN-26OCT29-T68": {
+  "cash": -1.21,
+  "city": "Trenton, NJ",
+  "contracts": 33,
+  "day": "2026-10-29",
+  "held": 9,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-30T11:07:03+00:00"
+ },
+ "KXHIGHTTTN-26OCT30-B69.5": {
+  "cash": -8.19,
+  "city": "Trenton, NJ",
+  "contracts": 53,
+  "day": "2026-10-30",
+  "held": 45,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTTTN-26OCT30-B71.5": {
+  "cash": 24.84,
+  "city": "Trenton, NJ",
+  "contracts": 54,
+  "day": "2026-10-30",
+  "held": -32,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTTTN-26OCT30-B73.5": {
+  "cash": -34.67,
+  "city": "Trenton, NJ",
+  "contracts": 107,
+  "day": "2026-10-30",
+  "held": -41,
+  "inv": 0,
+  "result": "yes",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTTTN-26OCT30-B75.5": {
+  "cash": -0.22,
+  "city": "Trenton, NJ",
+  "contracts": 17,
+  "day": "2026-10-30",
+  "held": 5,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTTTN-26OCT30-T69": {
+  "cash": -0.51,
+  "city": "Trenton, NJ",
+  "contracts": 10,
+  "day": "2026-10-30",
+  "held": 10,
+  "inv": 0,
+  "result": "no",
+  "settled": "2026-10-31T11:09:22+00:00"
+ },
+ "KXHIGHTTTN-26OCT31-B59.5": {
+  "cash": 8.51,
+  "city": "Trenton, NJ",
+  "contracts": 32,
+  "day": "2026-10-31",
+  "inv": -10
+ },
+ "KXHIGHTTTN-26OCT31-B61.5": {
+  "cash": 5.83,
+  "city": "Trenton, NJ",
+  "contracts": 51,
+  "day": "2026-10-31",
+  "inv": -49
+ },
+ "KXHIGHTTTN-26OCT31-T59": {
+  "cash": 4.62,
+  "city": "Trenton, NJ",
+  "contracts": 44,
+  "day": "2026-10-31",
+  "inv": -36
+ }
+}
