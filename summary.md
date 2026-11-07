@@ -1,16 +1,16 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-07T14:54:58Z, tick 9365. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:00:23Z, tick 9366. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 909 copies the 95% interval (-13.6% to +4.2%) does not lie above zero.
 
 | Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |
 |---|---|---|---|---|---|---|
 | Sports (judged) | 909 | 526-383 | -4.7% | -13.6% to +4.2% | $-4,274 | 19 |
-| Not sports (recorded, not judged) | 2187 | 532-1655 | -44.8% | -50.7% to -38.8% | $-97,915 | 22 |
+| Not sports (recorded, not judged) | 2188 | 532-1656 | -44.8% | -50.8% to -38.8% | $-98,015 | 21 |
 | Same bets on Kalshi | 603 | 342-261 | -6.4% | -14.0% to +1.3% | (Polymarket on the same 603: -6.0%) | |
 
-**Closing line** (price at the last tick before the start, against the entry; 540 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 12% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
+**Closing line** (price at the last tick before the start, against the entry; 545 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
 Opening buys seen since the start: 10677 (too_small 5279, copied 3137, no_book 1100, skipped_chase 777, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 615 of 928.
 
@@ -22,7 +22,7 @@ Opening buys seen since the start: 10677 (too_small 5279, copied 3137, no_book 1
 | joseph00677 | 19 | 19 | 8-11 | -24.9% | -11.0% |
 | 0x361b16e3 | 493 | 482 | 312-170 | -3.9% | +8.4% |
 | Elaran1993 | 65 | 65 | 36-29 | +5.4% | +11.0% |
-| Papeasy | 2127 | 2126 | 496-1630 | -46.1% | n/a |
+| Papeasy | 2127 | 2127 | 496-1631 | -46.1% | n/a |
 | JnStrtPrdctnMrkts | 2 | 1 | 0-1 | -2.9% | +7.6% |
 | juice-fruit | 84 | 84 | 46-38 | -5.4% | +39.4% |
 | BillyGating | 3 | 3 | 0-3 | -100.0% | -32.1% |
@@ -44,7 +44,7 @@ Opening buys seen since the start: 10677 (too_small 5279, copied 3137, no_book 1
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
-| 11-07T14:54 | Papeasy | Bitcoin Up or Down - November 7, 9:50AM-9:55AM ET: Up | 1c |  | open |
+| 11-07T14:54 | Papeasy | Bitcoin Up or Down - November 7, 9:50AM-9:55AM ET: Up | 1c |  | -100.0% (resolved) |
 | 11-07T14:48 | Papeasy | Bitcoin Up or Down - November 7, 9:45AM-9:50AM ET: Up | 35c |  | +166.7% (resolved) |
 | 11-07T14:48 | 0x361b..74fe | Spread: Bromley FC (-1.5): Rotherham United FC | 74c | no matching Kalshi game | open |
 | 11-07T14:43 | 0x361b..74fe | Exact Score: Torino FC 0 - 1 US Lecce?: No | 94c | bet type not mapped to Kalshi | open |
