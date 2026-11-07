@@ -1,6 +1,6 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:28:05Z, tick 9371. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:33:37Z, tick 9372. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 909 copies the 95% interval (-13.6% to +4.2%) does not lie above zero.
 
@@ -10,9 +10,9 @@ Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:28:05Z, tick 9371. Watchin
 | Not sports (recorded, not judged) | 2190 | 533-1657 | -44.8% | -50.7% to -38.8% | $-98,066 | 21 |
 | Same bets on Kalshi | 603 | 342-261 | -6.4% | -14.0% to +1.3% | (Polymarket on the same 603: -6.0%) | |
 
-**Closing line** (price at the last tick before the start, against the entry; 545 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
+**Closing line** (price at the last tick before the start, against the entry; 546 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 10690 (too_small 5281, copied 3143, no_book 1103, skipped_chase 779, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 617 of 932.
+Opening buys seen since the start: 10692 (too_small 5282, copied 3143, no_book 1104, skipped_chase 779, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 617 of 932.
 
 ## By wallet
 
