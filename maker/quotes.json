@@ -1,0 +1,292 @@
+{
+ "KXHIGHAUS-26NOV07-B72.5": {
+  "ask": 0.46,
+  "bid": 0.45,
+  "city": "Austin",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.455,
+  "ts": 1794062982
+ },
+ "KXHIGHAUS-26NOV07-B74.5": {
+  "ask": null,
+  "bid": 0.13,
+  "city": "Austin",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.135,
+  "ts": 1794062982
+ },
+ "KXHIGHDEN-26NOV07-B63.5": {
+  "ask": 0.61,
+  "bid": 0.59,
+  "city": "Denver",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.6,
+  "ts": 1794062982
+ },
+ "KXHIGHLAX-26NOV07-B85.5": {
+  "ask": 0.46,
+  "bid": 0.44,
+  "city": "Los Angeles",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.45,
+  "ts": 1794062982
+ },
+ "KXHIGHNY-26NOV07-T61": {
+  "ask": null,
+  "bid": 0.25,
+  "city": "New York",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.255,
+  "ts": 1794062982
+ },
+ "KXHIGHPHIL-26NOV07-B57.5": {
+  "ask": 0.24,
+  "bid": 0.23,
+  "city": "Philadelphia",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.235,
+  "ts": 1794062982
+ },
+ "KXHIGHTATL-26NOV07-B66.5": {
+  "ask": 0.32,
+  "bid": 0.29,
+  "city": "Atlanta",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.305,
+  "ts": 1794062982
+ },
+ "KXHIGHTATL-26NOV07-B68.5": {
+  "ask": 0.55,
+  "bid": 0.54,
+  "city": "Atlanta",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.545,
+  "ts": 1794062982
+ },
+ "KXHIGHTEWR-26NOV07-B62.5": {
+  "ask": 0.74,
+  "bid": 0.58,
+  "city": "Newark, NJ (EWR)",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.66,
+  "ts": 1794062982
+ },
+ "KXHIGHTEWR-26NOV07-B64.5": {
+  "ask": 0.21,
+  "bid": 0.14,
+  "city": "Newark, NJ (EWR)",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.175,
+  "ts": 1794062982
+ },
+ "KXHIGHTEWR-26NOV07-T62": {
+  "ask": null,
+  "bid": 0.04,
+  "city": "Newark, NJ (EWR)",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.045,
+  "ts": 1794062982
+ },
+ "KXHIGHTHOU-26NOV07-B77.5": {
+  "ask": 0.14,
+  "bid": 0.13,
+  "city": "Houston",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.135,
+  "ts": 1794062982
+ },
+ "KXHIGHTHOU-26NOV07-B81.5": {
+  "ask": 0.23,
+  "bid": 0.2,
+  "city": "Houston",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.215,
+  "ts": 1794062982
+ },
+ "KXHIGHTLV-26NOV07-B74.5": {
+  "ask": 0.78,
+  "bid": 0.77,
+  "city": "Las Vegas",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.775,
+  "ts": 1794062982
+ },
+ "KXHIGHTMIN-26NOV07-B54.5": {
+  "ask": 0.43,
+  "bid": 0.4,
+  "city": "Minneapolis",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.415,
+  "ts": 1794062982
+ },
+ "KXHIGHTNOLA-26NOV07-B75.5": {
+  "ask": 0.14,
+  "bid": 0.13,
+  "city": "New Orleans",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.135,
+  "ts": 1794062982
+ },
+ "KXHIGHTOKC-26NOV07-B61.5": {
+  "ask": 0.25,
+  "bid": 0.23,
+  "city": "Oklahoma City",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.24,
+  "ts": 1794062982
+ },
+ "KXHIGHTPHX-26NOV07-B83.5": {
+  "ask": 0.29,
+  "bid": 0.27,
+  "city": "Phoenix",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.28,
+  "ts": 1794062982
+ },
+ "KXHIGHTSAN-26NOV07-B85.5": {
+  "ask": null,
+  "bid": 0.1,
+  "city": "San Diego",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.195,
+  "ts": 1794062982
+ },
+ "KXHIGHTSAN-26NOV07-T83": {
+  "ask": null,
+  "bid": 0.05,
+  "city": "San Diego",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.115,
+  "ts": 1794062982
+ },
+ "KXHIGHTSATX-26NOV07-B70.5": {
+  "ask": null,
+  "bid": 0.28,
+  "city": "San Antonio",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.285,
+  "ts": 1794062982
+ },
+ "KXHIGHTSATX-26NOV07-B72.5": {
+  "ask": 0.16,
+  "bid": 0.15,
+  "city": "San Antonio",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.155,
+  "ts": 1794062982
+ },
+ "KXHIGHTSDF-26NOV07-B54.5": {
+  "ask": 0.14,
+  "bid": 0.12,
+  "city": "San Antonio",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.13,
+  "ts": 1794062982
+ },
+ "KXHIGHTSDF-26NOV07-B56.5": {
+  "ask": 0.73,
+  "bid": 0.62,
+  "city": "San Antonio",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.675,
+  "ts": 1794062982
+ },
+ "KXHIGHTSDF-26NOV07-B58.5": {
+  "ask": null,
+  "bid": 0.08,
+  "city": "San Antonio",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.105,
+  "ts": 1794062982
+ },
+ "KXHIGHTSEA-26NOV07-T61": {
+  "ask": 0.31,
+  "bid": 0.3,
+  "city": "Seattle",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.305,
+  "ts": 1794062982
+ },
+ "KXHIGHTSFO-26NOV07-B69.5": {
+  "ask": 0.37,
+  "bid": 0.35,
+  "city": "San Francisco",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.36,
+  "ts": 1794062982
+ },
+ "KXHIGHTTTN-26NOV07-B58.5": {
+  "ask": 0.74,
+  "bid": 0.68,
+  "city": "Trenton, NJ",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.71,
+  "ts": 1794062982
+ },
+ "KXHIGHTTTN-26NOV07-T58": {
+  "ask": 0.11,
+  "bid": 0.1,
+  "city": "Trenton, NJ",
+  "day": "2026-11-07",
+  "left_ask": 10,
+  "left_bid": 10,
+  "mid": 0.105,
+  "ts": 1794062982
+ }
+}
