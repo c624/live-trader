@@ -1,6 +1,6 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:22:28Z, tick 9370. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:28:05Z, tick 9371. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 909 copies the 95% interval (-13.6% to +4.2%) does not lie above zero.
 
@@ -12,7 +12,7 @@ Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:22:28Z, tick 9370. Watchin
 
 **Closing line** (price at the last tick before the start, against the entry; 545 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 10688 (too_small 5281, copied 3143, no_book 1102, skipped_chase 778, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 617 of 932.
+Opening buys seen since the start: 10690 (too_small 5281, copied 3143, no_book 1103, skipped_chase 779, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 617 of 932.
 
 ## By wallet
 
@@ -44,8 +44,8 @@ Opening buys seen since the start: 10688 (too_small 5281, copied 3143, no_book 1
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
-| 11-07T15:22 | 0x361b..74fe | CD Nacional vs. Académico de Viseu FC: O/U 2.5: Over | 46c | YES Over 2.5 goals scored 46c | open |
 | 11-07T15:22 | 0x361b..74fe | Exact Score: 1. FSV Mainz 05 0 - 2 FC Bayern München?: No | 84c | bet type not mapped to Kalshi | open |
+| 11-07T15:22 | 0x361b..74fe | CD Nacional vs. Académico de Viseu FC: O/U 2.5: Over | 46c | YES Over 2.5 goals scored 46c | open |
 | 11-07T15:22 | alwaysfade | Spread: Baylor (-8.5): Baylor | 54c | no 8.5 line on Kalshi (has 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 9.5, 10.5, 11.5, 13.5, 14.5, 16.5, 17.5, 20.5, 21.5, 23.5, 24.5, 27.5) | open |
 | 11-07T15:16 | Papeasy | Bitcoin Up or Down - November 7, 10:15AM-10:20AM ET: Up | 89c |  | -100.0% (resolved) |
 | 11-07T15:11 | Papeasy | Bitcoin Up or Down - November 7, 10:10AM-10:15AM ET: Down | 64c |  | +48.3% (resolved) |
