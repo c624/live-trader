@@ -1,18 +1,18 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:05:50Z, tick 9367. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-07T15:11:14Z, tick 9368. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 909 copies the 95% interval (-13.6% to +4.2%) does not lie above zero.
 
 | Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |
 |---|---|---|---|---|---|---|
 | Sports (judged) | 909 | 526-383 | -4.7% | -13.6% to +4.2% | $-4,274 | 20 |
-| Not sports (recorded, not judged) | 2188 | 532-1656 | -44.8% | -50.8% to -38.8% | $-98,015 | 21 |
+| Not sports (recorded, not judged) | 2188 | 532-1656 | -44.8% | -50.8% to -38.8% | $-98,015 | 22 |
 | Same bets on Kalshi | 603 | 342-261 | -6.4% | -14.0% to +1.3% | (Polymarket on the same 603: -6.0%) | |
 
 **Closing line** (price at the last tick before the start, against the entry; 545 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 10679 (too_small 5279, copied 3138, no_book 1101, skipped_chase 777, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 616 of 929.
+Opening buys seen since the start: 10682 (too_small 5280, copied 3139, no_book 1102, skipped_chase 777, closed_before_entry 321, priced_out 59, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 616 of 929.
 
 ## By wallet
 
@@ -22,7 +22,7 @@ Opening buys seen since the start: 10679 (too_small 5279, copied 3138, no_book 1
 | joseph00677 | 19 | 19 | 8-11 | -24.9% | -11.0% |
 | 0x361b16e3 | 493 | 482 | 312-170 | -3.9% | +8.4% |
 | Elaran1993 | 65 | 65 | 36-29 | +5.4% | +11.0% |
-| Papeasy | 2127 | 2127 | 496-1631 | -46.1% | n/a |
+| Papeasy | 2128 | 2127 | 496-1631 | -46.1% | n/a |
 | JnStrtPrdctnMrkts | 2 | 1 | 0-1 | -2.9% | +7.6% |
 | juice-fruit | 84 | 84 | 46-38 | -5.4% | +39.4% |
 | BillyGating | 3 | 3 | 0-3 | -100.0% | -32.1% |
@@ -44,6 +44,7 @@ Opening buys seen since the start: 10679 (too_small 5279, copied 3138, no_book 1
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
+| 11-07T15:11 | Papeasy | Bitcoin Up or Down - November 7, 10:10AM-10:15AM ET: Down | 64c |  | open |
 | 11-07T15:05 | alwaysfade | Spread: LSU (-5.5): LSU | 52c | YES LSU wins by over 5.5 points 52c | open |
 | 11-07T14:54 | Papeasy | Bitcoin Up or Down - November 7, 9:50AM-9:55AM ET: Up | 1c |  | -100.0% (resolved) |
 | 11-07T14:48 | Papeasy | Bitcoin Up or Down - November 7, 9:45AM-9:50AM ET: Up | 35c |  | +166.7% (resolved) |
@@ -68,4 +69,3 @@ Opening buys seen since the start: 10679 (too_small 5279, copied 3138, no_book 1
 | 11-07T12:48 | Papeasy | Bitcoin Up or Down - November 7, 7:45AM-7:50AM ET: Down | 2c |  | -100.0% (resolved) |
 | 11-07T12:37 | 0x361b..74fe | Leeds United FC vs. Tottenham Hotspur FC: O/U 1.5: Under | 28c | NO Over 1.5 goals scored 28c | +244.7% (resolved) |
 | 11-07T11:47 | Papeasy | Bitcoin Up or Down - November 7, 6:45AM-6:50AM ET: Down | 11c |  | -100.0% (resolved) |
-| 11-07T11:36 | 0x361b..74fe | Will Kocaelispor win on 2026-11-07?: Yes | 94c | YES Kocaeli 94c | +6.1% (resolved) |

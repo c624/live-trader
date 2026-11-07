@@ -2,11 +2,11 @@
 
 Started 2026-10-21T15:33:46+00:00. Rule: at 17:00 ET, buy 100 NO on every daily-high bracket with a YES bid of 1-4c (spread 5c or less), at the ask plus the taker fee, and hold. 48 cities watched.
 
-**Verdict:** Running: 133 of 1000 settled trades (or judged on 2027-01-31). Not judged yet.
+**Verdict:** Running: 135 of 1000 settled trades (or judged on 2027-01-31). Not judged yet.
 
 | Settled | Losses | Mean per contract | 95% interval (city-days) | P&L | Open |
 |---|---|---|---|---|---|
-| 133 | 3 | -0.56c | -3.09c to +1.98c | $-73.86 | 2 |
+| 135 | 3 | -0.52c | -3.01c to +1.98c | $-70.14 | 0 |
 
 Backtest it is testing: +1.19c per contract (90% CI +0.37c to +1.90c) over 282 trades with 2 losses. One loss costs about 50 wins, so the loss rate decides it.
 
@@ -29,9 +29,9 @@ Backtest it is testing: +1.19c per contract (90% CI +0.37c to +1.90c) over 282 t
 | Philadelphia | 1 | 0 | +2.79c |
 | Phoenix | 9 | 0 | +1.96c |
 | San Antonio | 9 | 0 | +1.55c |
-| San Diego | 13 | 1 | -5.90c |
+| San Diego | 14 | 1 | -5.28c |
 | San Francisco | 17 | 1 | -4.02c |
-| Seattle | 14 | 1 | -5.48c |
+| Seattle | 15 | 1 | -5.05c |
 | Washington DC | 2 | 0 | +1.86c |
 
 ## Losses
