@@ -712,6 +712,13 @@
   "day": "2026-11-07",
   "inv": -2
  },
+ "KXHIGHCHI-26NOV08-B63.5": {
+  "cash": -0.43,
+  "city": "Chicago",
+  "contracts": 6,
+  "day": "2026-11-08",
+  "inv": 6
+ },
  "KXHIGHCHI-26NOV08-T57": {
   "cash": -1.23,
   "city": "Chicago",
@@ -1237,18 +1244,18 @@
   "inv": -25
  },
  "KXHIGHDEN-26NOV07-B63.5": {
-  "cash": 9.88,
+  "cash": 15.82,
   "city": "Denver",
-  "contracts": 127,
+  "contracts": 137,
   "day": "2026-11-07",
-  "inv": -17
+  "inv": -27
  },
  "KXHIGHDEN-26NOV07-B65.5": {
-  "cash": -9.96,
+  "cash": -6.51,
   "city": "Denver",
-  "contracts": 264,
+  "contracts": 274,
   "day": "2026-11-07",
-  "inv": 24
+  "inv": 14
  },
  "KXHIGHDEN-26NOV08-B67.5": {
   "cash": -2.84,
@@ -4436,11 +4443,11 @@
   "inv": -41
  },
  "KXHIGHTDAL-26NOV07-T66": {
-  "cash": -2.71,
+  "cash": -7.53,
   "city": "Dallas",
-  "contracts": 98,
+  "contracts": 107,
   "day": "2026-11-07",
-  "inv": -8
+  "inv": 1
  },
  "KXHIGHTDAL-26NOV08-B71.5": {
   "cash": -3.15,
@@ -5453,11 +5460,11 @@
   "inv": -25
  },
  "KXHIGHTEWR-26NOV07-B64.5": {
-  "cash": 4.21,
+  "cash": 4.54,
   "city": "Newark, NJ (EWR)",
-  "contracts": 40,
+  "contracts": 42,
   "day": "2026-11-07",
-  "inv": -16
+  "inv": -18
  },
  "KXHIGHTEWR-26NOV07-T62": {
   "cash": 8.98,
@@ -9343,11 +9350,11 @@
   "inv": -40
  },
  "KXHIGHTSATX-26NOV07-T70": {
-  "cash": 27.38,
+  "cash": 26.11,
   "city": "San Antonio",
-  "contracts": 158,
+  "contracts": 160,
   "day": "2026-11-07",
-  "inv": -46
+  "inv": -44
  },
  "KXHIGHTSATX-26NOV08-B63.5": {
   "cash": 5.15,
@@ -10357,11 +10364,11 @@
   "inv": -10
  },
  "KXHIGHTSEA-26NOV08-B58.5": {
-  "cash": 1.86,
+  "cash": 1.43,
   "city": "Seattle",
-  "contracts": 10,
+  "contracts": 12,
   "day": "2026-11-08",
-  "inv": -10
+  "inv": -8
  },
  "KXHIGHTSEA-26OCT25-B56.5": {
   "cash": 4.77,
@@ -10854,11 +10861,11 @@
   "settled": "2026-11-07T15:05:58+00:00"
  },
  "KXHIGHTSFO-26NOV07-B69.5": {
-  "cash": 1.34,
+  "cash": -1.91,
   "city": "San Francisco",
-  "contracts": 90,
+  "contracts": 100,
   "day": "2026-11-07",
-  "inv": 0
+  "inv": 10
  },
  "KXHIGHTSFO-26NOV07-B71.5": {
   "cash": 7.92,
