@@ -521,11 +521,11 @@
   "inv": -18
  },
  "KXHIGHAUS-26NOV14-T67": {
-  "cash": -9.08,
+  "cash": -8.32,
   "city": "Austin",
-  "contracts": 191,
+  "contracts": 197,
   "day": "2026-11-14",
-  "inv": 33
+  "inv": 27
  },
  "KXHIGHAUS-26NOV15-B61.5": {
   "cash": 0.78,
@@ -2724,11 +2724,11 @@
   "inv": -44
  },
  "KXHIGHLAX-26NOV14-B71.5": {
-  "cash": 30.04,
+  "cash": 25.38,
   "city": "Los Angeles",
-  "contracts": 87,
+  "contracts": 94,
   "day": "2026-11-14",
-  "inv": -47
+  "inv": -40
  },
  "KXHIGHLAX-26NOV14-B73.5": {
   "cash": 1.89,
@@ -4667,11 +4667,11 @@
   "inv": -43
  },
  "KXHIGHPHIL-26NOV14-B50.5": {
-  "cash": 0.13,
+  "cash": 1.5,
   "city": "Philadelphia",
-  "contracts": 73,
+  "contracts": 83,
   "day": "2026-11-14",
-  "inv": -9
+  "inv": -19
  },
  "KXHIGHPHIL-26NOV15-B49.5": {
   "cash": -0.44,
@@ -6067,11 +6067,11 @@
   "inv": -8
  },
  "KXHIGHTBOS-26NOV14-B45.5": {
-  "cash": 19.18,
+  "cash": 22.91,
   "city": "Boston",
-  "contracts": 76,
+  "contracts": 81,
   "day": "2026-11-14",
-  "inv": -38
+  "inv": -43
  },
  "KXHIGHTBOS-26NOV14-B47.5": {
   "cash": -1.77,
@@ -6832,11 +6832,11 @@
   "inv": -11
  },
  "KXHIGHTDAL-26NOV14-T62": {
-  "cash": -24.07,
+  "cash": -23.14,
   "city": "Dallas",
-  "contracts": 146,
+  "contracts": 151,
   "day": "2026-11-14",
-  "inv": 36
+  "inv": 31
  },
  "KXHIGHTDAL-26NOV15-B50.5": {
   "cash": 1.95,
@@ -10591,11 +10591,11 @@
   "inv": -11
  },
  "KXHIGHTMIN-26NOV14-B43.5": {
-  "cash": 19.66,
+  "cash": 24.17,
   "city": "Minneapolis",
-  "contracts": 143,
+  "contracts": 150,
   "day": "2026-11-14",
-  "inv": -35
+  "inv": -42
  },
  "KXHIGHTMIN-26NOV14-B45.5": {
   "cash": 0.19,
@@ -12098,11 +12098,11 @@
   "inv": 1
  },
  "KXHIGHTOKC-26NOV14-T54": {
-  "cash": 11.89,
+  "cash": 13.65,
   "city": "Oklahoma City",
-  "contracts": 112,
+  "contracts": 122,
   "day": "2026-11-14",
-  "inv": -36
+  "inv": -46
  },
  "KXHIGHTOKC-26NOV15-B44.5": {
   "cash": 4.85,
@@ -12740,11 +12740,11 @@
   "inv": 1
  },
  "KXHIGHTPHX-26NOV14-T71": {
-  "cash": 10.49,
+  "cash": 14.64,
   "city": "Phoenix",
-  "contracts": 171,
+  "contracts": 181,
   "day": "2026-11-14",
-  "inv": -33
+  "inv": -43
  },
  "KXHIGHTPHX-26NOV15-B75.5": {
   "cash": 4.85,

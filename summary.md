@@ -1,18 +1,18 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-14T16:21:19Z, tick 11390. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-14T16:26:52Z, tick 11391. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
 **Verdict:** **Failed**: over 1058 copies the 95% interval (-13.6% to +2.2%) does not lie above zero.
 
 | Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |
 |---|---|---|---|---|---|---|
 | Sports (judged) | 1058 | 614-444 | -5.7% | -13.6% to +2.2% | $-6,023 | 15 |
-| Not sports (recorded, not judged) | 3112 | 752-2360 | -44.3% | -49.4% to -39.2% | $-137,925 | 33 |
+| Not sports (recorded, not judged) | 3112 | 752-2360 | -44.3% | -49.4% to -39.2% | $-137,925 | 34 |
 | Same bets on Kalshi | 717 | 408-309 | -6.8% | -13.8% to +0.2% | (Polymarket on the same 717: -6.8%) | |
 
 **Closing line** (price at the last tick before the start, against the entry; 612 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
 
-Opening buys seen since the start: 13643 (too_small 6196, copied 4218, no_book 1622, skipped_chase 1060, closed_before_entry 467, priced_out 76, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 725 of 1073.
+Opening buys seen since the start: 13646 (too_small 6197, copied 4219, no_book 1623, skipped_chase 1060, closed_before_entry 467, priced_out 76, exited_before_entry 3, no_market 1). Sports copies with a Kalshi match: 725 of 1073.
 
 ## By wallet
 
@@ -22,7 +22,7 @@ Opening buys seen since the start: 13643 (too_small 6196, copied 4218, no_book 1
 | joseph00677 | 20 | 20 | 8-12 | -28.6% | -11.0% |
 | 0x361b16e3 | 564 | 552 | 365-187 | -3.3% | +8.4% |
 | Elaran1993 | 65 | 65 | 36-29 | +5.4% | +11.0% |
-| Papeasy | 3041 | 3041 | 708-2333 | -45.4% | n/a |
+| Papeasy | 3042 | 3041 | 708-2333 | -45.4% | n/a |
 | JnStrtPrdctnMrkts | 2 | 2 | 0-2 | -47.1% | +7.6% |
 | juice-fruit | 97 | 97 | 52-45 | -8.1% | +39.4% |
 | BillyGating | 3 | 3 | 0-3 | -100.0% | -32.1% |
@@ -44,6 +44,7 @@ Opening buys seen since the start: 13643 (too_small 6196, copied 4218, no_book 1
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
+| 11-14T16:26 | Papeasy | Bitcoin Up or Down - November 14, 11:25AM-11:30AM ET: Down | 53c |  | open |
 | 11-14T16:04 | Papeasy | Bitcoin Up or Down - November 14, 11:00AM-11:05AM ET: Up | 1c |  | -100.0% (resolved) |
 | 11-14T15:59 | Papeasy | Bitcoin Up or Down - November 14, 10:55AM-11:00AM ET: Up | 30c |  | +190.0% (resolved) |
 | 11-14T15:53 | Papeasy | Bitcoin Up or Down - November 14, 10:50AM-10:55AM ET: Up | 8c |  | -100.0% (resolved) |
@@ -68,4 +69,3 @@ Opening buys seen since the start: 13643 (too_small 6196, copied 4218, no_book 1
 | 11-14T14:06 | 0x361b..74fe | Will Republic of Ireland win on 2026-11-14?: No | 84c | NO Ireland 84c | open |
 | 11-14T14:06 | 0x361b..74fe | Will Austria win on 2026-11-14?: Yes | 60c | YES Austria 59c | open |
 | 11-14T14:01 | 0x361b..74fe | Will Portugal win on 2026-11-14?: Yes | 62c | YES Portugal 63c | open |
-| 11-14T13:55 | Papeasy | Bitcoin Up or Down - November 14, 8:50AM-8:55AM ET: Up | 1c |  | -100.0% (resolved) |
