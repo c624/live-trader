@@ -4625,18 +4625,18 @@
   "settled": "2026-11-14T12:09:31+00:00"
  },
  "KXHIGHPHIL-26NOV14-B46.5": {
-  "cash": 4.12,
+  "cash": 5.52,
   "city": "Philadelphia",
-  "contracts": 147,
+  "contracts": 158,
   "day": "2026-11-14",
-  "inv": -37
+  "inv": -46
  },
  "KXHIGHPHIL-26NOV14-B48.5": {
-  "cash": 29.95,
+  "cash": 22.8,
   "city": "Philadelphia",
-  "contracts": 161,
+  "contracts": 171,
   "day": "2026-11-14",
-  "inv": -43
+  "inv": -33
  },
  "KXHIGHPHIL-26NOV14-B50.5": {
   "cash": -1.24,
@@ -6039,11 +6039,11 @@
   "inv": -38
  },
  "KXHIGHTBOS-26NOV14-B47.5": {
-  "cash": 2.08,
+  "cash": -1.68,
   "city": "Boston",
-  "contracts": 108,
+  "contracts": 118,
   "day": "2026-11-14",
-  "inv": 2
+  "inv": 12
  },
  "KXHIGHTBOS-26NOV15-B49.5": {
   "cash": 6.86,
@@ -6811,11 +6811,11 @@
   "inv": -10
  },
  "KXHIGHTDAL-26NOV15-B52.5": {
-  "cash": 3.35,
+  "cash": 0.72,
   "city": "Dallas",
-  "contracts": 10,
+  "contracts": 17,
   "day": "2026-11-15",
-  "inv": -10
+  "inv": -3
  },
  "KXHIGHTDAL-26NOV15-B54.5": {
   "cash": -1.83,
@@ -10542,11 +10542,11 @@
   "inv": -25
  },
  "KXHIGHTMIN-26NOV14-B45.5": {
-  "cash": 9.32,
+  "cash": 6.17,
   "city": "Minneapolis",
-  "contracts": 117,
+  "contracts": 127,
   "day": "2026-11-14",
-  "inv": -39
+  "inv": -29
  },
  "KXHIGHTMIN-26NOV15-B50.5": {
   "cash": 4.75,
@@ -12021,11 +12021,11 @@
   "settled": "2026-11-14T13:06:30+00:00"
  },
  "KXHIGHTOKC-26NOV14-B54.5": {
-  "cash": 19.04,
+  "cash": 17.22,
   "city": "Oklahoma City",
-  "contracts": 68,
+  "contracts": 72,
   "day": "2026-11-14",
-  "inv": -46
+  "inv": -42
  },
  "KXHIGHTOKC-26NOV14-B56.5": {
   "cash": 6.2,
@@ -16470,11 +16470,11 @@
   "inv": 1
  },
  "KXHIGHTSFO-26NOV15-B64.5": {
-  "cash": 5.45,
+  "cash": 3.35,
   "city": "San Francisco",
-  "contracts": 10,
+  "contracts": 14,
   "day": "2026-11-15",
-  "inv": -10
+  "inv": -6
  },
  "KXHIGHTSFO-26OCT26-B64.5": {
   "cash": 0.7,
