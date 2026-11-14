@@ -1,13 +1,13 @@
 # Polymarket wallet watch (paper)
 
-Started 2026-10-06T18:39:55Z; last tick 2026-11-14T16:04:41Z, tick 11387. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
+Started 2026-10-06T18:39:55Z; last tick 2026-11-14T16:10:13Z, tick 11388. Watching 22 wallets fixed on 2026-10-06. $100 paper per copy at the live ask plus the taker fee; chases over 10c past the wallet's fill are skipped.
 
-**Verdict:** **Failed**: over 1057 copies the 95% interval (-13.5% to +2.3%) does not lie above zero.
+**Verdict:** **Failed**: over 1058 copies the 95% interval (-13.6% to +2.2%) does not lie above zero.
 
 | Arm | Settled | W-L | Mean ROI | 95% interval | P&L | Open |
 |---|---|---|---|---|---|---|
-| Sports (judged) | 1057 | 614-443 | -5.6% | -13.5% to +2.3% | $-5,923 | 16 |
-| Not sports (recorded, not judged) | 3111 | 752-2359 | -44.3% | -49.4% to -39.2% | $-137,825 | 34 |
+| Sports (judged) | 1058 | 614-444 | -5.7% | -13.6% to +2.2% | $-6,023 | 15 |
+| Not sports (recorded, not judged) | 3112 | 752-2360 | -44.3% | -49.4% to -39.2% | $-137,925 | 33 |
 | Same bets on Kalshi | 717 | 408-309 | -6.8% | -13.8% to +0.2% | (Polymarket on the same 717: -6.8%) | |
 
 **Closing line** (price at the last tick before the start, against the entry; 612 sports copies): ours -0.5c (band -0.8c to -0.2c), the wallets' own fills +0.2c; the price moved our way after 13% of copies. Beating the close is the early sign of an edge; it is recorded, not judged.
@@ -20,9 +20,9 @@ Opening buys seen since the start: 13641 (too_small 6195, copied 4218, no_book 1
 |---|---|---|---|---|---|
 | totoro3miyazaki | 37 | 36 | 16-20 | -25.2% | +10.0% |
 | joseph00677 | 20 | 20 | 8-12 | -28.6% | -11.0% |
-| 0x361b16e3 | 564 | 551 | 365-186 | -3.2% | +8.4% |
+| 0x361b16e3 | 564 | 552 | 365-187 | -3.3% | +8.4% |
 | Elaran1993 | 65 | 65 | 36-29 | +5.4% | +11.0% |
-| Papeasy | 3041 | 3040 | 708-2332 | -45.4% | n/a |
+| Papeasy | 3041 | 3041 | 708-2333 | -45.4% | n/a |
 | JnStrtPrdctnMrkts | 2 | 2 | 0-2 | -47.1% | +7.6% |
 | juice-fruit | 97 | 97 | 52-45 | -8.1% | +39.4% |
 | BillyGating | 3 | 3 | 0-3 | -100.0% | -32.1% |
@@ -44,7 +44,7 @@ Opening buys seen since the start: 13641 (too_small 6195, copied 4218, no_book 1
 
 | Detected | Wallet | Bet | Ask | Kalshi | Result |
 |---|---|---|---|---|---|
-| 11-14T16:04 | Papeasy | Bitcoin Up or Down - November 14, 11:00AM-11:05AM ET: Up | 1c |  | open |
+| 11-14T16:04 | Papeasy | Bitcoin Up or Down - November 14, 11:00AM-11:05AM ET: Up | 1c |  | -100.0% (resolved) |
 | 11-14T15:59 | Papeasy | Bitcoin Up or Down - November 14, 10:55AM-11:00AM ET: Up | 30c |  | +190.0% (resolved) |
 | 11-14T15:53 | Papeasy | Bitcoin Up or Down - November 14, 10:50AM-10:55AM ET: Up | 8c |  | -100.0% (resolved) |
 | 11-14T15:47 | Papeasy | Bitcoin Up or Down - November 14, 10:45AM-10:50AM ET: Down | 9c |  | -100.0% (resolved) |
@@ -62,7 +62,7 @@ Opening buys seen since the start: 13641 (too_small 6195, copied 4218, no_book 1
 | 11-14T14:44 | Papeasy | Bitcoin Up or Down - November 14, 9:40AM-9:45AM ET: Down | 1c |  | -100.0% (resolved) |
 | 11-14T14:33 | 0x361b..74fe | Will Real Valladolid CF win on 2026-11-14?: No | 97c | NO Valladolid 97c | open |
 | 11-14T14:17 | Papeasy | Bitcoin Up or Down - November 14, 9:15AM-9:20AM ET: Down | 11c |  | -100.0% (resolved) |
-| 11-14T14:17 | 0x361b..74fe | Exact Score: Kosovo 0 - 0 Israel?: No | 92c | bet type not mapped to Kalshi | open |
+| 11-14T14:17 | 0x361b..74fe | Exact Score: Kosovo 0 - 0 Israel?: No | 92c | bet type not mapped to Kalshi | -100.0% (resolved) |
 | 11-14T14:06 | Papeasy | Bitcoin Up or Down - November 14, 9:05AM-9:10AM ET: Up | 63c |  | -100.0% (resolved) |
 | 11-14T14:06 | 0x361b..74fe | Exact Score: Austria 1 - 0 Republic of Ireland?: Yes | 13c | bet type not mapped to Kalshi | open |
 | 11-14T14:06 | 0x361b..74fe | Will Republic of Ireland win on 2026-11-14?: No | 84c | NO Ireland 84c | open |
