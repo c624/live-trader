@@ -1,6 +1,6 @@
 {
- "last_tick": "2026-11-28T16:08:34+00:00",
- "quoted": 91,
+ "last_tick": "2026-11-28T16:14:21+00:00",
+ "quoted": 94,
  "series": {
   "KXHIGHAUS": "Austin",
   "KXHIGHCHI": "Chicago",
@@ -53,5 +53,5 @@
  },
  "series_at": 1795826881,
  "started": "2026-10-25T23:23:53+00:00",
- "ticks": 9518
+ "ticks": 9519
 }
