@@ -1,7 +1,7 @@
 {
  "started": "2026-10-06T18:39:55Z",
  "started_ts": 1791311995,
- "ticks": 15359,
+ "ticks": 15360,
  "wallets": {
   "0x51698a47f840a242abc2ca0351371c7ffac41842": {
    "last_ts": 1789485901,
@@ -20,7 +20,7 @@
    "error": ""
   },
   "0x361b16e3ddfe1d415d41008daac2631d94ab74fe": {
-   "last_ts": 1795879287,
+   "last_ts": 1795883443,
    "error": ""
   },
   "0xb7271c112cbd83eb4c1ef1b554ff963604ae2a9d": {
@@ -96,7 +96,7 @@
    "error": ""
   }
  },
- "last_tick": "2026-11-28T16:25:45Z",
+ "last_tick": "2026-11-28T16:31:34Z",
  "requests_last_tick": 25,
  "activity_api": "v2"
 }
